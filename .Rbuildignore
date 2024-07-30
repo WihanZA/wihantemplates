@@ -2,4 +2,7 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
-^01 setup\.R$
+^README\.html$
+^scripts$
+^examples$
+^thumbnails

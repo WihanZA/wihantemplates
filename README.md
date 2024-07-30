@@ -15,8 +15,6 @@ kinks. The best way to contribute to its development and address the
 problems which will inevitably arise is by logging a new issue
 [here](https://github.com/WihanZA/wihantemplates/issues).
 
-Certainly! Here’s the refined version:
-
 ## Getting Started
 
 You can install the development version of `wihantemplates` from Github
@@ -25,6 +23,7 @@ via the [`remotes`](https://github.com/r-lib/remotes#readme) package.
 ``` r
 # install.packages("remotes")
 remotes::install_github("WihanZA/wihantemplates")
+library(wihantemplates)
 ```
 
 Ensure that you have the essential R packages installed and loaded.
@@ -60,8 +59,6 @@ packages and styles, and installs them.
 tinytex::parse_install("dissertation.log")
 ```
 
-## Usage
-
 Once the package has been installed, it is quite simple to use a
 particular template. In RStudio, go to
 `File > New File > R Markdown > From Template` and select your desired
@@ -80,13 +77,14 @@ the excellent suite of $\LaTeX$ packages,
 [`stellenbosch-2`](https://ctan.org/pkg/stellenbosch-2), created and
 maintained by [Daniel Els](mailto:dnjels@sun.ac.za).
 
-#### Template directory
+[<img src="thumbnails/su_dissertation-1.png" style="width: 100.0%" />](thumbnails/su_dissertation-1.png)
+
+#### Template Directory
 
 ``` latex
-template
+[dissertation-name]
 ├── cache
 ├── code
-├── data
 ├── figures
 ├── matter
 │   ├── abstract.Rmd
@@ -97,9 +95,44 @@ template
 ├── styles
 │   ├── defaults.R
 │   └── template.tex
-├── su_dissertation.pdf
-├── su_dissertation.Rmd
-└── su_dissertation.tex
+├── [dissertation-name].Rmd
+```
+
+#### YAML Fields
+
+``` yaml
+---
+output: 
+  pdf_document:
+    template: styles/template.tex
+    keep_tex: TRUE
+    latex_engine: xelatex
+    citation_package: natbib
+    pandoc_args: --top-level-division=chapter
+thesistype: PhD
+author: Johnny Elvis Bravo
+authorshort: J.\ E.\ Bravo
+title: My Dissertation
+titel: My Proefskrif
+degree: Doctor of Philosophy in Economics
+graad: Doktor in die Wysbegeerte in Ekonomie
+degreeshort: PhD (Economics)
+graadshort: PhD (Ekonomie)
+department: Department of Economics
+departement: Departement van Ekonomie
+faculty: Faculty of Economic and Management Sciences
+fakulteit: Fakulteit Ekonomiese en Bestuurswetenskappe
+supervisor: Prof.\ F.\ Flintstone
+# cosupervisor: Prof.\ G.\ Jetson
+year: 2025
+month: 04
+sponsor: The financial assistance of the National Research Foundation (NRF) towards this research is hereby acknowledged. Opinions expressed and conclusions arrived at, are those of the author and are not necessarily to be attributed to the NRF.
+abstract: matter/abstract.Rmd
+acknowledgements: matter/acknowledgements.Rmd
+nomenclature: matter/nomenclature.Rmd
+bibliography: matter/mybib.bib
+colorlinks: TRUE
+---
 ```
 
 #### Spacing

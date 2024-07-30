@@ -168,6 +168,7 @@ incurred by, or claims asserted against, such Contributor by reason of your
 accepting any such warranty or additional liability.
 
 {wihantemplates}
+
 Copyright 2024 Wihan Marais (wihanmarais@sun.ac.za)
 
 Licensed under the Apache License, Version 2.0 (the "License");
