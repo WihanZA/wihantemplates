@@ -41,6 +41,8 @@ options(knitr.kable.NA = "")
 The package is still in its experimental stage, so please be patient while I work out the kinks.
 The best way to contribute to its development and address the problems which will inevitably arise is by logging a new issue [here](https://github.com/WihanZA/wihantemplates/issues).
 
+Certainly! Here's the refined version:
+
 ## Getting Started
 
 You can install the development version of `wihantemplates` from Github via the [`remotes`](https://github.com/r-lib/remotes#readme) package.
@@ -50,23 +52,22 @@ You can install the development version of `wihantemplates` from Github via the 
 remotes::install_github("WihanZA/wihantemplates")
 ```
 
-Ensure that you have the appropriate R packages installed and loaded:
+Ensure that you have the essential R packages installed and loaded.
+Since all templates rely on [TinyTeX](https://yihui.org/tinytex/), you must have both the `tinytex` package and TinyTeX LaTeX distribution installed on your machine.
+The [`rmarkdown`](https://rmarkdown.rstudio.com/lesson-1.html) package is included here for good measure.
 
 ```r
-install.packages(c("tinytex", "rmarkdown"))
-library(tinytex)
-library(rmarkdown)
-```
-Since all templates in this package rely on TinyTeX, you must have both the `tinytex` package and the TinyTeX LaTeX distribution installed on your machine. You can test and install them as follows:
-
-```r
-# Check if tinytex package is installed
+# Check if tinytex and rmarkdown packages are installed
 if (!requireNamespace("tinytex", quietly = TRUE)) {
   install.packages("tinytex")
 }
+if (!requireNamespace("rmarkdown", quietly = TRUE)) {
+  install.packages("rmarkdown")
+}
 
-# Load the tinytex package
+# Load the packages
 library(tinytex)
+library(rmarkdown)
 
 # Check if TinyTeX distribution is installed
 if (!tinytex::is_tinytex() || is.null(tinytex::tinytex_root())) {
@@ -74,15 +75,13 @@ if (!tinytex::is_tinytex() || is.null(tinytex::tinytex_root())) {
 }
 ```
 
-To ensure that all necessary LaTeX packages and dependencies are available, especially those not included in the TinyTeX distribution by default, you can use `tinytex::parse_install()` function. This reads the log file from a failed LaTeX compilation, identifies the missing packages, and installs them.
+To ensure that all necessary $\LaTeX$ packages and dependencies are available, especially those not included in the TinyTeX distribution by default, you can use `tinytex::parse_install()` function.
+This reads the log file from a failed LaTeX compilation (e.g., `su_dissertation.log`), identifies the missing packages and style files, and installs them.
 
 ```r
 # Parse the log file and install missing LaTeX packages
 tinytex::parse_install("su_dissertation.log")
 ```
-
-This command helps manage dependencies efficiently by installing only the required packages, making your LaTeX setup more streamlined and less bloated.
-
 
 ## Usage
 
