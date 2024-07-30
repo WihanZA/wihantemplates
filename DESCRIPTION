@@ -9,7 +9,7 @@ Authors@R:
     role = c("aut", "cre", "cph"),
     comment = c(ORCID = "0000-0002-4720-0929"))
 Description: These are my collection of 'R Markdown' templates, mostly for compilation to PDF.
-License: MIT + file LICENSE
+License: Apache License (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
