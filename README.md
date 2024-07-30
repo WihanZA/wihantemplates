@@ -28,14 +28,13 @@ remotes::install_github("WihanZA/wihantemplates")
 ```
 
 Ensure that you have the essential R packages installed and loaded.
-Since all templates rely on [TinyTeX](https://yihui.org/tinytex/), you
-must have both the `tinytex` package and TinyTeX LaTeX distribution
-installed on your machine. The
+Since all templates rely on [TinyTeX](https://yihui.org/tinytex/)’s
+custom $\LaTeX$ distribution, you must have both the `tinytex` package
+and distribution installed on your machine. The
 [`rmarkdown`](https://rmarkdown.rstudio.com/lesson-1.html) package is
-included here for good measure.
+also included here for good measure.
 
 ``` r
-# Check if tinytex and rmarkdown packages are installed
 if (!requireNamespace("tinytex", quietly = TRUE)) {
   install.packages("tinytex")
 }
@@ -43,11 +42,9 @@ if (!requireNamespace("rmarkdown", quietly = TRUE)) {
   install.packages("rmarkdown")
 }
 
-# Load the packages
 library(tinytex)
 library(rmarkdown)
 
-# Check if TinyTeX distribution is installed
 if (!tinytex::is_tinytex() || is.null(tinytex::tinytex_root())) {
   tinytex::install_tinytex()
 }
@@ -55,13 +52,12 @@ if (!tinytex::is_tinytex() || is.null(tinytex::tinytex_root())) {
 
 To ensure that all necessary $\LaTeX$ packages and dependencies are
 available, especially those not included in the TinyTeX distribution by
-default, you can use `tinytex::parse_install()` function. This reads the
-log file from a failed LaTeX compilation (e.g., `su_dissertation.log`),
-identifies the missing packages and style files, and installs them.
+default, you can use `tinytex::parse_install()`. This reads the log file
+from a failed compilation, `dissertation.log`, identifies the missing
+packages and styles, and installs them.
 
 ``` r
-# Parse the log file and install missing LaTeX packages
-tinytex::parse_install("su_dissertation.log")
+tinytex::parse_install("dissertation.log")
 ```
 
 ## Usage
