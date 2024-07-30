@@ -1,3 +1,5 @@
 ^wihantemplates\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^README\.Rmd$
+^01 setup\.R$
