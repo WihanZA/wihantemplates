@@ -1,0 +1,74 @@
+
+```{=latex}
+\cleardoublepage
+\appendix
+\setappendixname
+
+```
+
+# Mathematics
+
+\def\bE{\mathbf{E}}
+\def\bB{\mathbf{B}}
+\def\bJ{\mathbf{J}}
+\def\bx{\mathbf{x}}
+\def\by{\mathbf{y}}
+\def\bv{\mathbf{v}}
+\def\bp{\mathbf{p}}
+\def\bxdot{\mathbf{\dot x}}
+\def\bal{\boldsymbol{\alpha}}
+\def\bphi{\boldsymbol{\varphi}}
+\def\e{\varepsilon}
+\textbf{An inversion formula:} Let $g:\mathbb{R}^+\to \mathbb{R}$
+ be bounded and right continuous, and let
+$\varphi(\alpha)\coloneq\int_0^\infty e^{-\alpha t}g(t)\,dt$ denote its Laplace transform. Then, for every $t>0$,
+\begin{equation}
+g(t)=\lim_{\mathstrut\e\to 0}\lim_{\mathstrut\lambda\to\infty}\e^{-1}\sum_{\lambda t<k\le (\lambda+\e)t}
+\frac{(-1)^k}{k!}\lambda^k\varphi ^{(k)}(\lambda).
+\end{equation}
+
+\textbf{Solutions of systems of ODEs:} Let $\bv(\bx,\bal)$ denote a parametrized vector field ($\bx\in U$, $\bal\in A$) where $U$ is a domain in $\mathbb{R}^n$ and the parameter space $A$ is a domain in $\mathbb{R}^m$. We assume that $\bv$ is $C^k$-differentiable as a function of~$(\bx,\bal)$, where~$k\ge 2$. Consider a system of differential equations in~$U$:
+\begin{equation}
+\bxdot=\bv(\bx,\bal),\qquad \bx\in U\label{eq:first}
+\end{equation}
+ Fix an initial point $\bp_0$ in the interior of $U$, and assume $\bv(\bp_0,\bal_0)\neq\mathbf{0}$. Then, for sufficiently small $t$, $|\bp-\bp_0|$ and $|\bal-\bal_0|$, the system~(\ref{eq:first}) has a unique solution $\bx_{\bal}(t)$  satisfying the initial condition $\bx_{\bal}(0)=\bp$, and that solution depends differentiably (of class~$C^k$) on $t$, $\bp$ and $\bal$.
+
+\textbf{Stirling's formula:} 
+\begin{equation}
+\Gamma(z)\sim e^{-z}z^{z-1/2}\sqrt{2\pi}\bigg[1+\frac{1}{12z}+\frac{1}{288z^2}-\frac{139}{51840z^3}+\ldots\bigg],\quad z\to\infty \text{ in $|\arg z|<\pi$}.
+\end{equation}
+
+\textbf{B\'ezier curves:} Given $z_1$,
+$z_2$,
+$z_3$,
+$z_4$ in  $\mathbb{C}$, define  the B\'ezier
+curve with control points $z_1$, $z_2$, $z_3$, $z_4$ by
+\[z(t)\coloneq(1-t)^3z_1+3(1-t)^2tz_2+3(1-t)t^2z_3+t^3z_4,\qquad 0\le t\le 1.\]
+Because $(1-t)^3+3(1-t)^2t+3(1-t)t^2+t^3=(1-t+t)^3=1$
+and all summands are positive for $0\le t\le1$, $z(t)$
+is a convex combination of the four points~$z_k$, hence
+the curve defined by $z(t)$ lies in their convex hull. As $t$ varies from~$0$ to~$1$, the curve moves from
+$z_1$ to~$z_4$ with initial direction $z_2-z_1$ and final direction $z_4-z_3$. 
+
+\textbf{Maxwell's equations:}
+\begin{equation*}
+\begin{aligned}
+\bB'&=-c\nabla\times\bE\\
+\bE'&=c\nabla\times\bB-4\pi \bJ.
+\end{aligned}
+\end{equation*}
+
+\textbf{Residue theorem:} Let $f$ be analytic in the region $G$ except for the isolated singularities $a_1$, $a_2$, \ldots, $a_m$. If $\gamma$ is a closed rectifiable curve in $G$ which does not pass through any of the points $a_k$ and if $\gamma\approx 0$ in $G$, then
+\[\frac{1}{2\pi i}\int_\gamma f=\sum_{k=1}^m n(\gamma;a_k)\,\mathrm{Res}(f;a_k).\]
+
+\textbf{Maximum modulus principle:} Let $G$ be a bounded open set in  $\mathbb{C}$ and suppose that $f$ is a continuous function on $\bar G$ which is analytic in $G$. Then
+\[\max \{|f(z)| : z\in \bar G\}=\max\{|f(z)| : z\in \partial G\}.\]
+
+\textbf{Jacobi's identity:} Define the \emph{theta function}  $\vartheta$ by
+\[\vartheta(t)=\sum_{n=-\infty}^\infty \exp(-\pi n^2 t),\qquad t>0.\]
+ Then
+\[\vartheta(t)=t^{-1/2}\vartheta(1/t).\]
+
+# Experiments
+
+`r lorem::ipsum(paragraphs = 12)`

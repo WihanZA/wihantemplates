@@ -1,0 +1,11 @@
+\chapter*{Acknowledgements}
+
+I would like to express my sincere gratitude to the following people:
+
+\begin{itemize}
+
+  \item My supervisor...
+
+  \item My family...
+
+\end{itemize}
