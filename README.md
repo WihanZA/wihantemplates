@@ -77,7 +77,7 @@ requirements of Stellenbosch University. The template heavily relies on
 the excellent suite of LaTeX packages,
 [`stellenbosch-2`](https://ctan.org/pkg/stellenbosch-2), created and
 maintained by [Daniel Els](mailto:dnjels@sun.ac.za). You can find a
-complete example [here](examples/su_dissertation.pdf).
+complete example [here](examples/su_dissertation.pdf).d
 
 [<img src="thumbnails/su_dissertation-1-2-3-4.png" style="width: 100.0%" />](thumbnails/su_dissertation-1-2-3-4.png)
 
@@ -123,6 +123,9 @@ complete example [here](examples/su_dissertation.pdf).
   including `abstract.Rmd`, `acknowledgements.Rmd`, and
   `nomenclature.Rmd`. Although these are `.Rmd` files, they primarily
   consist of LaTeX code, so users should be aware of this when editing.
+  You’ll find that they’re easy to use given the self-explanatory
+  examples provided in the template. `appendix.Rmd` follows the same
+  syntax as your main `.Rmd` file.
 
 - **`matter/mybib.bib`**: The BibTeX file containing bibliography
   entries referenced in the main `.Rmd` file. I recommend using
@@ -169,37 +172,6 @@ colorlinks: TRUE
 ```
 
 [<img src="thumbnails/su_dissertation-10-19-21-25.png" style="width: 100.0%" />](thumbnails/su_dissertation-10-19-21-25.png)
-
-#### Spacing
-
-Given the particular setup of the template’s document class and
-packages, the following LaTeX parameters produce skips, indents and
-separations of the sizes presented in the table below. The relevant
-parts of the template’s setup is as follows:
-
-``` latex
-\documentclass[12pt,...]{stb-thesis}
-\usepackage[a4paper, left=1in, right=1in, top=1in, bottom=1.25in]{geometry} \usepackage{setspace}
-\usepackage[skip,parfill]{parskip} 
-\setstretch{1.1}
-```
-
-*Point sizes of selected* LaTeX *parameters and units given the
-template’s default settings.*
-
-| Parameter       | `\normalfont (Body)`          | `\chapter (#)` | `\section (##)` | `\subsection (###)` |
-|:----------------|:------------------------------|:---------------|:----------------|:--------------------|
-| `1em`           | 12pt                          | 24.88pt        | 17.28pt         | 14.4pt              |
-| `1ex`           | 6.43pt                        | 13.34pt        | 9.26pt          | 7.72pt              |
-| `\baselineskip` | 15.95pt                       |                |                 |                     |
-| `\bigskip`      | 12.0pt plus 4.0pt minus 4.0pt |                |                 |                     |
-| `\topskip`      | 12.0pt                        |                |                 |                     |
-| `\parskip`      | 7.25pt plus 2.0pt             |                |                 |                     |
-| `\medskip`      | 6.0pt plus 2.0pt minus 2.0pt  |                |                 |                     |
-| `\smallskip`    | 3.0pt plus 1.0pt minus 1.0pt  |                |                 |                     |
-| `\lineskip`     | 1.0pt                         |                |                 |                     |
-| `\parindent`    | 0.0pt                         |                |                 |                     |
-| `\partopsep`    | 0.0pt                         |                |                 |                     |
 
 [^1]: See **[Better
     BibTeX](https://retorque.re/zotero-better-bibtex/)**, **[Citations

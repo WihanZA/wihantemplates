@@ -1,0 +1,32 @@
+\chapter{Mathematical proofs}
+
+\section{Euler's equation}
+Euler's equation gives the relationship between the trigonometric functions and the complex exponential function.
+\begin{equation}
+    e^{ i\theta } = \cos \theta + i\sin \theta
+    \label{eq:Euler}
+\end{equation}
+Inserting $\theta=\pi$ in \eqref{eq:Euler} results in Euler's identity
+\begin{equation}
+    e^{ i \pi} + 1 = 0
+    \label{eq:Euler2}
+\end{equation}
+
+
+\section{Navier Stokes equation}
+
+The Navier–Stokes equations mathematically express momentum balance and conservation of mass for Newtonian fluids.  Navier-Stokes equations using tensor notation:
+\begin{subequations}
+\begin{gather}
+    \frac{\partial \rho}{\partial t} +
+    \frac{\partial}{\partial x_j}\left[ \rho u_j \right] = 0 
+    \\
+    \frac{\partial}{\partial t}\left( \rho u_i \right) +
+    \frac{\partial}{\partial x_j}
+    \left[ \rho u_i u_j + p \delta_{ij} - \tau_{ji} \right] = 0, \quad i=1,2,3
+    \\
+    \frac{\partial}{\partial t}\left( \rho e_0 \right) +
+    \frac{\partial}{\partial x_j}
+    \left[ \rho u_j e_0 + u_j p + q_j - u_i \tau_{ij} \right] = 0
+\end{gather}
+\end{subequations}

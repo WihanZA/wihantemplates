@@ -1,0 +1,2699 @@
+% \iffalse  meta-comment
+% stb-thesis.dtx
+% Copyright (C) 2023 Stellenbosch University
+% All rights reserved.
+%
+% -------------------------------------------------------------------
+% Stellenbosch University Title Page Package
+% -------------------------------------------------------------------
+%
+% Author:     Danie Els
+% Maintained: Danie Els (dnjels@sun.ac.za)
+%
+% This work may be distributed and modified, and must be credited
+% under the conditions of the latest version of the Creative Commons 
+% License (CC BY 4.0). The latest version of this license is in
+% 
+%    https://creativecommons.org/licenses/by/4.0/
+% 
+% -------------------------------------------------------------------
+% \fi
+%
+% \iffalse
+%<*cls>
+\newcommand{\STBTfileversion}{v1.3}
+\newcommand{\STBTfiledate}{2023/09/01}
+%</cls>
+%
+%<*driver>
+\documentclass[a4paper]{ltxdoc}
+\usepackage{stb-titlepage}
+\usepackage{calc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{fourier}%.......................... Roman+math - Utopia
+\usepackage{textcomp}%......................... Additional text symbols
+\usepackage[scaled=0.85]{berasans}%............ Sans serif - Bera sans
+\usepackage[scaled=0.85]{beramono}%............ Typewriter - Bera mono
+\usepackage{xcolor}
+    \definecolor{lstkey1}  {rgb} {0.65,0.04,0.07} % red
+    \definecolor{lstkey0}  {rgb} {0.06,0.44,0.08} % green
+    \definecolor{lstcomm}  {gray}{0.50}
+    \definecolor{lstback}  {gray}{0.94}
+    \definecolor{lstfrme}  {gray}{0.75}
+    \definecolor{declfrme} {gray}{0.00}
+    \definecolor{declback} {gray}{1.00}
+    \definecolor{cboxback} {gray}{0.85}
+    \definecolor{cminiback}{gray}{1.00}
+    \definecolor{cminifrme}{gray}{0.75}
+    \definecolor{hrefcol}  {rgb} {0.00,0.00,0.50}
+\usepackage{enumerate}
+\usepackage{caption}
+\usepackage{array}
+    \setlength{\extrarowheight}{2pt}
+    \newcolumntype{f}{>{$}l<{$}}
+\usepackage{graphicx}
+\usepackage{listings}
+    \lstset{
+        gobble=2,
+        alsodigit={-0123456789_},
+        columns=flexible,
+        keepspaces,
+        escapechar=|,
+        basicstyle=\small\ttfamily,
+        keywords=[0]{\AorE,\TitlePage,\title,\address,\author,\date,\degree,\subject,
+                     \ThesisDescript,\studyleader,\supervisor, \cosupervisor,
+                     \ThesisType,\STBName,\DeclarationPage,\DeclarationSign,\DeclarationDate,
+                     \SetCopyrightHolder,\SetCopyrightOff,\CopyrightPage,\SetSponsor},
+        keywordstyle=[0]\color{lstkey0},
+        keywords=[1]{masters-a,masters-t,PhD,a5block,
+                    goldenblock,wideblock,stdblock,stb-thesis},
+        keywordstyle=[1]\color{lstkey1},
+        comment=[l]\%,
+        commentstyle=\color{lstcomm}\slshape,
+        backgroundcolor=\color{lstback},
+        belowskip=\medskipamount,
+        aboveskip=\medskipamount,
+        }
+    \lstnewenvironment{ltxexample}[1][]{\lstset{#1}}{}
+\usepackage[breaklinks=true,
+            linktocpage,
+            colorlinks  = true,
+            linkcolor   = hrefcol,
+            urlcolor    = hrefcol,
+            pdftitle    ={stbthesis},
+            pdfauthor   ={Danie Els}
+            ]{hyperref}
+\usepackage{hologo}
+\makeatletter
+%==== temps =========================================================
+\newsavebox{\tboxa}
+\newsavebox{\tboxb}
+\newlength{\tdima}
+\newlength{\tdimb}
+
+%==== Additional documenting commands ===============================
+\def\meta@font@select{\normalfont\ttfamily\itshape}
+\newcommand*{\pkg}[1]{\textsf{#1}}
+\newcommand*{\env}[1]{\texttt{#1}}
+\newcommand*{\opt}[1]{\texttt{#1}}
+\newcommand*{\STBopt}[1]{{\normalfont\color{lstkey1}\texttt{#1}}}
+\newcommand*{\STBT}{\pkg{stb-thesis}}
+
+\def\PrintDescribeMacro#1{\strut\MacroFont\color{lstkey0}\string #1}
+\def\PrintDescribeEnv#1{\strut\MacroFont\color{lstkey0}#1}
+
+%==== Command & Env declarations ====================================
+\newcommand*\CmdList[2]{%
+    \@CmdList{#1} #2,\relax\@eolst}
+\def\@CmdList#1 #2,#3\@eolst{%
+    \ifx\relax#2\relax\else #1{#2}\fi
+    \ifx\relax#3\relax\else
+        \@CmdList{#1} #3\@eolst
+    \fi}
+\newenvironment{decl}[1][\relax]{%
+    \def\defarg{\CmdList{\DescribeMacro}{#1}}%
+    \begin{lrbox}{\tboxa}\small
+        \begin{tabular}[t]{@{}l@{}}\ignorespaces
+    }{%
+        \\ \end{tabular}
+    \end{lrbox}%
+    \par\addvspace{\smallskipamount}
+    \noindent
+    \defarg\fcolorbox{declfrme}{declback}{\usebox\tboxa}%
+    \\*[\smallskipamount]}
+\newenvironment{Edecl}[1][\relax]{%
+    \def\defarg{\CmdList{\DescribeEnv}{#1}}%
+    \begin{lrbox}{\tboxa}\small
+        \begin{tabular}[t]{@{}l@{}}\ignorespaces
+    }{%
+        \\ \end{tabular}
+    \end{lrbox}%
+    \par\addvspace{\smallskipamount}
+    \noindent
+    \defarg\fcolorbox{declfrme}{declback}{\usebox\tboxa}%
+    \\*[\smallskipamount]}
+
+%==== Ruled & colored minipage & boxes ==============================
+\newcommand*{\Fbox}[1]{\fbox{\strut#1}}
+\newcommand*{\Cbox}[1]{\colorbox{cboxback}{\strut#1}}
+\newcommand*{\FCbox}[1]{\fcolorbox{black}{cboxback}{\strut#1}}
+\newenvironment{fminipage}[2][c]
+    {\setlength{\tdima}{#2-2\fboxsep-2\fboxrule}%
+     \begin{lrbox}{\tboxa}\begin{minipage}[#1]{\tdima}}%
+    {\end{minipage}\end{lrbox}\noindent\fbox{\usebox{\tboxa}}}
+\newenvironment{cminipage}[2][c]
+    {\setlength{\tdima}{#2-2\fboxsep-2\fboxrule}%
+     \begin{lrbox}{\tboxa}\begin{minipage}[#1]{\tdima}}%
+    {\end{minipage}\end{lrbox}%
+     \noindent\fcolorbox{cminifrme}{cminiback}{\usebox{\tboxa}}}
+
+%==== Special description environment ===============================
+\newenvironment{Description}[1]
+   {\list{}{%
+        \settowidth{\labelwidth}{#1}%
+        \setlength{\leftmargin}{\labelwidth+\labelsep}%
+        \setlength{\itemindent}{0pt}%
+        %\setlength{\itemsep}{0pt}%
+        \setlength{\parsep}{0pt}%
+        \setlength{\listparindent}{\parindent}%
+        \renewcommand*\makelabel[1]{\normalfont ##1\hfill}}}
+    {\endlist}
+
+%==== AMS logo ======================================================
+\providecommand{\AmS}{AMS}%
+
+%==== Supervisor command (from stb-thesis) ============================
+\makeatletter
+\begingroup
+   \catcode`\Q=3
+   \long\gdef\STBifempt#1{\STBxifempt#1QQ\@secondoftwo\@firstoftwo\@nil}
+   \long\gdef\STBxifempt#1#2Q#3#4#5\@nil{#4}
+\endgroup
+
+\newcommand\SupervisorText{Supervisor:}%
+\newcommand\SupervisorsText{Supervisors:}%
+\newcommand\CoSupervisorText{Co-supervisor:}%
+\newcommand\CoSupervisorsText{Co-supervisors:}%
+
+\newsavebox{\STBtboxa}
+\newsavebox{\STBtboxb}
+
+\newboolean{STBspvpresent}  \setboolean{STBspvpresent}{false}
+\newboolean{STBcospvpresent}\setboolean{STBcospvpresent}{false}
+\newboolean{STBspvmult}     \setboolean{STBspvmult}{false}
+\newboolean{STBcospvmult}   \setboolean{STBcospvmult}{false}
+\newboolean{STBspvrows}     \setboolean{STBspvrows}{false}
+
+\newcommand\STBspv{}
+\newcommand\STBcospv{}
+\newcommand*\STBspvalign{l}
+\newcommand*\STBspvnewline{~}
+
+\newcommand{\supervisor}{%
+   \@ifstar{\setboolean{STBspvrows}{false}\@supervisor}%
+           {\setboolean{STBspvrows}{true}\@supervisor}}
+
+\newcommand{\@supervisor}[2][l]{%
+   \STBifempt{#2}{}{\setboolean{STBspvpresent}{true}}%
+   \renewcommand*\STBspvalign{#1}%
+   \renewcommand\STBspv{#2}}
+
+\newcommand{\cosupervisor}[1]{%
+   \STBifempt{#1}{}{\setboolean{STBcospvpresent}{true}}%
+   \renewcommand\STBcospv{#1}}
+
+\newcommand{\STBspvset}{%
+    \ifSTBspvrows
+        \STBspvrows
+    \else
+        \STBspvcols
+    \fi}
+
+\newcommand\STBspvrows{%
+    \edef\STBbeginTab{\noexpand\begin{tabular}[t]{@{}\STBspvalign @{}}}%
+    \edef\STBendTab{\noexpand\end{tabular}}%
+    \setboolean{STBspvmult}{false}%
+    \sbox{\STBtboxa}{%
+        \let\and\STBspvand%
+        \STBbeginTab\STBspv\STBendTab}%
+    \setboolean{STBcospvmult}{false}%
+    \sbox{\STBtboxb}{%
+        \let\and\STBcospvand%
+        \STBbeginTab\STBcospv\STBendTab}%
+    \ifSTBspvpresent%
+        \begin{tabular}{@{}ll@{}}
+             \ifSTBspvmult\SupervisorsText\else\SupervisorText\fi%
+              & \usebox{\STBtboxa}\\
+             \ifSTBcospvpresent%
+                  \noalign{\vskip 1ex}
+                   \ifSTBcospvmult\CoSupervisorsText\else\CoSupervisorText\fi%
+                & \usebox{\STBtboxb}
+             \fi%
+        \end{tabular}
+    \fi}
+
+\newcommand\STBspvcols{%
+    \edef\STBbeginTab{\noexpand\begin{tabular}[t]{@{}\STBspvalign @{}}}%
+    \edef\STBendTab{\noexpand\end{tabular}}%
+    \setboolean{STBspvmult}{false}%
+    \sbox{\STBtboxa}{%
+        \let\and\STBspvand%
+        \STBbeginTab\STBspv\STBendTab}%
+    \setboolean{STBcospvmult}{false}%
+    \sbox{\STBtboxb}{%
+        \let\and\STBcospvand%
+        \STBbeginTab\STBcospv\STBendTab}%
+    \ifSTBspvpresent%
+        \STBbeginTab
+            \ifSTBspvmult\SupervisorsText\else\SupervisorText\fi\\[1ex]
+             \usebox{\STBtboxa}
+        \STBendTab
+    \fi
+    \ifSTBcospvpresent
+        \hspace{2em}%
+        \STBbeginTab
+            \ifSTBcospvmult\CoSupervisorsText\else\CoSupervisorText\fi\\[1ex]
+             \usebox{\STBtboxb}
+        \STBendTab
+    \fi}
+
+\newcommand*{\STBspvand}[1][0pt]{%
+      \global\STBspvmulttrue%
+      \\[#1]%
+      \ignorespaces}
+
+\newcommand*{\STBcospvand}[1][0pt]{%
+      \global\STBcospvmulttrue%
+      \\[#1]%
+      \ignorespaces}
+
+%==== Headings & running heads ======================================
+\newcommand\sechead[1]{\@afterindentfalse \vskip 1.5ex
+     {\parindent0pt
+      \normalfont\itshape\nobreak#1\par\nobreak
+     }\smallskip\nobreak\@afterheading}
+\newcommand\Hpar[1][1cm]{\hangindent #1\noindent\hspace*{#1}}
+
+%===================================================================
+\makeatother
+
+\EnableCrossrefs
+\CodelineIndex
+\CodelineNumbered
+\RecordChanges
+\setlength\hfuzz{15pt}
+\hbadness=7000
+\begin{document}
+    \DocInput{stb-thesis.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \CheckSum{1554}
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+% \changes{v1.0}{2023/01/10}{Initial version}
+% \changes{v1.1}{2023/07/25}{Change licence to CC BY 4.0}
+% \changes{v1.2}{2023/08/10}{Change front page graphics}
+% \changes{v1.3}{2023/09/01}{Chance TOC frontmatter entries}
+%
+% \DoNotIndex{\@arabic,\@chapapp,\@clubpenalty,\@dottedtocline,
+%             \@empty,\@firstoftwo,\@gobbletwo,\@idxitem,
+%             \@ifclassloaded,\@ifpackageloaded,\@ifstar,\@latex@warning,
+%             \@m,\@minipagefalse,\@mkboth,\@ne,\@nil,\@noitemerr,
+%             \@openbib@code,\@plus,\@restonecolfalse,\@restonecoltrue,
+%             \@secondoftwo,\@startsection,\@starttoc,\@tempa,\@tempboxa,
+%             \@temptokena}
+% \DoNotIndex{\^,\ ,\.,\\}
+% \DoNotIndex{\addcontentsline,\addtolength,\advance,\AtBeginDocument}
+% \DoNotIndex{\baselineskip,\begin,\begingroup,\bfseries,\box}
+% \DoNotIndex{\c@enumiv,\c@secnumdepth,\catcode,\centering,\ClassError,
+%             \ClassWarning,\cleardoublepage,\clearpage,\clubpenalty,
+%             \columnsep,\columnseprule,\copyright,\csname,\CurrentOption}
+% \DoNotIndex{\DeclareOption,\def,\dotfill}
+% \DoNotIndex{\edef,\else,\end,\endcsname,\endgroup,\endlist,
+%             \ExecuteOptions,\expandafter}
+% \DoNotIndex{\fi,\footnote}
+% \DoNotIndex{\gdef,\global}
+% \DoNotIndex{\hb@xt@,\headheight,\headsep,\hfil,\hfill,\headwidth,
+%             \hoffset,\hsize,\hskip}
+% \DoNotIndex{\if@twocolumn,\if@twoside,\ifcase,\ifdim,\ifnum,\ifx,
+%             \ignorespaces,\includegraphics,\intextsep,\item,
+%             \itemindent,\itshape}
+% \DoNotIndex{\labelsep,\labelwidth,\LARGE,\Large,\large,\lastskip,
+%             \leftmargin,\leftmark,\let,\lineskip,\list,\listparindent,
+%             \listtablename,\LoadClass,\long}
+% \DoNotIndex{\m@ne,\makebox,\MakeLowercase,\MakeUppercase,\markboth,
+%             \markright,\mbox,\medskip}
+% \DoNotIndex{\NeedsTeXFormat,\newcommand,\newcount,\newenvironment,
+%             \newif,\newlength,\newpage,\newsavebox,\noexpand,\noindent,
+%             \normalfont,\normalsize,\number}
+% \DoNotIndex{\oddsidemargin,\onecolumn,\or}
+% \DoNotIndex{\p@,\p@enumiv,\PackageError,\PackageInfo,\PackageWarning,
+%             \paperheight,\paperwidth,\par,\paragraph,\parindent,
+%             \parsep,\parskip,\partopsep,\PassOptionsToClass,\phantom,
+%             \providecommand,\ProvidesClass,\ProvidesPackage}
+% \DoNotIndex{\raggedright,\relax,\renewcommand,\renewenvironment,
+%             \RequirePackage,\reset@font,\rightmargin,\rightmark,
+%             \rmfamily}
+% \DoNotIndex{\sbox,\section,\setcounter,\setlengtj,\settowidth,\sfcode,\sloppy,
+%             \slshape,\small,\smallskip,\space,\string,\subparagraph,
+%             \subsection,\subsubsection}
+% \DoNotIndex{\textheight,\textwidth,\the,\thechapter,\theenumiv,\thepage,
+%             \thesection,\thispagestyle,\tocmark,\toks@,\topmargin,
+%             \topsep,\topskip,\twocolumn}
+% \DoNotIndex{\undefined,\unhbox,\usebox,\usecounter}
+% \DoNotIndex{\vfill,\voffset,\vskip,\vspace}
+% \DoNotIndex{\wd,\widowpenalty}
+% \DoNotIndex{\z@}
+%
+%
+% \pagestyle{myheadings}
+% \markright{STB-THESIS CLASS}
+%
+%  ^^A== Title =====================================================
+%  \title{The \STBT\ class^^A
+%        \thanks{This class has version number \STBTfileversion,
+%        last revised \STBTfiledate.}}
+%
+%  \author{Danie Els\thanks{^^A
+%       Any help with proofreading this document will be appreciated.}\\[1ex]
+%          \normalsize e-mail: \texttt{\href{mailto:dnjels@sun.ac.za}^^A
+%                                           {dnjels@sun.ac.za}}}
+%
+%  \address{Department of Mechanical and Mechatronic Engineering\\
+%          Stellenbosch University\\
+%          Private Bag X1, Matieland 7602 , South Africa.}
+%
+%  \date{\STBTfiledate}
+%
+% ^^A==============================================================
+% \maketitle
+%
+% \begin{abstract}\noindent
+% The \STBT\ class is provided to typeset theses and
+% dissertations that conform to the requirements of Stellenbosch University, 
+% South Africa.
+%
+% The class file \pkg{stb-thesis.cls} is based on the standard \LaTeX{}
+% \pkg{book} class. It is primarily concerned with the formatting of the front 
+% matter such as the title page, abstract, etc. It also works together with the
+% \pkg{babel} package to provide language language options to typeset documents
+% in Afrikaans or in English.
+% \end{abstract}
+% \clearpage
+%
+% \tableofcontents
+%
+% ^^A==============================================================
+% \clearpage
+% \section{User Interface}
+% \subsection{\STBT\ class file}
+%
+% The \pkg{stb-thesis.cls} class is loaded in the document preamble with
+% \begin{ltxexample}
+%     \documentclass[12pt,oneside,openany,a4paper, %... Global layout
+%                    afrikaans,UKenglish,          %... Global language options
+%                    masters-t, goldenblock        %... stb-thesis options
+%                   ]{stb-thesis}
+% \end{ltxexample}
+%
+% \subsubsection{The \STBT\ options:}
+%    
+% \paragraph{Document type options: }
+% This options for the \STBT\ class/style are for specific formatting of the
+% title and abstract pages of the different document types.
+% \begin{Description}{\STBopt{PhD-final}:}
+%     \item[\STBopt{masters-a}:]
+%         An assignment masters degree.
+%     \item[\STBopt{masters-t}:]
+%         A thesis masters degree.
+%     \item[\STBopt{PhD}:]
+%         A PhD dissertation.
+% \end{Description}
+%
+%
+%
+% \paragraph{Type block sizes:}
+%
+% The ISO A4 paper size (297.3\,mm${}\times{}$210.2\,mm) is not ideally suited
+% for typesetting off books. The \textsl{A5 type block} (fig~\ref{fig:A4A5})
+% and the \textsl{golden ratio type block} (fig~\ref{fig:A4golden}) are layouts
+% designed by the great typographer Jan Tschichold which adheres to the
+% classic typographic principals.\footnote{^^A
+%     The Tschichold designs have  a 3:5 ratio between the inner
+%     and outer margins.  The \pkg{stb-thesis} package employs a
+%     symmetric layout}^^A
+% A 12\,pt font size is recommended for most fonts. The following options are
+% provided as part of the \STBT\ class/style options:
+% \begin{Description}{\ttfamily goldenblock:}
+%     \item[\STBopt{a5block}: ]    ISO A4 paper with A5 type block
+%     \item[\STBopt{goldenblock}:] ISO A4 paper with golden ratio type block,
+%     \item[\STBopt{wideblock}:]   Type block with 25\,mm borders
+%     \item[\STBopt{stdblock}:]    Standard \LaTeX{} type block [default].
+% \end{Description}
+%
+% \noindent The user can set up custom page layouts if needed.  The setup
+% depends on the class file used. The following example is for a page with
+% 30\,mm margins all around.
+%
+% \begin{ltxexample}
+%     \documentclass[a4paper,|\meta{options}|]{stb-thesis}
+%     \usepackage[hmargin={30mm,30mm},
+%                 vmargin={30mm,30mm}
+%                ]{geometry}
+% \end{ltxexample}
+%
+%
+% \begin{table}[p]
+%     \centering
+%     \caption{Page layout parameters}
+%     \small
+% \begin{tabular}{@{}
+%                 l
+%                 f@{}>{{}}f<{{}}@{}f@{${}={}$}r
+%                 c
+%                 f@{}>{{}}f<{{}}@{}f@{${}={}$}r
+%                 @{}}
+%     \hline
+%        &\multicolumn{4}{c}{A5 type block}& &\multicolumn{4}{c}{Golden section type block}\\
+%        &\multicolumn{4}{c}{\texttt{(a5block)}}& &\multicolumn{4}{c}{\texttt{(goldenblock)}}\\
+%     \cline{2-5}  \cline{7-10}
+%     Page width       & W & &              & 210,2\,mm && W & &             & 210,2\,mm\\
+%     Page height      & H &=&  \sqrt{2}\,W & 297,3\,mm && H &=& \sqrt{2}\,W & 297,3\,mm\\
+%     Block width      & w &=& H/2          & 148,7\,mm && w &=& 2W/3        & 140,1\,mm\\
+%     Block height     & h &=& W            & 210,2\,mm && h &=& H-W/3       & 227,2\,mm\\
+%     Side margin      & s &=& (W-w)/2      &  30,8\,mm && s &=&  W/6        &  35,0\,mm\\
+%     Top margin       & t &=& 3(H-h)/8     &  32,7\,mm && t &=& 3W/24       &  26,3\,mm\\
+%     Foot margin      & f &=& 5(H-h)/8     &  54,4\,mm && f &=& 5W/24       &  43,8\,mm\\
+%     \hline
+% \end{tabular}
+%
+%     \vspace*{2cm}
+%     \centering
+%     \footnotesize
+%     \setlength{\unitlength}{35mm}
+%     \begin{picture}(2, 1.414)
+%         \put(0.000,0.000){\framebox(1.000,1.414){}}
+%         \put(1.000,0.000){\framebox(1.000,1.414){}}
+%         \color[gray]{0.8}
+%         \put(0.146,0.259){\rule{0.707\unitlength}{1.000\unitlength}}
+%         \put(1.146,0.259){\rule{0.707\unitlength}{1.000\unitlength}}
+%         \color{black}
+%         \put(0.146,0.259){\framebox(0.707,1.000){}}
+%         \put(1.146,0.259){\framebox(0.707,1.000){}}
+%         \put(0.000,0.000){\raisebox{4pt}{\rule{4pt}{0pt}A4}}
+%         \put(0.146,0.259){\raisebox{4pt}{\rule{4pt}{0pt}A5}}
+%         \setlength{\fboxsep}{1.25pt}
+%         \put(1.9268,1.000){\vector( 1,0){0.0732}}
+%         \put(1.9268,1.000){\vector(-1,0){0.0732}}
+%         \put(1.9268,1.000){\raisebox{-.5ex}{\makebox[0pt][c]{\colorbox{white}{$s$}}}}
+%         \put(1.5000,1.000){\vector( 1,0){0.3536}}
+%         \put(1.5000,1.000){\vector(-1,0){0.3536}}
+%         \put(1.5000,1.000){\raisebox{-.5ex}{\makebox[0pt][c]{\colorbox[gray]{0.8}{$w$}}}}
+%         \put(1.0732,1.000){\vector( 1,0){0.0732}}
+%         \put(1.0732,1.000){\vector(-1,0){0.0732}}
+%         \put(1.0732,1.000){\raisebox{-.5ex}{\makebox[0pt][c]{\colorbox{white}{$s$}}}}
+%         \put(1.7,0.1294){\vector(0, 1){0.1294}}
+%         \put(1.7,0.1294){\vector(0,-1){0.1294}}
+%         \put(1.7,0.1294){\hspace*{-1.25ex}\rotatebox[origin=bl]{90}{\colorbox{white}{$f$}}}
+%         \put(1.7,0.7589){\vector(0, 1){0.5}}
+%         \put(1.7,0.7589){\vector(0,-1){0.5}}
+%         \put(1.7,0.7589){\hspace*{-1.25ex}\rotatebox[origin=bl]{90}{\colorbox[gray]{0.8}{$h$}}}
+%         \put(1.7,1.3365){\vector(0, 1){0.0777}}
+%         \put(1.7,1.3365){\vector(0,-1){0.0777}}
+%         \put(1.7,1.3250){\hspace*{-1.25ex}\rotatebox[origin=bl]{90}{\colorbox{white}{$t$}}}
+%         \put(1.500,1.414){\raisebox{2pt}{\makebox[0pt][c]{$W$}}}
+%         \put(2.000,0.707){\makebox[0pt][l]{\rule{2pt}{0pt}$H$}}
+%     \end{picture}
+%     \captionof{figure}{ISO A4 paper with A5 type block \texttt{(\STBopt{A5block})}}
+%     \label{fig:A4A5}
+%
+%     \vspace*{1cm}
+%     \centering
+%     \footnotesize
+%     \setlength{\unitlength}{35mm}
+%     \begin{picture}(2, 1.414)
+%         \put(0.000,0.000){\framebox(1.000,1.414){}}
+%         \put(1.000,0.000){\framebox(1.000,1.414){}}
+%         \color[gray]{0.8}
+%         \put(0.1667,0.208){\rule{0.6667\unitlength}{1.081\unitlength}}
+%         \put(1.1667,0.208){\rule{0.6667\unitlength}{1.081\unitlength}}
+%         \color{black}
+%         \put(0.1667,0.208){\framebox(0.6667,1.081){}}
+%         \put(1.1667,0.208){\framebox(0.6667,1.081){}}
+%         \put(0.000,0.000){\raisebox{4pt}{\rule{4pt}{0pt}A4}}
+%         \setlength{\fboxsep}{1.25pt}
+%         \put(1.0833,1.000){\vector(-1,0){0.0833}}
+%         \put(1.0833,1.000){\vector( 1,0){0.0833}}
+%         \put(1.0833,1.000){\raisebox{-.5ex}{\makebox[0pt][c]{\colorbox{white}{$s$}}}}
+%         \put(1.5000,1.000){\vector( 1,0){0.3333}}
+%         \put(1.5000,1.000){\vector(-1,0){0.3333}}
+%         \put(1.5000,1.000){\raisebox{-.5ex}{\makebox[0pt][c]{\colorbox[gray]{0.8}{$w$}}}}
+%         \put(1.9167,1.000){\vector( 1,0){0.0833}}
+%         \put(1.9167,1.000){\vector(-1,0){0.0833}}
+%         \put(1.9167,1.000){\raisebox{-.5ex}{\makebox[0pt][c]{\colorbox{white}{$s$}}}}
+%         \put(1.7,0.1042){\vector(0, 1){0.1042}}
+%         \put(1.7,0.1042){\vector(0,-1){0.1042}}
+%         \put(1.7,0.1042){\hspace*{-1.25ex}\rotatebox[origin=bl]{90}{\colorbox{white}{$f$}}}
+%         \put(1.7,0.7488){\vector(0, 1){0.5404}}
+%         \put(1.7,0.7488){\vector(0,-1){0.5404}}
+%         \put(1.7,0.7488){\hspace*{-1.25ex}\rotatebox[origin=bl]{90}{\colorbox[gray]{0.8}{$h$}}}
+%         \put(1.7,1.3517){\vector(0, 1){0.0625}}
+%         \put(1.7,1.3517){\vector(0,-1){0.0625}}
+%         \put(1.7,1.3400){\hspace*{-1.25ex}\rotatebox[origin=bl]{90}{\colorbox{white}{$t$}}}
+%         \put(1.500,1.414){\raisebox{2pt}{\makebox[0pt][c]{$W$}}}
+%         \put(2.000,0.707){\makebox[0pt][l]{\rule{2pt}{0pt}$H$}}
+%     \end{picture}
+%     \captionof{figure}
+%               {ISO A4 paper with golden ratio type block \texttt{(\STBopt{goldenblock})}}
+%     \label{fig:A4golden}
+% \end{table}
+%
+%
+% \clearpage
+% \subsubsection{\LaTeX{} class options:}
+%
+% The gray \Cbox{boxes} are the \LaTeX\ default options, while \Fbox{boxed}
+% options are the preferred options of \pkg{stb-thesis} package.
+%
+% \setlength{\fboxsep}{2pt}
+% \begin{Description}{\hspace{1cm}}
+%     \item[\ttfamily \Cbox{10pt}, 11pt, \Fbox{12pt}:]  Sets the size of the
+%         main font in the document. The preferred font size depends very much
+%         on the font type. For Computer Modern (the default \LaTeX{} font) is
+%         11 or 12 points the most legible option on an A4 paper size.
+%
+%     \item[\ttfamily \Fbox{a4paper}, a5paper, b5paper, \Cbox{letterpaper}, executivepaper, legalpaper:]
+%         Defines the paper size. In South Africa is the ISO A4 paper size the standard.
+%
+%     \item[\ttfamily fleqn:] Typesets displayed formulae left-aligned instead of
+%         centred.  This option is a matter of personal taste.
+%
+%     \item[\ttfamily leqno:] Places the numbering of formulae on the left hand
+%         side instead of the right. This is the traditional layout of the
+%         American Mathematical Society.
+%
+%     \item[\ttfamily \FCbox{onecolumn}, twocolumn:]
+%         Instructs \LaTeX{} to typeset the document in one column or two
+%         columns. The University of Stellenbosch Engineering theses are
+%         traditionally single column documents.
+%
+%     \item[\ttfamily \Cbox{twoside}, \Fbox{oneside}:] Specifies whether double
+%         or single sided output should be generated.  Note that this option
+%         concerns the style of the document only.  The option \opt{twoside}
+%         does not tell the printer you use that it should actually make a
+%         two-sided printout. If a printer with double sided printing
+%         capability is available, then this option can be used.
+%
+%     \item[\ttfamily \Cbox{openright}, \Fbox{openany}:] Makes chapters begin
+%         either only on right hand pages or on the next page available.
+%         Selection of \opt{openright} depends on the selection of the
+%         \opt{twoside} option.
+%  \end{Description}
+%
+% \clearpage
+% \subsection{Required Packages}
+% \subsubsection{Language setup}
+%
+% \LaTeX{} provides for a variety of languages. It set up hyphenation patterns
+% and defines language specific output such as chapter names, etc.  The default
+% language is American style English, while the South African English is the
+% United Kingdom style.  Language selections must be loaded with the \pkg{babel}
+% package. Load language option global to be visable of other language dependant
+% packages such as \pkg{varioref}.
+% The last language declared is the default document language.
+% 
+% \begin{ltxexample}
+%     \documentclass[|\meta{options}|, afrikaans, UKenglish]{stb-thesis} % English default
+%     \usepackage{babel}
+% \end{ltxexample}
+%  or
+% \begin{ltxexample}
+%     \documentclass[|\meta{global options}|, UKenglish, afrikaans]{stb-thesis} % Afrikaans default
+%     \usepackage{babel}
+% \end{ltxexample}
+%
+% \noindent Languages can be made active with the \cmd{\selectlanguage}\marg{lang-name}
+% command from \pkg{babel}. In the \STBT\ class, a command
+% ^^A\medskip
+% ^^A\Describe{Macro}{\AorE}{Afr-teks,Eng-text}
+% \begin{decl}[\AorE]
+%     \cmd{\AorE}\marg{Afr-teks}\marg{Eng-text}
+% \end{decl}
+% is provided that types one of the two arguments, depending on whether
+% \opt{afrikaans} is the active language or not. 
+% \pagebreak[3]
+%
+% Environments for changing the
+% language options locally are also provided in \STBT\ (if languages are
+% installed with \pkg{babel}).
+%
+% \begin{Edecl}[Afr,Eng]
+%     |\begin{Afr}          \begin{Eng}|\\
+%     \quad\textit{Afr-teks} ... \hspace{6em}\textit{Eng-text} ...\\
+%     |\end{Afr}            \end{Eng}|
+% \end{Edecl}
+%
+% With the \opt{afrikaans} option of \pkg{babel} the character |"| is made
+% active.  One of
+% the reasons for this is that in the Afrikaans language a word with a dieresis
+% can be hyphenated just before the letter with the umlaut, but the dieresis
+% has to disappear if the word is broken between the previous letter and the
+% accented letter, for example `{ge\"eerd}' becomes `{ge-eerd}'. It is
+% extremely important that the commands |"a|, |"e|, ..., are used in Afrikaans
+% documents, and not |\"e|, etc., and neither the direct input of \texttt{\"e}
+% with |Alt+137| (if |latin1| input encoding is selected).
+%
+% The \opt{afrikaans} option sometimes has problems with the hyphenation of the
+% very long words.
+% The simplest way to correct a wrongly hyphenated word is to include
+% the discretionary hyphen command |\-| in the word: e.g.: |kom\-buis\-kas|.
+% Words that are incorrectly hyphenated and appear frequently within the
+% document can be put into a list of exceptions in the preamble of the
+% document:
+% \begin{ltxexample}
+%     \hyphenation{Kom-buis-kas  ...}
+% \end{ltxexample}
+% It is also important to note that words that contain |"e|, etc.\ must be
+% hyphenated by hand when they are near linebreaks, for example:
+% ko\"effisi\"entematriks
+% \begin{ltxexample}
+%     ko"ef\-fisi"en\-te\-mat\-riks
+% \end{ltxexample}
+%
+%
+%
+%
+% \subsubsection{Input font encoding}^^A
+%
+% \nopagebreak In Afrikaans there are many words containing characters such as
+% \'e, \^o, \`a, \"i, etc. These characters can be included directly in the
+% input text file, except \"a, \"e, \"i, \"o and \"u, which need to be inserted
+% as |"a|, ..., for proper hyphenation (see previous section).  
+% If the Western European input
+% encoding (latin1) is loaded, \LaTeX{} will recognizes these characters.
+% \begin{ltxexample}
+%     \usepackage[latin1]{inputenc}
+% \end{ltxexample}
+% For a unicode file format
+% \begin{ltxexample}
+%     \usepackage[utf8]{inputenc}
+% \end{ltxexample}
+%
+% \subsubsection{Output font encoding}^^A
+%
+% The classic \TeX{} Computer Modern fonts contain only 126 characters (7-bit)
+% per font set (OT1 encoding). It does not contain glyphs for characters such
+% as \texttt{\^e}. These characters are formed by two characters that are
+% overprinted (\texttt{\^{}\,+\,e}). The result is that Afrikaans words such as
+% \emph{``ko\"effisi\"entematriks,''} are not hyphenated automatically. The
+% solution is to use the T1 encoding scheme with 256 character (8-bit) font
+% sets. 
+%
+% Postscript Type 1 and TrueType fonts can be configured, with the aid of
+% \TeX's virtual font mechanism, to be available for \LaTeX{}. Font handling
+% can be switched to T1 encoding (if you have the Postscript fonts).
+%
+% The \hologo{XeLaTeX} typesetting system supports the full unicode font technologies.
+%
+% \begin{ltxexample}
+%\usepackage{iftex}
+%\ifxetex
+%    \usepackage[math-style=TeX, bold-style=TeX]{unicode-math}
+%    \setmainfont{Cambria}%........................   (Windows)                
+%    \setsansfont[Scale=MatchLowercase]{Calibri}
+%    \setmonofont[Scale=MatchLowercase]{Consolas}
+%    \setmathfont{Cambria Math}
+%    \defaultfontfeatures{Ligatures=TeX}
+%    \let\bm\symbfit%.............................. Bold math
+%\else
+%    \usepackage{textcomp}%........................ Additional text symbols
+%    \usepackage[T1]{fontenc}%..................... Type 1 outline fonts
+%    \usepackage{bm}%.............................. Bold math fonts
+%\fi
+% \end{ltxexample}
+%
+%
+% \subsubsection{Mathematics}
+%
+% Normal \LaTeX{} contains many math typesetting commands and environments, but
+% for serious mathematical typesetting you need to load the American
+% Mathematical Society (\AmS) math packages. The \AmS\ packages also include
+% additional math symbols, but load them only if really necessary, because they
+% are very big.
+% \begin{ltxexample}
+%     \usepackage|\oarg{options}|{amsmath}
+%     \usepackage{amssymb}  % only if necessary
+%     \usepackage{bm}       %.. Bold math characters (after fonts)
+% \end{ltxexample}
+% Bold math symbols can be obtained with the \AmS\ command |\boldsymbol| or
+% with the more advanced |\bm| command form the \pkg{bm} package. The \pkg{unicode-math}
+% package are a number of math formatting command. See documentation.
+%
+% \subsubsection{Graphics and Color}
+%
+% The \pkg{graphicx} package is needed by the \STBT\ package to format the title
+% page and must be loaded in the document preamble. The \pkg{color} package is
+% optional, but very useful.
+% \begin{ltxexample}
+%     \usepackage|\oarg{options}|{graphicx}
+%     \usepackage|\oarg{options}|{color} % or xcolor
+% \end{ltxexample}
+% If you need display drivers (such as \opt{dvips}, {pdftex}, etc.) different
+% from the default options, is it important that they are passed on to all the
+% packages as a global option. With the MiK\TeX\ this is achieved with the
+% standard configuration file.
+%
+%
+% \subsubsection{Line spacing}
+%
+% The guidelines for University of Stellenbosch theses dictates that either
+% single, one-halve or double line spacing be used. Line spacing can be
+% obtained with the \pkg{setspace} packages. 
+% With this package, footnotes and captions are still single spaced,
+% while no additional vertical spacing is added around display math or in
+% lists. 
+%
+% \noindent One and a half lines spacing for \pkg{stb-thesis.cls}:
+% \begin{ltxexample}
+%     \documentclass[|\meta{options}|]{stb-thesis}
+%     \usepackage[onehalfspacing]{setspace}%.. Line spacing
+%       :
+%     \begin{document}
+%          \frontmatter
+%          \begin{singlespace}
+%             \TitlePage%..................... Single spaced title page
+%          \end{singlespace}
+%            :
+% \end{ltxexample}
+%
+%
+% \subsubsection{Paragraph indent and spacing}
+%
+% The conventional way of typesetting running text has no separation between
+% paragraphs, and the first line of each paragraph in a block of text indented.
+% It is sometimes required that paragraphs are separated with a blank line and
+% without any first line indent. This can be obtained with the \pkg{parskip}
+% package.
+% 
+% \begin{ltxexample}
+%     \documentclass[|\meta{options}|]{stb-thesis}
+%     \usepackage{parskip}%......... Paragraph spacing + zero indent
+% \end{ltxexample}
+% Please note that this is not recommended for theses containing large amounts
+% of mathematics, because it is difficult, if not impossible, to see where a
+% new paragraph starts between equations.
+%
+%
+% ^^A----------------------------------------------------------
+% \clearpage
+% \section{Front matter}
+% \subsection{Title page}
+%
+% The title page is inserted on the first page of a document with
+% the command
+% \begin{decl}[\TitlePage]
+%    \cmd{\TitlePage}
+% \end{decl}
+%
+% \noindent Depending on the selected options, the following commands are used
+% to set the contents of the title page:
+%
+% \subsubsection*{\itshape Title}
+%
+% The title of the document is inserted on the front page as well as on the
+% abstract pages of Masters or PhD theses.
+% \begin{decl}[\title]
+%    \cmd{\title}\marg{title text}
+% \end{decl}
+% For a Masters or PhD thesis, the title must make provisions for both
+% languages.
+%
+% \noindent For an English document:
+% \begin{ltxexample}
+%     \title{\AorE{ Geforseerde Partikelvloei\\[1ex]
+%                  \normalfont\small\itshape(``Forced Granular flow'')}
+%                 {Forced granular flow}}
+% \end{ltxexample}
+% and for an Afrikaans document
+% \begin{ltxexample}
+%     \title{\AorE{Geforseerde Partikelvloei}
+%                 {Forced granular flow\\[1ex]
+%                 \normalfont\small\itshape(``Geforseerde Partikelvloei'')}}
+% \end{ltxexample}
+%
+%
+%
+% \subsubsection*{\itshape Author}
+%
+% \begin{decl}[\author]
+%    \cmd{\author}\marg{short name}\marg{full names}
+% \end{decl}
+% Provides the author name not only for the title page, but for various other
+% places in the document.
+% \begin{ltxexample}
+%     \author{J.\ Smith}{John Smith}
+% \end{ltxexample}
+%
+%
+%
+%
+% \subsubsection*{\itshape Faculty}
+%
+% \begin{decl}[\faculty]
+% \cmd{\faculty}\marg{faculty name}
+% \end{decl}
+% The faculty must be included in Afrikaans and English for Masters
+% and PhD documents.
+% \begin{ltxexample}
+%     \faculty{\AorE{Fakulteit Ingenieurswese}%
+%                   {Faculty of Engineering}}
+% \end{ltxexample}
+%
+%
+% \subsubsection*{\itshape Degree}
+%
+% \begin{decl}[\degree]
+%  \cmd{\degree}\marg{abbvr}\marg{full name}
+% \end{decl}
+% The degree or subject names. Please refer to the yearbook for the
+% \emph{correct} names. The degree names must be available in Afrikaans and
+% English.
+% \begin{ltxexample}
+%     \degree{\AorE{MIng (Meg)}
+%                  {MEng (Mech)}}
+%            {\AorE{Magister in Ingenieurswese (Meganies)}
+%                  {Master of Engineering (Mechanical)}}
+% \end{ltxexample}
+%
+% \subsubsection*{\itshape Supervisor/Co-supervisor}
+%    
+% \begin{decl}[\supervisor,\cosupervisor]
+% \begin{tabular}[t]{@{}l@{\quad or\quad}l@{}}
+%    \cmd{\supervisor}\oarg{align}\marg{name} &
+%    \cmd{\supervisor}{\ttfamily\char`\{}\meta{name}
+%       \cmd{\and}
+%       \meta{name}{\ttfamily\char`\}}\\
+%    \cmd{\cosupervisor}\marg{name} &
+%    \cmd{\cosupervisor}{\ttfamily\char`\{}\meta{name}
+%       \cmd{\and}
+%       \meta{name}{\ttfamily\char`\}}
+% \end{tabular}
+% \end{decl}
+%
+% \noindent The \cmd{\studyleader} and \cmd{\supervisor}
+% commands are synonyms and the output depends on the document type. The commands
+% also have a starred (\texttt{*}) form that stack the names of multiple
+% supervisors. The \cmd{\and} has an optional argument, e.g.:
+% \cmd{\and} |[1ex]|, for spacing in a stacked environment.
+% \medskip
+%
+% \noindent
+% \supervisor{Dr.\ D.N.J.\ Els}
+% \begin{minipage}[b]{\textwidth}
+% \begin{minipage}[c]{5.5cm}
+% \begin{ltxexample}[boxpos=c]
+%     \supervisor{Dr.\ D.N.J.\ Els}
+% \end{ltxexample}
+% \end{minipage}
+%   \hfill$\rightarrow$\hfill
+% \begin{cminipage}[c]{6cm}
+%     \centering\small {\STBspvset}
+% \end{cminipage}
+% \end{minipage}
+%
+% \smallskip
+% \noindent or
+% \medskip
+%
+% \supervisor{Dr.\ D.N.J.\ Els \and Mnr.\ J.\ Smith}
+% \noindent
+% \begin{minipage}[c]{\textwidth}
+% \begin{minipage}[c]{5.5cm}
+% \begin{ltxexample}
+%     \supervisor{Dr.\ D.N.J.\ Els
+%                    \and
+%                 Mnr.\ J.\ Smith}
+% \end{ltxexample}
+% \end{minipage}
+%     \hfill$\rightarrow$\hfill
+% \begin{cminipage}[c]{6cm}
+%     \centering\small\STBspvset
+% \end{cminipage}
+% \end{minipage}
+%
+% \smallskip
+% \noindent or
+% \medskip
+%
+% \supervisor*{Dr.\ D.N.J.\ Els \and[0ex] Mnr.\ J.\ Smith}
+% \noindent
+% \begin{minipage}[c]{\textwidth}
+% \begin{minipage}[c]{5.5cm}
+% \begin{ltxexample}
+%     \supervisor*{Dr.\ D.N.J..\ Els
+%                     \and[0ex]
+%                  Mnr.\ J.\ Smith}
+% \end{ltxexample}
+% \end{minipage}
+%     \hfill$\rightarrow$\hfill
+% \begin{cminipage}[c]{6cm}
+%     \centering\small\STBspvset
+% \end{cminipage}
+% \end{minipage}
+%
+% \medskip
+% \noindent For a co-supervisor
+% \medskip
+%
+% \supervisor{Dr.\ D.N.J.\ Els}
+% \cosupervisor{Mnr.\ J.\ Smith}
+% \noindent
+% \begin{minipage}[c]{\textwidth}
+% \begin{minipage}[c]{5.5cm}
+% \begin{ltxexample}
+%     \supervisor{Dr.\ D.N.J.\ Els}
+%     \cosupervisor{Mnr.\ J.\ Smith}
+% \end{ltxexample}
+% \end{minipage}
+%     \hfill$\rightarrow$\hfill
+% \begin{cminipage}[c]{6cm}
+%     \centering\small\STBspvset
+% \end{cminipage}
+% \end{minipage}
+%
+% \smallskip
+% \noindent or
+% \medskip
+%
+%    \supervisor{^^A
+%       Prof A.H.\ Basson\\[.5ex]
+%       Mechanical Engineering\\
+%       Stellenbosch University}
+%    \cosupervisor{^^A
+%       Prof P.A.\ Vermeer\\[.5ex]
+%       Institut f\"ur Geotechnic\\
+%       Universit\"at Stuttgart}
+%
+% \noindent
+% \begin{minipage}[c]{\textwidth}
+% \begin{minipage}[c]{5.5cm}
+% \begin{ltxexample}
+%     \supervisor{%
+%        Prof A.H.\ Basson\\[.5ex]
+%        Mechanical Engineering\\
+%        Stellenbosch University}
+%     \cosupervisor{%
+%        Prof P.A.\ Vermeer\\[.5ex]
+%        Institut f\"ur Geotechnic\\
+%        Universit\"at Stuttgart}
+% \end{ltxexample}
+% \end{minipage}
+%     \hfill$\rightarrow$\hfill
+% \begin{cminipage}[c]{6cm}
+%    \small \STBspvset
+% \end{cminipage}
+% \end{minipage}
+%
+% \smallskip
+% \noindent or
+% \medskip
+%
+%    \supervisor*[c]{^^A
+%       Prof A.H.\ Basson\\[.5ex]
+%       Mechanical Engineering\\
+%       Stellenbosch University}
+%    \cosupervisor{^^A
+%       Prof P.A.\ Vermeer\\[.5ex]
+%       Institut f\"ur Geotechnic\\
+%       Universit\"at Stuttgart}
+%
+%
+% \noindent
+% \begin{minipage}[c]{\textwidth}
+% \begin{minipage}[c]{5.5cm}
+% \begin{ltxexample}
+%    \supervisor*[c]{%
+%       Prof A.H.\ Basson\\[.5ex]
+%       Mechanical Engineering\\
+%       Stellenbosch University}
+%    \cosupervisor{%
+%       Prof P.A.\ Vermeer\\[.5ex]
+%       Institut f\"ur Geotechnic\\
+%       Universit\"at Stuttgart}
+% \end{ltxexample}
+% % \end{minipage}
+%     \hfill$\rightarrow$\hfill
+% \parbox{6cm}{^^A
+% \begin{cminipage}[c]{8cm}
+%    \small\centering\STBspvset
+% \end{cminipage}
+% \end{minipage}}
+% \smallskip
+%
+%
+% \subsubsection*{\itshape Date}
+%
+% \begin{decl}[\date]
+%    \cmd{\date}\marg{month}\marg{year}
+% \end{decl}
+% The date when the document is handed in. The arguments must be numerical,
+%
+% \noindent
+% \begin{minipage}[c]{\textwidth}
+% \begin{minipage}[c]{5.5cm}
+% \begin{ltxexample}
+%     \date{10}{2003}
+% \end{ltxexample}
+% \end{minipage}
+% \hfill$\rightarrow$\hfill
+% \begin{cminipage}{6cm}
+%   \centering October 2003
+% \end{cminipage}
+% \end{minipage}
+%
+% \subsubsection*{\itshape Sponsor}
+% Sponsors such as the NRF requires an acknowledgement on the title page
+%
+% \begin{decl}[\SetSponsor]
+%    \cmd{\SetSponsor}\marg{text}
+% \end{decl}
+% \begin{ltxexample}
+%   \SetSponsor{The financial assistance of the National Research Foundation (NRF) towards
+%       this research is hereby acknowledged. Opinions expressed and conclusions arrived 
+%       at, are those of the author and are not necessarily to be attributed to the NRF.}
+%        
+% \end{ltxexample}
+%
+%
+%
+% \begin{figure}
+% \begin{minipage}{\textwidth}
+%    \setlength\fboxsep{0pt}
+%    \begin{minipage}{0.48\hsize}
+%        \fbox{\includegraphics[width=0.99\hsize]{figs/stb-thesis-phd}}
+%    \end{minipage}
+%    \hfill
+%    \begin{minipage}{0.48\hsize}
+%        \fbox{\includegraphics[width=0.99\hsize]{figs/stb-thesis-masters-t}}
+%    \end{minipage}
+% \end{minipage}
+%
+% \begin{minipage}{\textwidth}
+%    \begin{minipage}{0.48\hsize}
+%        \smallskip  
+%        \caption{Title page with \STBopt{PhD} option}
+%    \end{minipage}
+%    \hfill
+%    \begin{minipage}{0.48\hsize}
+%        \smallskip  
+%        \caption{Title page with \STBopt{master-t} option}
+%    \end{minipage}
+% \end{minipage}
+% \bigskip
+%
+% \begin{minipage}{\textwidth}
+%    \setlength\fboxsep{0pt}
+%    \begin{minipage}{0.48\hsize}
+%        \fbox{\includegraphics[width=0.99\hsize]{figs/stb-thesis-masters-a}}
+%    \end{minipage}
+%    \hfill
+%    \begin{minipage}{0.48\hsize}
+%    \end{minipage}
+% \end{minipage}
+% 
+% \begin{minipage}[t]{\textwidth}
+%    \begin{minipage}[t]{0.48\hsize}
+%        \smallskip  
+%        \caption{Title page with \STBopt{masters-a} option for a 
+%                  masters assignment project}
+%    \end{minipage}
+%    \hfill
+%    \begin{minipage}[t]{0.48\hsize}
+%    \end{minipage}
+% \end{minipage}
+% \end{figure}
+%
+% \subsection{Declaration page}
+% Every thesis and dissertation \emph{must} include a declaration page.
+% The \cmd{\DeclarationPage} command set the required text in the default
+% language and output the copyright statement.
+% \begin{decl}[\DeclarationPage,\DeclarationDate]
+% \cmd{\DeclarationPage} \\
+% \cmd{\DeclarationDate}\marg{date}
+% \end{decl}
+%
+% \subsection{Copyright Information}
+%
+% The copyright information in a thesis or dissertation is compulsory
+% from 2007. It is added to the bottom of the declaration page.
+% The default copyright holder is the University of Stellenbosch.
+%
+% The default copyright holder can be changed with:
+% \begin{decl}[\SetCopyrightHolder]
+%    \cmd{\SetCopyrightHolder}\marg{new copyright holder}
+% \end{decl}
+%
+% \noindent The copyright output can be switched of with
+% \begin{decl}[\SetCopyrightOff]
+%    \cmd{\SetCopyrightOff}
+% \end{decl}
+%
+%
+% \subsection{Abstract}
+%
+% An \env{abstract} environment is provided that prints a page containing all
+% the thesis information.
+%
+% \begin{decl}[\address]
+% \cmd{\address}\marg{full address}
+% \end{decl}
+% The address must be included in Afrikaans and English for Masters
+% and PhD documents.
+% \begin{ltxexample}
+% \address{\AorE{Departement Siviele Ingenieurswese,\\ Stellenbosch Universiteit,\\ 
+%                Privaatsak X1, 7602 Matieland, Suid Afrika.
+%                }{%
+%                Department of Civil Engineering,\\ Stellenbosch University,\\
+%                Private Bag X1, 7602 Matieland, South Africa.}}
+% \end{ltxexample}
+% The layout of an abstract for a report differs from
+% that of a thesis or a dissertation. It is also important to note that theses
+% and dissertations require an English and an Afrikaans abstract.
+% \begin{Edecl}[abstract]
+%  |\begin{abstract}                 \begin{abstract}|\oarg{language}\\
+%  ~~Text in default language ...\hspace{7.0em}Text in \meta{language} ...\\
+%  |\end{abstract}                   \end{abstract}|
+% \end{Edecl}
+% If the traditional abstract page is preferred, then use a normal chapter
+%
+% \begin{ltxexample}
+% \chapter{Abstract}
+% This thesis ...
+% \end{ltxexample}
+%
+%
+%
+% \subsection{Acknowledgements, Dedications, etc.}
+%
+% Acknowledgements, etc.\ can be included in the front matter of a document
+% after a \cmd{\chapter} command, e.g.:
+% \begin{ltxexample}
+% \chapter{Acknowledgements}
+% I would like to express my sincere gratitude ...
+% \end{ltxexample}
+%
+%
+%
+% \section{Back Matter}
+% \subsection{Bibliography/List of References}
+%
+% The \pkg{stb-bib} package formats bibliographies for theses and dissertations
+% of the University of Stellenbosch. It is language sensitive and provides the
+% correct output for both Afrikaans and English theses.
+%
+% \paragraph{Bibliography:}
+% The list of all the citations in numerical order of citation, e.g.:\smallskip
+%
+% \noindent\begin{cminipage}{\textwidth}\small
+%      \begin{itemize}
+%       \item[]\hspace*{-1.5em}1.~~Rhodes, M\@. \textit{Introduction
+%           to Particle Technology.} Wiley, New York (1998).
+%       \item[]\hspace*{-1.5em}2.~~Cleary, P.W\@. The filling of dragline buckets.
+%                 \textit{Mathematical Engineering in Industry,}\\
+%                 vol.\ 7, no.\ 1 (1998), pp.\ 1--24.
+%      \end{itemize}
+%      \end{cminipage}
+%
+% \paragraph{List of References:}
+% For author-year citations, all the citations sorted in alphabetic order,
+% e.g.:\smallskip
+%
+% \noindent\begin{cminipage}{\textwidth}\small
+%      \begin{itemize}
+%       \item[]\hspace*{-2.5em}Cleary, P.W.  (1998). The filling of
+%           dragline buckets. \textit{Mathematical Engineering in
+%           Industry,} vol.\ 7, no.\ 1, pp.\ 1--24.
+%       \item[]\hspace*{-2.5em}Rhodes, M. (1998). 
+%              \textit{Introduction to Particle Technology.}
+%               Wiley, New York.
+%      \end{itemize}
+%      \end{cminipage}
+%
+% \bigskip
+%
+% \noindent The default name in the \pkg{stb-thesis} package is ``Bibliography''.
+% To change this to ``List of References'' (for a thesis), we have to overrule
+% the \pkg{babel} setup. Make the following declarations
+% \begin{ltxexample}
+%     \documentclass[12pt,oneside,openany,a4paper,%... Layout
+%                    afrikaans,UKenglish,%.............. Global language drivers
+%                    masters-t,a5block %.............. Type and layout
+%                   ]{stb-thesis}
+%    
+%     \usepackage{babel}%............................. Language setup
+%       :
+%     \usepackage{stb-bib}%........................... Bibliography
+%        \bibliographystyle{stb-bib-eng-a}%.......... Auhor-year style
+%        \addto{\captionsafrikaans}{\renewcommand{\bibname}{Lys van Verwysings}}
+%        \addto{\captionsUKenglish}{\renewcommand{\bibname}{List of References}}
+% \end{ltxexample}
+%
+% \noindent References to the pages or sections of citations, can be included
+% with the \pkg{backref} package. The \pkg{backref} package loaded as part of
+% \pkg{hyperref} or on its own.:
+%
+% \begin{ltxexample}
+%     \iftrue
+%         \usepackage[backref=page]{hyperref}%.... Hyperlinks & backreferences
+%     \else
+%        \usepackage[pageref]{backref}%........... Citation backreferences
+%     \fi
+%     \renewcommand*{\backrefalt}[4]{%
+%         \ifcase #1 (Not cited.)%
+%         \or        (Cited on page~#2.)%
+%         \else      (Cited on pages~#2.)%
+%         \fi}
+% \end{ltxexample}
+% An example is:\par\noindent
+% \begin{cminipage}{1\textwidth}\small
+% \begin{itemize}
+%     \item[]\hspace*{-2.5em}Rhodes, M. (1998).
+%       \textit{Introduction to Particle Technology.}\\
+%       Wiley, New York. (Cited on pages 13 and 15.)
+% \end{itemize}
+% \end{cminipage}
+%
+% \StopEventually{\PrintChanges\PrintIndex}
+% ^^A==============================================================
+% \clearpage
+% \section{Implementation: \pkg{stb-thesis}}
+%
+% \subsection{Identification}
+%    \begin{macrocode}
+%<*cls>
+%    \end{macrocode}
+%    \begin{macrocode}
+\NeedsTeXFormat{LaTeX2e}[2020/08/10]
+%    \end{macrocode}
+% \changes{v1.2}{2023/08/10}{Requires Latex 2020/08/10}
+%    \begin{macrocode}
+\def\STB@basetype{book}
+\ProvidesClass{stb-thesis}[\STBTfiledate
+                           \STBTfileversion 
+                           Stellenbosh Thesis class (DNJ ELS)]
+%    \end{macrocode}
+%
+% \subsection{External packages}
+%    We need the \pkg{calc} and \pkg{ifpdf} packages.
+%    \begin{macrocode}
+\RequirePackage{calc}
+\RequirePackage{ifpdf}
+%    \end{macrocode}
+%
+%    \begin{macro}{\phantomsection}
+%    A command needed, if the \pkg{hyperref} package is used,
+%    for putting before certain \cmd{\addcontentsline} commands.
+%    \begin{macrocode}
+\providecommand{\phantomsection}{}
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \noindent We need the \pkg{graphicx} package and it must be
+%    loaded by the user in the document preamble.
+%
+%    \begin{macrocode}
+\AtBeginDocument{%
+   \@ifpackageloaded{graphicx}{}{%
+   \ClassError{stb-thesis}{You must load the graphicx package}{}}}
+%    \end{macrocode}
+%
+%  \subsection{Options}
+%  \subsubsection{Language options}
+%
+%  \subsubsection*{\itshape Utility commands:}
+%    Utility commands and environments to make local
+%    language changes.
+%
+%    \begin{macro}{\STB@AFRstr}
+%    String in the right catcode for tests against \cmd{\languagename}.
+%    \begin{macrocode}
+\edef\STB@AFRstr{\string afrikaans}
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\AorE}
+%    Command \cmd{\AorE}\marg{Afr}\marg{Eng} to type text depending
+%    on the active language.
+%    \begin{macrocode}
+\newcommand{\AorE}[2]{%
+   \ifx\STB@AFRstr\languagename #1\else #2\fi}
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{environment}{Afr}
+%    Makes an Afrikaans environment inside an English document.
+%    \begin{macrocode}
+\newenvironment{Afr}%
+    {\ifx\languagename\STB@AFRstr\relax\else
+       \selectlanguage{afrikaans}%
+     \fi}%
+    {}
+%    \end{macrocode}
+%    \end{environment}
+%
+%    \begin{macro}{\STB@ENGstr}
+%    Make provisions for all the different types of English.
+%    The command is reset within the options.
+%    \begin{macrocode}
+\newcommand*\STB@ENGstr{}
+\let\STB@ENGstr=\relax
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{environment}{Eng}
+%    Makes an English environment inside an Afrikaans document.
+%    \begin{macrocode}
+\newenvironment{Eng}%
+    {\ifx\relax\STB@ENGstr\relax\else
+        \ifx\languagename\STB@ENGstr\relax\else
+           \edef\STB@tempa{\noexpand\selectlanguage{\STB@ENGstr}}%
+           \STB@tempa
+        \fi
+     \fi}%
+    {}
+%    \end{macrocode}
+%    \end{environment}
+%
+%   \subsubsection*{\itshape Marker commands:}
+%   Commands of which the contents are defined later.
+%
+%    \begin{macrocode}
+\newcommand\DegreeName{%
+    \ClassWarning{stb-thesis}{No degree or subject supplied}%
+    \textfb{[No degree!]}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\newcommand\DegreeNameLong{%
+    \ClassWarning{stb-thesis}{No degree or subject supplied}%
+    \textfb{[No degree!]}}
+%    \end{macrocode}
+%
+%
+%   \subsubsection*{\itshape Language commands:}
+%
+%    Declare all the language specific text in separate macros,
+%    enabling language changes with the \pkg{babel} package
+%    commands.
+%
+%    Predefine the language commands to prevent accidental overwrite
+%    when loaded from external files.
+%
+%    \begin{macrocode}
+\newcommand*\STBName{}
+\newcommand*\AuthByTxt{}
+\newcommand*\StudyLeaderType{}
+\newcommand*\StudyLeadersType{}
+\newcommand*\CoStudyLeaderType{}
+\newcommand*\CoStudyLeadersType{}
+\newcommand*\SupervisorType{}
+\newcommand*\SupervisorsType{}
+\newcommand*\CoSupervisorType{}
+\newcommand*\CoSupervisorsType{}
+\newcommand*\TypeAssignment{}
+\newcommand*\TypeThesis{}
+\newcommand*\TypePhD{}
+\newcommand*\CopyrightHolder{}
+\newcommand*\CopyrightTxt{}
+\newcommand*\CopyrightAnot{}
+\newcommand*\Signat{}
+\newcommand*\Datetxt{}
+\newcommand*\MasterDescript{}
+\newcommand*\PhDDescript{}
+\newcommand*\ThesisDeclare{}
+\newcommand*\MonthName{}
+\newcommand*\DeclarationName{}
+\newcommand*\AbstractName{}
+%    \end{macrocode}
+%
+%    Input all the language setting form external files
+%
+%    \begin{macrocode}
+\InputIfFileExists{stb-thesis.afr}
+    {\ClassInfo{stb-thesis}{Input file 'stb-thesis.afr' loaded}}
+    {\ClassError{stb-thesis}{No file 'stb-thesis.afr'}{}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\InputIfFileExists{stb-thesis.eng}
+    {\ClassInfo{stb-thesis}{Input file 'stb-thesis.eng' loaded}}
+    {\ClassError{stb-thesis}{No file 'stb-thesis.eng'}{}}
+%    \end{macrocode}
+%    Set English as default if no language option is selected.
+%    \begin{macrocode}
+\STBextrasenglish
+\STBcaptionsenglish
+%    \end{macrocode}
+%
+%
+%  \subsubsection*{\itshape Set language options}
+%
+%    \begin{macro}{\STB@addto}
+%    A redefinition of the \pkg{babel} \cmd{\addto}  command
+%    (taken from \pkg{varioref}).
+%    \begin{macrocode}
+\def\STB@addto#1#2{%
+  #2%
+  \@temptokena{#2}%
+  \ifx#1\relax
+    \let#1\@empty
+  \fi
+  \ifx#1\undefined
+     \edef#1{\the\@temptokena}%
+  \else
+     \toks@\expandafter{#1}%
+     \edef#1{\the\toks@\the\@temptokena}%
+  \fi
+  \@temptokena{}\toks@\@temptokena}
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\STB@addlangextras}
+%    \begin{macro}{\STB@addlangcaptions}
+%    Add the language definitions to \cmd{\extras}\meta{lang}
+%    and \cmd{\captions}\meta{lang}
+%    at the beginning of the document after \pkg{babel}.
+%    \begin{macrocode}
+\newcommand\STB@addlangextras[2]{%
+   \AtBeginDocument{%
+      \expandafter\STB@addto\csname extras#1\endcsname #2}}
+\newcommand\STB@addlangcaptions[2]{%
+   \AtBeginDocument{%
+      \expandafter\STB@addto\csname captions#1\endcsname #2}}
+%    \end{macrocode}
+%    \end{macro}
+%    \end{macro}
+%
+%    \noindent Set all the different English language options.
+%    \begin{macrocode}
+\DeclareOption{english}{%
+   \edef\STB@ENGstr{\string english}%
+   \STB@addlangextras{english}{\STBextrasenglish}%
+   \STB@addlangcaptions{english}{\STBcaptionsenglish}}
+\DeclareOption{UKenglish}{%
+   \edef\STB@ENGstr{\string UKenglish}%
+   \STB@addlangextras{UKenglish}{\STBextrasenglish}%
+   \STB@addlangcaptions{UKenglish}{\STBcaptionsenglish}}
+\DeclareOption{USenglish}{%
+   \edef\STB@ENGstr{\string USenglish}%
+   \STB@addlangextras{USenglish}{\STBextrasenglish}%
+   \STB@addlangcaptions{USenglish}{\STBcaptionsenglish}}
+\DeclareOption{british}{%
+   \edef\STB@ENGstr{\string british}%
+   \STB@addlangextras{british}{\STBextrasenglish}%
+   \STB@addlangcaptions{british}{\STBcaptionsenglish}}
+%    \end{macrocode}
+%
+%    \noindent Set Afrikaans language option.
+%    \begin{macrocode}
+\DeclareOption{afrikaans}{%
+   \STB@addlangextras{afrikaans}{\STBextrasafrikaans}%
+   \STB@addlangcaptions{afrikaans}{\STBcaptionsafrikaans}}
+%    \end{macrocode}
+%
+%
+%  \subsubsection{Thesis type options}
+%    \begin{macro}{\if@Masters}
+%    Flag for \opt{masters-a} and \opt{masters-t} options.
+%    \begin{macrocode}
+\newif\if@Masters
+\@Mastersfalse
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macro}{\if@PhD}
+%    Flag for \opt{PhD} option.
+%    \begin{macrocode}
+\newif\if@PhD
+\@PhDfalse
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\ThesisType}
+%    \begin{macro}{\SupervisorText}
+%    \begin{macro}{\SupervisorsText}
+%    \begin{macro}{\CoSupervisorText}
+%    \begin{macro}{\CoSupervisorsText}
+%    Global headings that are set according to the thesis
+%    type options.
+%    \begin{macrocode}
+\newcommand{\ThesisType}{}
+\newcommand{\SupervisorText}{}
+\newcommand{\SupervisorsText}{}
+\newcommand{\CoSupervisorText}{}
+\newcommand{\CoSupervisorsText}{}
+%    \end{macrocode}
+%    \end{macro}
+%    \end{macro}
+%    \end{macro}
+%    \end{macro}
+%    \end{macro}
+%
+%    \opt{masters-a:} Masters with and assignment.
+%    \begin{macrocode}
+\DeclareOption{masters-a}{%
+   \renewcommand{\ThesisType}{\TypeAssignment}%
+   \renewcommand{\SupervisorText}{\SupervisorType}%
+   \renewcommand{\SupervisorsText}{\SupervisorsType}%
+   \renewcommand{\CoSupervisorText}{\CoSupervisorType}%
+   \renewcommand{\CoSupervisorsText}{\CoSupervisorsType}%
+   \@Masterstrue
+   \@PhDfalse}
+%    \end{macrocode}
+%
+%    \opt{masters-t:} Masters with a thesis.
+%    \begin{macrocode}
+\DeclareOption{masters-t}{%
+   \renewcommand{\ThesisType}{\TypeThesis}%
+   \renewcommand{\SupervisorText}{\SupervisorType}%
+   \renewcommand{\SupervisorsText}{\SupervisorsType}%
+   \renewcommand{\CoSupervisorText}{\CoSupervisorType}%
+   \renewcommand{\CoSupervisorsText}{\CoSupervisorsType}%
+   \@Masterstrue
+   \@PhDfalse}
+%    \end{macrocode}
+%
+%    \opt{PhD:} PhD dissertation.
+%    \begin{macrocode}
+\DeclareOption{PhD}{%
+   \renewcommand{\ThesisType}{\TypePhD}%
+   \renewcommand{\SupervisorText}{\SupervisorType}%
+   \renewcommand{\SupervisorsText}{\SupervisorsType}%
+   \renewcommand{\CoSupervisorText}{\CoSupervisorType}%
+   \renewcommand{\CoSupervisorsText}{\CoSupervisorsType}%
+   \@Mastersfalse
+   \@PhDtrue}
+%    \end{macrocode}
+%
+%
+%
+%  \subsubsection{Page layout options}
+%
+%     Intercept 2-column requests.
+%    \begin{macrocode}
+\DeclareOption{twocolumn}{}
+%    \end{macrocode}
+%    \begin{macro}{\if@ABlock}
+%    \begin{macro}{\if@GBlock}
+%    \begin{macro}{\if@WBlock}
+%    Flags for \opt{a5block}, \opt{goldenblock} and \opt{wideblock} options.
+%    \begin{macrocode}
+\newif\if@ABlock
+\newif\if@GBlock
+\newif\if@WBlock
+\@ABlockfalse
+\@GBlockfalse
+\@WBlockfalse
+%    \end{macrocode}
+%    \end{macro}
+%    \end{macro}
+%    \end{macro}
+%
+%    \noindent\opt{a5block:}  An A5 type block area.
+%    \begin{macrocode}
+\DeclareOption{a5block}{%
+    \PassOptionsToClass{a4paper}{\STB@basetype}%
+    \@ABlocktrue
+    \@GBlockfalse
+    \@WBlockfalse}
+%    \end{macrocode}
+%
+%    \noindent\opt{goldenblock:} A golden section type block area.
+%    \begin{macrocode}
+\DeclareOption{goldenblock}{%
+    \PassOptionsToClass{a4paper}{\STB@basetype}%
+    \@GBlocktrue
+    \@ABlockfalse
+    \@WBlockfalse}
+%    \end{macrocode}
+%
+%    \noindent\opt{wideblock:} A type block with 25\,mm margins.
+%    \begin{macrocode}
+\DeclareOption{wideblock}{%
+    \PassOptionsToClass{a4paper}{\STB@basetype}%
+    \@GBlockfalse
+    \@ABlockfalse
+    \@WBlocktrue}
+%    \end{macrocode}
+%
+%    \noindent\opt{stdblock:} Standard \LaTeX{} type block area.
+%    \begin{macrocode}
+\DeclareOption{stdblock}{%
+   \@GBlockfalse
+   \@ABlockfalse
+   \@WBlockfalse}
+%    \end{macrocode}
+%
+%
+%
+%    \subsubsection{Process package options}
+%
+%    \begin{macrocode}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{\STB@basetype}}
+\ExecuteOptions{masters-t}
+\ProcessOptions*\relax
+\LoadClass[oneside,openany]{\STB@basetype}
+%    \end{macrocode}
+%
+%
+%
+%
+%
+%  \subsection{Temporaries}
+%
+%    \begin{macrocode}
+\newlength{\STB@tdima}
+\newlength{\STB@tdimb}
+\newsavebox{\STB@tboxa}
+\newsavebox{\STB@tboxb}
+\newcounter{STB@tcnta}
+\newcounter{STB@tcntb}
+%    \end{macrocode}
+%
+%
+%  \subsection{Page layout}
+%
+%    \begin{macro}{\FixVertParams}
+%    Reset all the vertical parameters for a page layout.
+%    \begin{macrocode}
+\newcommand\FixVertParams[1]{%
+    \normalsize
+    \setlength\STB@tdima{\textheight-\topskip}%
+    \setcounter{STB@tcnta}{\STB@tdima}
+    \setcounter{STB@tcntb}{\baselineskip}
+    \setcounter{STB@tcnta}{\value{STB@tcnta}/\value{STB@tcntb}}
+    \setlength\textheight{\baselineskip*\value{STB@tcnta}+\topskip}%
+    \setlength\STB@tdima{\paperheight-\textheight}%
+    \setlength\topmargin{#1\STB@tdima-\headheight-\headsep-1in}%
+    \@settopoint\topmargin}
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\FixHorizParams}
+%    Reset all the horizontal parameters for a page layout.
+%    \begin{macrocode}
+\newcommand\FixHorizParams[1]{%
+    \@settopoint\textwidth
+    \setlength\STB@tdima{\paperwidth-\textwidth}%
+    \if@twoside
+        \setlength\oddsidemargin{#1\STB@tdima-1in}%
+    \else
+        \setlength\oddsidemargin{.5\STB@tdima-1in}%
+    \fi
+    \@settopoint\oddsidemargin
+    \setlength\evensidemargin{\STB@tdima-\oddsidemargin-2in}%
+    \@settopoint\evensidemargin
+    \setlength\marginparwidth{\evensidemargin+1in-\marginparsep-1cm}%
+    \@settopoint\marginparwidth}
+%    \end{macrocode}
+%    \end{macro}
+%
+%
+%  \subsubsection{A5 type block area}
+%
+%    \begin{macrocode}
+\if@ABlock
+    \setlength\paperheight  {297.3mm}
+    \setlength\paperwidth   {210.2mm} % A4 paper
+    \setlength\textwidth    {.5\paperheight}
+    \setlength\textheight   {\paperwidth}
+    \setlength\marginparsep {7\p@}
+    \setlength\marginparpush{7\p@}
+    \FixVertParams{0.375}
+    %\FixHorizParams{0.375}
+    \FixHorizParams{0.5}% Changed in v3.0
+    \ifpdf
+       \setlength\pdfpagewidth{\paperwidth}
+       \setlength\pdfpageheight{\paperheight}
+    \fi
+\fi
+%    \end{macrocode}
+%
+%  \subsubsection{Golden section type block area}
+%
+%    \begin{macrocode}
+\if@GBlock
+    \setlength\paperheight  {297.3mm}
+    \setlength\paperwidth   {210.2mm} % A4 paper
+    \setlength\textheight   {0.747547\paperheight}
+    \setlength\textwidth    {0.666667\paperwidth}
+    \setlength\marginparsep {7\p@}
+    \setlength\marginparpush{7\p@}
+    \FixVertParams{0.375}
+    %\FixHorizParams{0.375}
+    \FixHorizParams{0.5}% Changed in v3.0
+    \ifpdf
+       \setlength\pdfpagewidth{\paperwidth}
+       \setlength\pdfpageheight{\paperheight}
+    \fi
+\fi
+%    \end{macrocode}
+%
+%  \subsubsection{Wide type block area}
+%
+%    \begin{macrocode}
+\if@WBlock
+    \setlength\paperheight  {297.3mm}
+    \setlength\paperwidth   {210.2mm} % A4 paper
+    \setlength\textheight   {\paperheight-50mm}
+    \setlength\textwidth    {\paperwidth-50mm}
+    \setlength\marginparsep {7\p@}
+    \setlength\marginparpush{7\p@}
+    \FixVertParams{0.5}
+    \FixHorizParams{0.5}
+    \ifpdf
+       \setlength\pdfpagewidth{\paperwidth}
+       \setlength\pdfpageheight{\paperheight}
+    \fi
+\fi
+%    \end{macrocode}
+%
+%  \subsection{Utility commands}
+%
+%    \begin{macro}{\STB@ifempt}
+%    \noindent
+%    Test for a empty argument (Wilson, Arseneau in \pkg{ifmtarg})
+%    \begin{macrocode}
+\begingroup
+   \catcode`\Q=3
+   \long\gdef\STB@ifempt#1{\STB@xifempt#1QQ\@secondoftwo\@firstoftwo\@nil}
+   \long\gdef\STB@xifempt#1#2Q#3#4#5\@nil{#4}
+\endgroup
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{environment}{STB@adjustwidth}
+%    \noindent Adjust the width of a paragraph. 
+%    \begin{macrocode}
+\newenvironment{STB@adjustwidth}[2]{%
+   \begin{list}{}{%
+      \setlength{\topsep}{0pt}%
+      \setlength{\partopsep}{0pt}%
+      \setlength{\leftmargin}{#1}%
+      \setlength{\rightmargin}{#2}%
+      \setlength{\listparindent}{\parindent}%
+      \setlength{\itemindent}{\parindent}%
+      \setlength{\parsep}{\parskip}%
+      }%
+   \item[]}{\end{list}}
+%    \end{macrocode}
+%    \end{environment}
+%
+%    \begin{environment}{SetMargins}
+%    Adjust the margins of a paragraph. The parameter |#1| and |#2|
+%    are the left and right margins of the paragraph.
+%    \begin{macrocode}
+\newenvironment{SetMargins}[2]%
+  {\setlength{\STB@tdima}{-1in-\hoffset-\oddsidemargin}%
+   \setlength{\STB@tdimb}{-\STB@tdima}%
+   \addtolength{\STB@tdima}{#1}%
+   \addtolength{\STB@tdimb}{-\paperwidth+\textwidth+#2}%
+   \begin{STB@adjustwidth}{\STB@tdima}{\STB@tdimb}%
+  }%
+  {\end{STB@adjustwidth}}
+%    \end{macrocode}
+%    \end{environment}
+%
+% \subsection{Front pages}
+%
+% \subsubsection{Title page}
+%
+%    \begin{environment}{STB@titlepage}
+%    Make a single column empty page with predefined margins
+%    \begin{quote}
+%    |\begin{STB@titlepage}|\marg{top}\marg{bottom}\marg{left}\marg{right}\\
+%    |   |\meta{title page}\\
+%    |\end{STB@titlepage}|
+%    \end{quote}
+%    \begin{macrocode}
+\newenvironment{STB@titlepage}[4]
+  {\cleardoublepage
+   \if@twocolumn
+      \@restonecoltrue\onecolumn
+   \else
+      \@restonecolfalse\newpage
+   \fi
+   \thispagestyle{empty}%
+   \setcounter{page}\@ne
+%    \end{macrocode}
+%
+%      \Hpar[1.5cm] Set the top margin by moving the starting point up.
+%
+%    \begin{macrocode}
+   \setlength{\STB@tdima}{1in+\voffset+\topmargin+\headheight+\headsep+\topskip}%
+   \setlength{\STB@tdimb}{#1 -\STB@tdima}%
+   \vspace*{\STB@tdimb}%
+%    \end{macrocode}
+%
+%      \Hpar[1.5cm] Set the bottom margin by enlarging the page
+%
+%    \begin{macrocode}
+   \addtolength{\STB@tdima}{\textheight-\paperheight-\topskip}%
+   \addtolength{\STB@tdima}{#2}%
+   \enlargethispage{-\STB@tdima}%
+%    \end{macrocode}
+%
+%      \Hpar[1.5cm] Set the left and right margins by putting the contents
+%                  in a list environment with widened margins.\par
+%    \begin{macrocode}
+   \setlength{\STB@tdima}{-1in-\hoffset-\oddsidemargin}%
+   \setlength{\STB@tdimb}{-\STB@tdima}%
+   \addtolength{\STB@tdima}{#3}%
+   \addtolength{\STB@tdimb}{-\paperwidth+\textwidth+#4}%
+   \begin{STB@adjustwidth}{\STB@tdima}{\STB@tdimb}%
+  }%
+  {\end{STB@adjustwidth}%
+   \if@restonecol\twocolumn \else \newpage \fi
+   \if@twoside\else
+      \setcounter{page}\@ne
+   \fi}
+%    \end{macrocode}
+%    \end{environment}
+%
+%    Undefine the standard title page.
+%    \begin{macrocode}
+\let\maketitle\relax
+%    \end{macrocode}
+%
+%
+%  \subsubsection*{\itshape The title page}
+%
+%    \begin{macro}{\STB@frntpage}
+%    \changes{v1.2}{2023/08/10}{Front page watermark graphics}
+%    \begin{macro}{\STB@putfrntpage}
+%    \changes{v1.2}{2023/08/10}{Front page watermark graphics}
+%    Full page graphics for frontpages
+%    \begin{macrocode}
+\newcommand\STB@frntpage{%
+    \includegraphics[width=\paperwidth,height=\paperheight]{stb-thesis-frntp.pdf}}
+\newcommand\STB@putfrntpage{%
+    \AddToHookNext{shipout/background}{\put(0mm,-\paperheight){\STB@frntpage}}}
+%    \end{macrocode}
+%    \end{macro}
+%    \end{macro}
+%
+%    \begin{macro}{\TitlePage}
+%    The \cmd{\TitlePage} command set the full front page for
+%    the US theses.  All margins, spacing and
+%    font sizes must be set inside this command.
+%    \begin{macrocode}
+\newcommand{\TitlePage}{%
+   \STB@putfrntpage
+   \begingroup
+      \let\footnote\relax
+      \begin{STB@titlepage}{6cm}{4.5cm}{2.5cm}{2.5cm}%
+         \centering
+         \vfil
+         \vspace{20mm}
+        {\LARGE \@title \par}
+         \vspace{2em}
+         \if@Authorpresent
+            {\large \AuthByTxt\par}
+             \vspace{2em}
+            {\Large
+             \lineskip .75em\relax%
+             \begin{tabular}[t]{c}%
+                \STB@authorlong
+             \end{tabular}\par}%
+             \vfill
+             \vfill
+         \fi
+        {\large\slshape
+         \begin{STB@adjustwidth}{1.5cm}{1.5cm}
+            \centering\STB@ThesisDescript
+         \end{STB@adjustwidth}\par}
+         \vfill
+         \vfill
+        {\normalsize \STB@spvset \par}
+         \vspace{2em}
+        {\normalsize \STB@date\par}%
+        {\footnotesize \STB@sponsor \par}
+      \end{STB@titlepage}%
+   \endgroup
+   \global\let\TitlePage\relax
+   \setcounter{footnote}{0}%
+   \global\let\thanks\relax
+   \global\let\@thanks\@empty
+%   \global\let\and\relax
+   }
+%    \end{macrocode}
+%    \end{macro}
+%
+%
+%
+%    \subsubsection*{\itshape Author block}
+%
+%    \begin{macrocode}
+\newif\if@Authorpresent
+\@Authorpresentfalse
+%    \end{macrocode}
+%    \begin{macrocode}
+\renewcommand\author[2]{%
+   \@Authorpresenttrue%
+   \gdef\STB@author{#1}%
+   \gdef\STB@authorlong{#2}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\newcommand\STB@author{%
+    \ClassWarning{stb-thesis}{No author supplied}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\newcommand\STB@authorlong{%
+    \ClassWarning{stb-thesis}{No author supplied}}
+%    \end{macrocode}
+%
+%
+%  \subsubsection*{\itshape Thesis description}
+%
+%    \begin{macrocode}
+\newcommand{\STB@ThesisDescript}{}
+%    \end{macrocode}
+%    \begin{macro}{\ThesisDescript}
+%    \begin{macrocode}
+\newcommand\ThesisDescript[1]{%
+   \long\gdef\STB@ThesisDescript{#1}}
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macrocode}
+\if@Masters
+   \ThesisDescript{\MasterDescript}
+\fi
+%    \end{macrocode}
+%    \begin{macrocode}
+\if@PhD
+    \ThesisDescript{\PhDDescript}%
+\fi
+%    \end{macrocode}
+%
+%
+%  \subsubsection*{\itshape Degree}
+%
+%  See beginning of class for |\DegreeName| and |\DegreeNameLong|.
+%    \begin{macrocode}
+\newcommand\degree[2]{%
+   \gdef\DegreeName{#1}%
+   \gdef\DegreeNameLong{#2}}
+%    \end{macrocode}
+%
+%  \subsubsection*{\itshape Address and faculty}
+%
+%    \begin{macro}{\address}
+%    \begin{macrocode}
+\newcommand\address[1]{\gdef\STB@address{#1}}
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macrocode}
+\newcommand\STB@address{%
+    \ClassWarning{stb-thesis}{No institutional address supplied}}
+%    \end{macrocode}
+%
+%    \begin{macro}{\faculty}
+%    \begin{macrocode}
+\newcommand\faculty[1]{\gdef\FacultyName{#1}}
+%    \end{macrocode}
+%    \end{macro}
+%    \begin{macrocode}
+\newcommand\FacultyName{%
+    \ClassWarning{stb-thesis}{No faculty name supplied}%
+    \textbf{[No faculty name supplied!]}}
+%    \end{macrocode}
+%
+%  \subsubsection*{\itshape Supervisor or study leader}
+%
+%    \begin{macro}{\ifSTB@spvpresent}
+%    \begin{macro}{\ifSTB@cospvpresent}
+%    \begin{macrocode}
+\newif\ifSTB@spvpresent\STB@spvpresentfalse
+\newif\ifSTB@cospvpresent\STB@cospvpresentfalse
+%    \end{macrocode}
+%    \end{macro}
+%    \end{macro}
+%
+%    \begin{macrocode}
+\newif\ifSTB@spvmult\STB@spvmultfalse
+\newif\ifSTB@cospvmult\STB@cospvmultfalse
+\newif\ifSTB@spvrows\STB@spvrowsfalse
+%    \end{macrocode}
+%    \begin{macrocode}
+\newcommand\STB@spv{}
+\newcommand\STB@cospv{}
+\newcommand*\STB@spvalign{l}
+%    \end{macrocode}
+%
+%    \begin{macro}{\supervisor}
+%    \begin{macrocode}
+\newcommand{\supervisor}{%
+   \@ifstar{\STB@spvrowsfalse\@supervisor}%
+           {\STB@spvrowstrue\@supervisor}}
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macrocode}
+\newcommand{\@supervisor}[2][l]{%
+   \STB@ifempt{#2}{}{\STB@spvpresenttrue}%
+   \renewcommand*\STB@spvalign{#1}%
+   \renewcommand\STB@spv{#2}}
+%    \end{macrocode}
+%
+%
+%    \begin{macro}{\cosupervisor}
+%    \begin{macrocode}
+\newcommand{\cosupervisor}[1]{%
+   \STB@ifempt{#1}{}{\STB@cospvpresenttrue}%
+   \renewcommand\STB@cospv{#1}}
+%    \end{macrocode}
+%    \end{macro}
+%
+%
+%    \begin{macro}{\STB@spvset}
+%    \begin{macrocode}
+\newcommand{\STB@spvset}{%
+    \ifSTB@spvrows
+        \STB@spvrows
+    \else
+        \STB@spvcols
+    \fi}
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macrocode}
+\newcommand\STB@spvrows{%
+    \edef\STB@beginTab{\noexpand\begin{tabular}[t]{@{}\STB@spvalign @{}}}%
+    \edef\STB@endTab{\noexpand\end{tabular}}%
+    \STB@spvmultfalse
+    \sbox{\STB@tboxa}{%
+        \let\and\STB@spvand%
+        \STB@beginTab\STB@spv\STB@endTab}%
+    \STB@cospvmultfalse
+    \sbox{\STB@tboxb}{%
+        \let\and\STB@cospvand%
+        \STB@beginTab\STB@cospv\STB@endTab}%
+    \ifSTB@spvpresent
+        \begin{tabular}{@{}ll@{}}
+             \ifSTB@spvmult\SupervisorsText\else\SupervisorText\fi
+             & \usebox{\STB@tboxa}\\
+             \ifSTB@cospvpresent%
+                  \noalign{\vskip 1ex}
+                  \ifSTB@cospvmult\CoSupervisorsText\else\CoSupervisorText\fi
+                & \usebox{\STB@tboxb}
+             \fi
+        \end{tabular}
+   \fi}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\newcommand\STB@spvcols{%
+    \edef\STB@beginTab{\noexpand\begin{tabular}[t]{@{}\STB@spvalign @{}}}%
+    \edef\STB@endTab{\noexpand\end{tabular}}%
+    \STB@spvmultfalse
+    \sbox{\STB@tboxa}{%
+        \let\and\STB@spvand%
+        \STB@beginTab\STB@spv\STB@endTab}%
+    \STB@cospvmultfalse
+    \sbox{\STB@tboxb}{%
+        \let\and\STB@cospvand%
+        \STB@beginTab\STB@cospv\STB@endTab}%
+    \ifSTB@spvpresent
+        \STB@beginTab
+            \ifSTB@spvmult\SupervisorsText\else\SupervisorText\fi\\[1ex]
+             \usebox{\STB@tboxa}
+        \STB@endTab
+    \fi
+    \ifSTB@cospvpresent
+        \hspace{2em}%
+        \STB@beginTab
+            \ifSTB@cospvmult\CoSupervisorsText\else\CoSupervisorText\fi\\[1ex]
+             \usebox{\STB@tboxb}
+        \STB@endTab
+    \fi}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\newcommand*{\STB@spvand}[1][0pt]{%
+      \global\STB@spvmulttrue%
+      \\[#1]%
+      \ignorespaces}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\newcommand*{\STB@cospvand}[1][0pt]{%
+      \global\STB@cospvmulttrue%
+      \\[#1]%
+      \ignorespaces}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\let\studyleader\supervisor
+\let\promotor\supervisor  %Backward compatibility
+%    \end{macrocode}
+%
+%
+%
+%  \subsubsection*{\itshape Date}
+%
+%    \begin{macrocode}
+\newcount\STB@month
+\newcount\STB@year
+%    \end{macrocode}
+%    \begin{macrocode}
+\STB@month=0
+\STB@year=\number\year
+\def\STB@date{\MonthName{\STB@month}\ \number\STB@year}
+%    \end{macrocode}
+%    \begin{macrocode}
+\newcommand{\setdate}[2]{%
+   \STB@ifempt{#1}{\STB@month=0}{\STB@month=#1}%
+   \STB@year=#2
+   \gdef\STB@date{\MonthName{\STB@month}\ \number\STB@year}}
+%    \end{macrocode}
+%
+%
+%   \subsubsection*{\itshape Sponsor}
+%    \begin{macro}{\SetSponsor}
+%    Sponsors such as the NRF requests an acknowledgement on the title page.
+%    \begin{macrocode}
+\newcommand\STB@sponsor{\vspace{2em}}
+\newcommand\SetSponsor[1]{%
+    \renewcommand\STB@sponsor{\vspace{2em}\par\parbox{\linewidth}{#1}}}
+%    \end{macrocode}
+%    \end{macro}
+%
+%
+% \subsubsection{Copyright page}
+%
+%    From 2007 the copyright declaration must be at
+%    the bottom of the declaration page.
+%    \begin{macro}{\CopyrightPage}
+%    \begin{macrocode}
+\newcommand\CopyrightPage[1][\CopyrightHolder]{%
+   %\clearpage
+   %\thispagestyle{empty}
+   %\mbox{}\par\vfill
+   %\begin{center}
+   %   \CopyrightTxt\ \copyright\ \number\STB@year\ #1\\
+   %   \CopyrightAnot
+   %\end{center}
+   %\vfill\mbox{}\par
+   %\clearpage
+   }
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\SetCopyrightHolder}
+%    Macro to change the default copyright holder.
+%    \begin{macrocode}
+\newcommand\SetCopyrightHolder[1]{%
+   \renewcommand\CopyrightHolder{#1}}
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\SetCopyrightOff}
+%    Switch copyright output off.
+%    \begin{macrocode}
+\newif\ifSTB@Copyright
+\STB@Copyrighttrue
+\newcommand\SetCopyrightOff{%
+   \STB@Copyrightfalse}
+%    \end{macrocode}
+%    \end{macro}
+%
+%  \subsubsection{Declaration page}
+%
+%    \macro{\DeclarationDate}
+%    Optional commands to insert a signature and a signed date on
+%    declaration page.
+%    \begin{macrocode}
+\let\STB@DeclDate\@empty
+\newcommand{\DeclarationDate}[1]{%
+    \renewcommand\STB@DeclDate{#1}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\newcommand\STB@putdecldate{%
+        \vspace{1cm}
+        \noindent
+        \begin{minipage}{.5\textwidth}
+            \noindent
+            \ifx\STB@DeclDate\@empty\relax\else
+                \phantom{\Signat:}~\hfill\makebox[0pt][c]{\STB@DeclDate}\hfill\mbox{}\\[-.5\baselineskip]
+            \fi
+            \Datetxt:~ \dotfill\mbox{}\par
+        \end{minipage}
+        \par}
+%    \end{macrocode}
+%
+%    \macro{\DeclarationPage}
+%    \changes{v1.3}{2023/09/01}{Remove addconentsline}
+%    Set up the declaration page. The \cmd{\ThesisDeclare}\oarg{declaration}
+%    command has an optional argument to set a different declaration.
+%    \begin{macrocode}
+\newcommand{\DeclarationPage}[1][\ThesisDeclare]{%
+   \if@twocolumn
+      \@restonecoltrue\onecolumn
+   \else
+      \@restonecolfalse
+   \fi
+   \par
+   \thispagestyle{plain}%
+   \chapter*{\DeclarationName}%
+   \declaremark
+   %\phantomsection
+   %\addcontentsline{toc}{chapter}{\DeclarationName}%
+   #1\par
+   \STB@putdecldate
+   \ifSTB@Copyright
+       \mbox{}\par
+       \vfill
+       \vfill
+       \noindent\CopyrightTxt\ \copyright\ \number\STB@year\ \CopyrightHolder\\
+       \noindent\CopyrightAnot
+       \vfill
+       \mbox{}\par
+   \fi
+   \if@restonecol\twocolumn\fi}
+%    \end{macrocode}
+%
+%
+%  \subsubsection{Abstract page}
+%
+%    \begin{environment}{abstract}
+%    \changes{v1.3}{2023/09/01}{Remove addconentsline}
+%    Provides the environment
+%    \begin{quote}
+%    |\begin{abstract}|\oarg{lang}\\
+%    |   |\meta{abtract text}\\
+%    |\end{abstract}|
+%    \end{quote}
+%    to typeset the abstract. A different language can be selected
+%    with the optional argument to the environment.
+%    \begin{macrocode}
+\newenvironment{abstract}[1][\languagename]%
+   {\edef\@tempa{\expandafter\string #1}%
+    \ifx\@tempa\languagename\relax\else
+      \edef\@tempa{\noexpand\selectlanguage{#1}}\@tempa%
+    \fi
+   \if@twocolumn
+      \@restonecoltrue\onecolumn
+   \else
+      \@restonecolfalse
+   \fi
+   \par
+   \chapter*{\AbstractName}%
+   \abstractmark
+   %\phantomsection
+   %\addcontentsline{toc}{chapter}{\AbstractName}%
+       \begin{center}
+          {\large\bfseries \@title \par}
+           \medskip
+          {\lineskip .75em\relax%
+           \begin{tabular}[t]{@{}c@{}}%
+              \STB@author
+           \end{tabular}\par}
+           \smallskip
+          {\small\itshape\STB@address\par}
+           \smallskip
+          {\ThesisType: \DegreeName\par}
+           \smallskip
+          {\STB@date\par}
+       \end{center}
+    \if@restonecol\twocolumn\fi%
+    }{}
+%    \end{macrocode}
+%    \end{environment}
+%
+%
+%  \subsubsection{Table of contents}
+
+%    \begin{macro}{\tableofcontents}
+%    \changes{v1.3}{2023/09/01}{Remove addconentsline}
+%    \begin{macrocode}
+\renewcommand\tableofcontents{%
+   \if@twocolumn
+      \@restonecoltrue\onecolumn
+   \else
+      \@restonecolfalse
+   \fi
+   \chapter*{\contentsname}%
+   \tocmark
+   %\phantomsection
+   %\addcontentsline{toc}{chapter}{\contentsname}%
+   \@starttoc{toc}%
+   \if@restonecol\twocolumn\fi}
+%    \end{macrocode}
+%    \end{macro}
+%
+%
+%  \subsubsection{List of figures}
+%
+%    \begin{macrocode}
+\renewcommand\listoffigures{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \chapter*{\listfigurename}%
+    \lofmark
+    \phantomsection
+    \addcontentsline{toc}{chapter}{\listfigurename}%
+    \@starttoc{lof}%
+    \if@restonecol\twocolumn\fi
+    }
+%    \end{macrocode}
+%    \begin{macrocode}
+\renewcommand*\l@figure{\@dottedtocline{1}{0em}{3em}}
+%    \end{macrocode}
+%
+%
+%  \subsubsection{List of tables}
+%
+%    \begin{macrocode}
+\renewcommand\listoftables{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \chapter*{\listtablename}%
+    \lotmark
+    \phantomsection
+    \addcontentsline{toc}{chapter}{\listtablename}%
+    \@starttoc{lot}%
+    \if@restonecol\twocolumn\fi}
+%    \end{macrocode}
+%    \begin{macrocode}
+\let\l@table\l@figure
+%    \end{macrocode}
+%
+%
+%  \subsection{Back matter}
+%  \subsubsection{Bibliography}
+%
+%    \begin{macro}{\bibsection}
+%    \pkg{natbib} uses the \cmd{\bibsection} command. We change the
+%    \env{thebibliography} to use it also.
+%    \begin{macrocode}
+\providecommand\bibsection{}%
+\AtBeginDocument{%
+   \renewcommand{\bibsection}{%
+      \chapter*{\bibname}%
+      \bibmark
+      \phantomsection
+      \addcontentsline{toc}{chapter}{\bibname}}%
+   }
+%    \end{macrocode}
+%    \end{macro}
+%
+%
+%    \begin{environment}{thebibliography}
+%    The environment is a mixture of code from \pkg{book.cls}
+%    and \pkg{natbib}
+%    \begin{macrocode}
+\renewenvironment{thebibliography}[1]{%
+   \bibsection
+   \parindent \z@
+   \bibpreamble
+   \bibfont
+   \list{\@biblabel{\@arabic\c@enumiv}}%
+        {\settowidth\labelwidth{\@biblabel{#1}}%
+         \leftmargin\labelwidth
+         \advance\leftmargin\labelsep
+         \@openbib@code
+         \usecounter{enumiv}%
+         \let\p@enumiv\@empty
+         \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+   \sloppy
+   \clubpenalty4000
+   \@clubpenalty \clubpenalty
+   \widowpenalty4000%
+   \sfcode`\.\@m}
+  {\def\@noitemerr{\@latex@warning{Empty `thebibliography' environment}}%
+   \endlist
+   \vskip-\lastskip}
+%    \end{macrocode}
+%    \end{environment}
+%
+%    \begin{macro}{\bibfont}
+%    Command to change font sizes.
+%    \begin{macro}{\bibpreamble}
+%    The user can add stuff before the bibliography.
+%    \begin{macrocode}
+\let\bibfont\relax
+\let\bibpreamble\relax
+%    \end{macrocode}
+%    \end{macro}
+%    \end{macro}
+%
+%    \begin{macro}{\setbiblabel}
+%    A user command to change the bib label format .
+%    \begin{macrocode}
+\newcommand*{\setbiblabel}[1]{%
+   \renewcommand*{\@biblabel}[1]{#1}}
+\setbiblabel{[#1]\hfill}
+%    \end{macrocode}
+%    \end{macro}
+%
+%
+%  \subsubsection{Index}
+%
+%    \begin{environment}{theindex}
+%    \begin{macrocode}
+\renewenvironment{theindex}
+   {\if@twocolumn
+       \@restonecolfalse
+    \else
+       \@restonecoltrue
+    \fi
+    \columnseprule \z@
+    \columnsep 35\p@
+    \twocolumn[\@makeschapterhead{\indexname}]%
+    \indexmark
+    \phantomsection
+    \addcontentsline{toc}{chapter}{\indexname}
+    \thispagestyle{plain}
+    \parindent\z@
+    \parskip\z@ \@plus .3\p@\relax
+    \let\item\@idxitem}
+   {\if@restonecol
+       \onecolumn
+    \else
+       \clearpage
+    \fi}
+%    \end{macrocode}
+%    \end{environment}
+%
+%
+%
+% \subsection{Page markup}
+% \subsubsection{Headers and footers}
+%
+%    \begin{macro}{\STB@headfnt}
+%    Font for running headers.
+%    \begin{macro}{\STB@numfnt}
+%    Font for running header numbers.
+%    \begin{macrocode}
+\newcommand*{\STB@headfnt}[1]{{\slshape\small#1}}
+\newcommand*{\STB@numfnt}[1]{{\normalsize\bfseries#1}}
+%    \end{macrocode}
+%    \end{macro}
+%    \end{macro}
+%
+%    Define the \texttt{stb-thesis} page style
+%  \sechead{Headers for normal book class}
+%
+%    \begin{macrocode}
+\if@twoside
+   \def\ps@STBthesis{%
+      \def\@evenhead{\STB@numfnt{\thepage}\hfil\STB@headfnt{\leftmark}}%
+      \def\@oddhead{\STB@headfnt{\rightmark}\hfil\STB@numfnt{\thepage}}%
+      \let\@oddfoot\@empty
+      \let\@evenfoot\@empty
+      \let\@mkboth\markboth
+      \def\chaptermark##1{%
+         \markboth{\MakeUppercase{%
+            \ifnum \c@secnumdepth >\m@ne
+               \if@mainmatter
+                  \@chapapp\ \thechapter. \ %
+               \fi
+            \fi
+            ##1}}{}}%
+      \def\sectionmark##1{%
+         \markright{\MakeUppercase{%
+            \ifnum \c@secnumdepth > \z@
+               \thesection. \ %
+            \fi
+            ##1}}}%
+      \def\declaremark{\markboth{\MakeUppercase{\DeclarationName}}{}}%
+      \def\abstractmark{\markboth{\MakeUppercase{\AbstractName}}{}}%
+      \def\tocmark{\markboth{\MakeUppercase{\contentsname}}{}}%
+      \def\lofmark{\markboth{\MakeUppercase{\listfigurename}}{}}%
+      \def\lotmark{\markboth{\MakeUppercase{\listtablename}}{}}%
+      \def\bibmark{\markboth{\MakeUppercase{\bibname}}{}}%
+      \def\indexmark{\markboth{\MakeUppercase{\indexname}}{}}%
+      }
+\else
+   \def\ps@STBthesis{%
+      \def\@oddhead{\STB@headfnt{\rightmark}\hfil\STB@numfnt{\thepage}}%
+      \let\@oddfoot\@empty
+      \let\@mkboth\markboth
+      \def\chaptermark##1{%
+         \markright{\MakeUppercase{%
+            \ifnum \c@secnumdepth >\m@ne
+               \if@mainmatter
+                  \@chapapp\ \thechapter. \ %
+               \fi
+            \fi
+            ##1}}}%
+      \def\declaremark{\markright{\MakeUppercase{\DeclarationName}}}%
+      \def\abstractmark{\markright{\MakeUppercase{\AbstractName}}}%
+      \def\tocmark{\markright{\MakeUppercase{\contentsname}}}%
+      \def\lofmark{\markright{\MakeUppercase{\listfigurename}}}%
+      \def\lotmark{\markright{\MakeUppercase{\listtablename}}}%
+      \def\bibmark{\markright{\MakeUppercase{\bibname}}}%
+      \def\indexmark{\markright{\MakeUppercase{\indexname}}}%
+      }
+\fi
+%    \end{macrocode}
+%    Redefine the \texttt{plain} page style.
+%    \begin{macrocode}
+\def\ps@plain{%
+   \let\@mkboth\@gobbletwo
+   \let\@oddhead\@empty
+   \let\@evenhead\@empty
+   \def\@oddfoot{\reset@font\hfil\STB@numfnt{\thepage}\hfil}%
+   \let\@evenfoot\@oddfoot
+   }
+%    \end{macrocode}
+%
+%
+%    The default page style.
+%    \begin{macrocode}
+\pagestyle{STBthesis}
+%    \end{macrocode}
+%
+%
+%
+%  \subsubsection{Chapter and section headings}
+%
+%    \begin{macrocode}
+\newcommand{\STB@headfamily}{\normalfont\rmfamily}
+%    \end{macrocode}
+%    \begin{macrocode}
+\def\section{%
+   \@startsection{section}{1}%
+                 {\z@}%
+                 {-3.5ex plus -1ex minus -.2ex}%
+                 {2.3ex plus .2ex}%
+                 {\STB@headfamily\Large\bfseries\raggedright}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\def\subsection{%
+   \@startsection{subsection}{2}%
+                 {\z@}%
+                 {-3.25ex plus -1ex minus -.2ex}%
+                 {1.5ex plus .2ex}%
+                 {\STB@headfamily\large\bfseries\raggedright}}%
+%    \end{macrocode}
+%    \begin{macrocode}
+\def\subsubsection{%
+   \@startsection{subsubsection}{3}%
+                 {\z@}%
+                 {-3.25ex plus -1ex minus -.2ex}%
+                 {1.5ex plus .2ex}%
+                 {\STB@headfamily\normalsize\bfseries\raggedright}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\def\paragraph{%
+   \@startsection{paragraph}{4}%
+                 {\z@}%
+                 {3.25ex plus 1ex minus .2ex}%
+                 {-1em}%
+                 {\STB@headfamily\normalsize\bfseries}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\def\subparagraph{%
+   \@startsection{subparagraph}{5}%
+                 {\parindent}%
+                 {3.25ex plus 1ex minus .2ex}%
+                 {-1em}%
+                 {\STB@headfamily\normalsize\bfseries}}
+%    \end{macrocode}
+%
+%
+%
+%  \subsubsection{Floats and float pages}
+%
+%    \begin{macrocode}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\setcounter{dbltopnumber}{3}
+%    \end{macrocode}
+%    \begin{macrocode}
+\renewcommand{\topfraction}{.85}
+\renewcommand{\bottomfraction}{.7}
+\renewcommand{\textfraction}{.1}
+\renewcommand{\floatpagefraction}{.7}
+\renewcommand{\dbltopfraction}{.85}
+\renewcommand{\dblfloatpagefraction}{.7}
+%    \end{macrocode}
+%    \begin{macrocode}
+\setlength{\floatsep}{15pt plus 12pt}
+\setlength{\textfloatsep}{\floatsep}
+\setlength{\intextsep}{\floatsep}
+\setlength{\dblfloatsep}{15pt plus 12pt}
+\setlength{\dbltextfloatsep}{15pt plus 12pt}
+%    \end{macrocode}
+%    \begin{macrocode}
+\setlength{\@fptop}{0pt plus1fil}
+\setlength{\@fpbot}{0pt plus1fil}
+\setlength{\@fpsep}{8pt plus1fil}
+\setlength{\@dblfptop}{0pt plus1fil}
+\setlength{\@dblfpbot}{0pt plus1fil}
+\setlength{\@dblfpsep}{8pt plus1fil}
+%    \end{macrocode}
+%
+%
+% \subsubsection{Captions}
+%
+%    Figures and tables use the same caption command in the
+%    standard \pkg{book.cls}. This
+%    causes problems with spacing, because figure captions
+%    are normally below the figure while table captions
+%    are above the table. Make the spacing equal.
+%
+%    \smallskip
+%    \noindent Set parameters for \pkg{stb-thesis.cls}.
+%    \begin{macrocode}
+\setlength{\abovecaptionskip}{0.5\baselineskip}
+\setlength{\belowcaptionskip}{0.5\baselineskip}
+%    \end{macrocode}
+%
+%    \begin{macro}{\@makecaption}
+%    Redefine the caption output.
+%    \begin{macrocode}
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{\small{\bfseries #1:} #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    \unhbox\@tempboxa\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macrocode}
+%</cls>
+%    \end{macrocode}
+%    The end of this class.
+%    \Finale
+\endinput

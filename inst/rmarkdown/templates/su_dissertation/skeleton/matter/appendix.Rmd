@@ -1,5 +1,6 @@
 
 ```{=latex}
+%% DON'T DELETE THE FOLLOWING LINES
 \cleardoublepage
 \appendix
 \setappendixname
