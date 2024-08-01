@@ -7,18 +7,17 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-`wihantemplates` is an R package comprising–hopefully one day–a suite of
-templates for the creation of **R Markdown** documents, and in turn,
-PDFs which I have come to use on a regular basis. The package is still
-in its experimental stage, so please be patient while I work out the
-kinks. The best way to contribute to its development and address the
-problems which will inevitably arise is by logging a new issue
+An R package–hopefully, one day–comprising a suite of templates for the
+creation documents in **R Markdown** which I have come to use on a
+regular basis. The package is still in its experimental stage and I’ll
+be working out the kinks. The best way to contribute to its development
+and address its inevitable problems is by logging a new issue
 [here](https://github.com/WihanZA/wihantemplates/issues).
 
 ## Getting Started
 
-You can install the development version of `wihantemplates` from Github
-via the [`remotes`](https://github.com/r-lib/remotes#readme) package.
+You can install the development version from Github via the
+[`remotes`](https://github.com/r-lib/remotes#readme) package in R.
 
 ``` r
 # install.packages("remotes")
@@ -26,12 +25,13 @@ remotes::install_github("WihanZA/wihantemplates")
 library(wihantemplates)
 ```
 
-Ensure that you have the essential R packages installed and loaded.
-Since all templates rely on [TinyTeX](https://yihui.org/tinytex/)’s
-custom LaTeX distribution, you must have both the `tinytex` package and
-distribution installed on your machine. The
-[`rmarkdown`](https://rmarkdown.rstudio.com/lesson-1.html) package is
-also included here for good measure.
+Also ensure that you have certain essential packages installed and
+loaded in R. Since all templates rely on
+[TinyTeX](https://yihui.org/tinytex/)’s custom LaTeX distribution, you
+must have both the [`tinytex`](https://github.com/rstudio/tinytex)
+package and distribution installed on your machine. The
+[`rmarkdown`](https://github.com/rstudio/rmarkdown) package is also
+included here for good measure.
 
 ``` r
 if (!requireNamespace("tinytex", quietly = TRUE)) {
@@ -51,9 +51,10 @@ if (!tinytex::is_tinytex() || is.null(tinytex::tinytex_root())) {
 
 To ensure that all necessary LaTeX packages and dependencies are
 available, especially those not included in the TinyTeX distribution by
-default, you can use `tinytex::parse_install()`. This reads the log file
-from a failed compilation, `dissertation.log`, identifies the missing
-packages and styles, and installs them.
+default, you can use
+[`tinytex::parse_install()`](https://yihui.org/tinytex/r/#compile-latex-documents).
+This reads the `.log` file from a failed compilation, identifies the
+missing packages and styles, and installs them.
 
 ``` r
 tinytex::parse_install("dissertation.log")
@@ -136,6 +137,12 @@ complete example [here](examples/su_dissertation.pdf).
 
 #### YAML Fields
 
+YAML fields are found at the beginning of your main `.Rmd` document.
+These are metadata elements which define document settings and content
+according to the specifications set out in `template.tex`. When you knit
+the `.Rmd` file the final document is populated with the corresponding
+information in the appropriate locations with the correct formatting.
+
 ``` yaml
 ---
 output: 
@@ -171,9 +178,75 @@ colorlinks: TRUE
 ---
 ```
 
+Fields containing `-short` are printed in the heading of the abstract to
+provide a shortened version of their corresponding longer fields. The
+Afrikaans equivalents of used in the Afrikaans abstract (“uittreksel”).
+All Afrikaans fields are restricted to output in the Afrikaans abstract
+or `uittreksel`. Fields on the front page include the full name of the
+author, title, degree, department, faculty, supervisor, year, month, and
+sponsor information.
+
+- **keep_tex**: Keeps the intermediate `.tex` file. TRUE or FALSE.
+
+- **thesistype**: Options for the `stb-thesis` class/style are specific
+  formatting of the title and abstract pages of different document
+  types. Options are `masters-a` (assignment master’s degree),
+  `masters-t` (thesis master’s degree), and `PhD` (PhD dissertation).
+
+- **author** (`authorshort`): The full name of the author for the front
+  page and the short version for the abstract.
+
+- **title** (`titel`): The dissertation title in English for the front
+  page.
+
+- **degree** (`graad`): The full name of the degree in English for the
+  front page.
+
+- **department** (`departement`): The full name of the department in
+  English for the front page.
+
+- **faculty** (`fakulteit`): The full name of the faculty in English for
+  the front page.
+
+- **supervisor**: Name of the supervisor for the front page.
+  `cosupervisor` is optional and can be commented out if not needed.
+
+- **year** and **month**: Specify the year and month of submission for
+  both the front page and the abstract.
+
+- **sponsor**: Acknowledges any financial assistance or sponsorship. It
+  is optional and can be commented out if not needed. This appears on
+  the front page.
+
+- **File paths**: `abstract` is the path to the `abstract.Rmd` file,
+  `acknowledgements` is the path to the `acknowledgements.Rmd` file,
+  `nomenclature` is the path to the `nomenclature.Rmd` file,
+  `bibliography` is the path to the BibTeX file containing bibliography
+  entries, and `template` is the path to the LaTeX template file.
+
+- **Fields to avoid deviating from**: `latex_engine` (specifies the
+  LaTeX engine to use, here `xelatex`), `citation_package` (specifies
+  the citation package to use, here `natbib`), and `pandoc_args`
+  (additional arguments for Pandoc, setting the top-level division to
+  chapter).[^2]
+
+``` plaintext
+Error: Unable to connect to the database.
+Please check your network connection and try again.
+```
+
+- **colorlinks**: Specifies if the links in the PDF will be colored. You
+  can set colors for links, citations, files, and URLs. For example,
+  setting `colorlinks` to `true` will enable colored links.
+
 [^1]: See **[Better
     BibTeX](https://retorque.re/zotero-better-bibtex/)**, **[Citations
     in R Markdown’s Visual
     Mode](https://rstudio.github.io/visual-markdown-editing/citations.html)**,
     and **[ZotFile](https://zotfile.com/)** for additional tools making
     citation and reference management easier.
+
+[^2]: If for some reason you decide to delete
+    `citation_package = natbib`, you will receive an error along the
+    lines of
+    `! Package natbib Error: Bibliography not compatible with author-year citations.`
