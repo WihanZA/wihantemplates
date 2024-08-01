@@ -77,9 +77,11 @@ requirements of Stellenbosch University. The template heavily relies on
 the excellent suite of LaTeX packages,
 [`stellenbosch-2`](https://ctan.org/pkg/stellenbosch-2), created and
 maintained by [Daniel Els](mailto:dnjels@sun.ac.za). You can find a
-complete example [here](examples/su_dissertation.pdf).d
+complete example [here](examples/su_dissertation.pdf).
 
 [<img src="thumbnails/su_dissertation-1-2-3-4.png" style="width: 100.0%" />](thumbnails/su_dissertation-1-2-3-4.png)
+[<img src="thumbnails/su_dissertation-5-6-8-9.png" style="width: 100.0%" />](thumbnails/su_dissertation-5-6-8-9.png)
+[<img src="thumbnails/su_dissertation-10-19-21-25.png" style="width: 100.0%" />](thumbnails/su_dissertation-10-19-21-25.png)
 
 #### Template Directory
 
@@ -132,8 +134,6 @@ complete example [here](examples/su_dissertation.pdf).d
   [Zotero](https://www.zotero.org/) to automatically export collections
   of bibliography entries to `matter/mybib.bib`.[^1]
 
-[<img src="thumbnails/su_dissertation-5-6-8-9.png" style="width: 100.0%" />](thumbnails/su_dissertation-5-6-8-9.png)
-
 #### YAML Fields
 
 ``` yaml
@@ -170,8 +170,6 @@ bibliography: matter/mybib.bib
 colorlinks: TRUE
 ---
 ```
-
-[<img src="thumbnails/su_dissertation-10-19-21-25.png" style="width: 100.0%" />](thumbnails/su_dissertation-10-19-21-25.png)
 
 [^1]: See **[Better
     BibTeX](https://retorque.re/zotero-better-bibtex/)**, **[Citations
