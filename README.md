@@ -230,14 +230,15 @@ sponsor information.
   (additional arguments for Pandoc, setting the top-level division to
   chapter).[^2]
 
-``` plaintext
-Error: Unable to connect to the database.
-Please check your network connection and try again.
-```
-
 - **colorlinks**: Specifies if the links in the PDF will be colored. You
   can set colors for links, citations, files, and URLs. For example,
   setting `colorlinks` to `true` will enable colored links.
+
+- **Fields to avoid deviating from**: `latex_engine` (specifies the
+  LaTeX engine to use, here `xelatex`), `citation_package` (specifies
+  the citation package to use, here `natbib`), and `pandoc_args`
+  (additional arguments for Pandoc, setting the top-level division to
+  chapter).[^3]
 
 [^1]: See **[Better
     BibTeX](https://retorque.re/zotero-better-bibtex/)**, **[Citations
@@ -250,3 +251,8 @@ Please check your network connection and try again.
     `citation_package = natbib`, you will receive an error along the
     lines of
     `! Package natbib Error: Bibliography not compatible with author-year citations.`
+
+[^3]: If for some reason you decide to delete
+    `citation_package = natbib`, you will receive an error along the
+    lines of
+    <span style="color: red;">`! Package natbib Error: Bibliography not compatible with author-year citations.`</span>
