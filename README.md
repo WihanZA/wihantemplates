@@ -128,28 +128,6 @@ maintained by [Daniel Els](mailto:dnjels@sun.ac.za).
   [Zotero](https://www.zotero.org/) to automatically export collections
   of bibliography entries to `matter/mybib.bib`.[^1]
 
-### Recommended Resources and Tools
-
-- **Zotero**: A free, easy-to-use tool to help you collect, organize,
-  cite, and share research from
-
-- **Better BibTeX (BBT)**: A plugin for Zotero and Juris-M that makes it
-  easier to manage bibliographic data, especially for people authoring
-  documents using text-based toolchains (e.g. based on LaTeX / Markdown)
-  from <https://retorque.re/zotero-better-bibtex/>
-
-- **Citations in RStudio’s R Markdown’s Visual Mode**: Uses the standard
-  Pandoc markdown representation for citations (e.g. \[@citation\]).
-  Citations can be inserted from a variety of sources from
-  <https://rstudio.github.io/visual-markdown-editing/citations.html>
-
-- **ZotFile**: Advanced PDF management for Zotero. ZotFile is a Zotero
-  plugin to manage your attachments: automatically rename, move, and
-  attach PDFs (or other files) to Zotero items, sync PDFs from your
-  Zotero library to your (mobile) PDF reader (e.g. an iPad, Android
-  tablet, etc.) and extract annotations from PDF files from
-  <https://zotfile.com/>
-
 #### YAML Fields
 
 ``` yaml
@@ -218,4 +196,9 @@ template’s default settings.*
 | `\parindent`    | 0.0pt                         |                |                 |                     |
 | `\partopsep`    | 0.0pt                         |                |                 |                     |
 
-[^1]: Testing this footnote to see what it looks like in Github document
+[^1]: See **[Better
+    BibTeX](https://retorque.re/zotero-better-bibtex/)**, **[Citations
+    in R Markdown’s Visual
+    Mode](https://rstudio.github.io/visual-markdown-editing/citations.html)**,
+    and **[ZotFile](https://zotfile.com/)** for additional tools making
+    citation and reference management easier.
