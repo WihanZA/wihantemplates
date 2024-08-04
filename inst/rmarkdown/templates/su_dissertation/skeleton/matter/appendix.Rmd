@@ -71,4 +71,4 @@ $z_1$ to~$z_4$ with initial direction $z_2-z_1$ and final direction $z_4-z_3$.
 
 # Experiments
 
-`r lorem::ipsum(paragraphs = 12)`
+`r lorem::ipsum(paragraphs = 6)`

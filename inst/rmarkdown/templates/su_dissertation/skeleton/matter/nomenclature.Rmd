@@ -12,15 +12,15 @@
     \item[$t$] period
 \end{Nomencl}
 \begin{acronym}
-\acro{ARPU}{average revenue per unit}
-\acro{FDI}{foreign direct investment}
-\acro{GDP}{gross domestic product}
-\acro{ICT}{information and communication technology}
-\acro{ISO}{International Organization for Standardization}
-\acro{MA}[M\&A]{mergers and acquisitions}
-\acro{MNO}{mobile network operator}
-\acro{OLS}{ordinary least squares}
-\acro{PPML}{Poisson Pseudo-Maximum Likelihood}
-\acro{PML}{Pseudo-Maximum Likelihood}
-\acro{WTO}{World Trade Organization}
+\acro{arpu}[ARPU]{average revenue per unit}
+\acro{fdi}[FDI]{foreign direct investment}
+\acro{gdp}[GDP]{gross domestic product}
+\acro{ict}[ICT]{information and communication technology}
+\acro{iso}[ISO]{International Organization for Standardization}
+\acro{ma}[M\&A]{mergers and acquisitions}
+\acro{mno}[MNO]{mobile network operator}
+\acro{ols}[OLS]{ordinary least squares}
+\acro{ppml}[PPML]{Poisson Pseudo-Maximum Likelihood}
+\acro{pml}[PML]{Pseudo-Maximum Likelihood}
+\acro{wto}[WTO]{World Trade Organization}
 \end{acronym}

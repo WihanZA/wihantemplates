@@ -36,20 +36,28 @@ $if(thesistype)$$thesistype$$endif$ % PhD or masters-t
 
 %% Fonts math script SI units
 %% --------------------------------------------------------------
+
 \usepackage{amsmath}
-\usepackage{iftex}
-\ifxetex
-    \usepackage[mono,vvarbb,upint,subscriptcorrection,uprightscript]{notomath}
-    \usepackage[no-math]{fontspec}
-    \defaultfontfeatures{Ligatures=TeX}
-    \let\bm\symbfit
-\else
-    \usepackage[utf8]{inputenc}
-    \usepackage{textcomp}
-    \usepackage[T1]{fontenc}
-    \usepackage{bm}
-\fi
-\normalfont
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage[vvarbb, upint, subscriptcorrection, uprightscript]{notomath}
+\usepackage{noto-mono}
+\usepackage[T1]{fontenc}
+\renewcommand\familydefault{\rmdefault}
+\renewcommand\textbf[1]{{\fontseries{sb}\selectfont#1}}
+\usepackage{textcomp}
+\usepackage{bm}
+\let\bm\symbfit
+
+\usepackage[
+protrusion=true,
+factor=1000,
+expansion=true,
+auto=true,
+tracking=false,
+verbose=true
+]{microtype}
+\DisableLigatures{encoding=T1,shape=sc} % remove ligatures for small caps headers
 
 \usepackage{siunitx}
 \sisetup{detect-all = true, detect-family = true}
@@ -62,16 +70,14 @@ $if(thesistype)$$thesistype$$endif$ % PhD or masters-t
 
 %% Floats captions
 %% --------------------------------------------------------------
-\let\newfloat\undefined
-\usepackage{floatrow}
-\floatsetup[figure]{capposition=bottom}
-\floatsetup[table]{capposition=top}
+\usepackage{placeins}
+\usepackage{float}
 \usepackage[font=small]{caption}
 \captionsetup[figure]{labelfont={bf},labelformat={default},labelsep=quad,name={Figure}}
 \captionsetup[table]{labelfont={bf},labelformat={default},labelsep=quad,name={Table}}
-\setlength{\abovecaptionskip}{0.25\baselineskip}
-\setlength{\belowcaptionskip}{0.25\baselineskip}
-\setlength{\floatsep}{6pt plus 6pt}
+\setlength{\abovecaptionskip}{1ex}
+\setlength{\belowcaptionskip}{1ex}
+\setlength{\floatsep}{1ex plus 1ex}
 \setlength{\textfloatsep}{\floatsep}
 \setlength{\intextsep}{\floatsep}
 
@@ -102,13 +108,21 @@ $if(thesistype)$$thesistype$$endif$ % PhD or masters-t
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{booktabs}
-\setlength{\extrarowheight}{2pt}
+% \setlength{\extrarowheight}{2pt}
+\setlength{\tabcolsep}{6pt} % cell padding
+\renewcommand{\arraystretch}{1.5} % row spacing
 \usepackage{pdflscape}
 \usepackage{tabu}
 \usepackage{threeparttable}
 \usepackage{threeparttablex}
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
+
+%% %% User's latex before document defined in YAML of Rmd
+%% --------------------------------------------------------------
+$for(header-includes)$
+$header-includes$
+$endfor$
 
 %% Colours hyperlink setup
 %% --------------------------------------------------------------
@@ -120,27 +134,24 @@ $if(thesistype)$$thesistype$$endif$ % PhD or masters-t
 \definecolor{stbOrange}{rgb}{0.86, 0.27, 0.02}
 \definecolor{stbWine}{rgb}{0.65, 0.04, 0.24}
 \definecolor{stbSoil}{rgb}{0.39, 0.20, 0.21}
-\newcommand\myshade{50} % 50:50 color
-\usepackage[final,unicode=true]{hyperref}
-\hypersetup{bookmarks=true,
+\newcommand\myshade{50} % 95:5 white
+%% e.g. stbWine!\myshade!white
+\usepackage[pdfpagelabels]{hyperref}
+\hypersetup{breaklinks=true,
+            bookmarks=true,
             pdftitle={$title-meta$},
             pdfauthor={$author-meta$},
-            $if(colorlinks)$
-            pdfborderstyle={/S/U/W 1},
-            linkbordercolor=stbWine!\myshade!white,
-            citebordercolor=stbWine!\myshade!white,
-            filebordercolor=stbWine!\myshade!white,
-            urlbordercolor=stbWine!\myshade!white,
-            $else$
             colorlinks=true,
-            linkcolor=black,
-            citecolor=black,
-            urlcolor=black,
+            filecolor={black},
+            linkcolor={black},
+            citecolor={black},
+            urlcolor={black},
             pdfborder={0 0 0},
-            $endif$
-            breaklinks=true,
             pdfcreator={WihanZA Stellenbosch University Dissertation Template}}
 \urlstyle{same}
+
+%% Code chunk printing
+%% --------------------------------------------------------------
 $if(highlighting-macros)$
 $highlighting-macros$
 $endif$
@@ -155,9 +166,171 @@ $endif$
 \renewcommand\bibfont{\small}
 \renewcommand\bibsection{\chapter{\bibname}}
 
+%% If for some reason user deletes citation_package = natbib in YAML
+%% Don't do this, rather use the natbib package
+%% --------------------------------------------------------------
+$if(csl-refs)$
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+$endif$
+
+%% Change spacing of stb-thesis.cls declaration page
+%% --------------------------------------------------------------
+\makeatletter
+\renewcommand{\DeclarationPage}[1][\ThesisDeclare]{%
+  \if@twocolumn
+    \@restonecoltrue\onecolumn
+  \else
+    \@restonecolfalse
+  \fi
+  \par
+  \thispagestyle{plain}%
+  \chapter*{\DeclarationName}%
+  \declaremark
+  \phantomsection
+  \addcontentsline{toc}{chapter}{\DeclarationName}%
+  #1\par
+  \STB@putdecldate
+  \ifSTB@Copyright
+    \mbox{}\par
+    \vfill
+    \vfill
+    \noindent\CopyrightTxt\ \copyright\ \number\STB@year\ \CopyrightHolder\\
+    \noindent\CopyrightAnot
+    % \vfill
+    \mbox{}\par
+  \fi
+  \if@restonecol\twocolumn\fi
+}
+\makeatother
+
+%% Change spacing of stb-thesis.cls abstract environment
+%% --------------------------------------------------------------
+\makeatletter
+\renewenvironment{abstract}[1][\languagename]%
+{%
+  \edef\@tempa{\expandafter\string #1}%
+  \ifx\@tempa\languagename\relax\else
+    \edef\@tempa{\noexpand\selectlanguage{#1}}\@tempa%
+  \fi
+  \if@twocolumn
+    \@restonecoltrue\onecolumn
+  \else
+    \@restonecolfalse
+  \fi
+  \par
+  \chapter*{\AbstractName}%
+  \abstractmark
+  \phantomsection
+  \addcontentsline{toc}{chapter}{\AbstractName}%
+  \begin{center}
+    {\large\bfseries \@title\\}
+    \smallskip
+    {\begin{tabular}[t]{@{}c@{}}
+        \STB@author
+      \end{tabular}\par
+    }
+    {\small\itshape\STB@address\par}
+    {\small\ThesisType: \DegreeName\\}
+    {\small\STB@date\par}
+  \end{center}
+  \if@restonecol\twocolumn\fi%
+}{}
+\makeatother
+
+%% Change vertical spacing of supervisors
+%% --------------------------------------------------------------
+\makeatletter
+\renewcommand*{\STB@spvand}[1][-6pt]{%
+\global\STB@spvmulttrue%
+\\[#1]%
+\ignorespaces}
+
+\renewcommand*{\STB@cospvand}[1][-6pt]{%
+\global\STB@cospvmulttrue%
+\\[#1]%
+\ignorespaces}
+\makeatother
+
+
+%% Appearance of thesis description on title page
+%% --------------------------------------------------------------
+\makeatletter
+\renewcommand{\TitlePage}{%
+  \STB@putfrntpage
+  \begingroup
+  \let\footnote\relax
+  \begin{STB@titlepage}{6cm}{4.5cm}{2.5cm}{2.5cm}%
+    \centering
+    \vfil
+    \vspace{20mm}
+    {\LARGE \@title \par}
+    \vspace{2em}
+    \if@Authorpresent
+      {\large \AuthByTxt\par}
+      \vspace{2em}
+      {\Large
+        \lineskip .75em\relax%
+        \begin{tabular}[t]{c}%
+          \STB@authorlong
+        \end{tabular}\par}%
+      \vfill
+      \vfill
+    \fi
+    {\normalsize\slshape
+      \begin{STB@adjustwidth}{1cm}{1cm}
+        \centering\STB@ThesisDescript
+      \end{STB@adjustwidth}\par}
+    \vfill
+    \vfill
+    {\normalsize \STB@spvset \par}
+    \vspace{2em}
+    {\normalsize \STB@date\par}%
+    {\footnotesize \STB@sponsor \par}
+  \end{STB@titlepage}%
+  \endgroup
+  \global\let\TitlePage\relax
+  \setcounter{footnote}{0}%
+  \global\let\thanks\relax
+  \global\let\@thanks\@empty
+  \global\let\and\relax
+}
+\makeatother
+
 %% Title page front matter
 %% --------------------------------------------------------------
-\title{\bfseries\AorE{$titel$\\[1ex]\normalfont\small\itshape (``$title$'')}{$title$}}
+\title{\bfseries\AorE{$titel$\\ \normalfont\small\itshape (``$title$'')}{$title$}}
 \author{$authorshort$}{$author$}
 \degree{\AorE{$graadshort$}{$degreeshort$}}{\AorE{$graad$}{$degree$}}
 \address{\AorE{
@@ -168,8 +341,12 @@ $endif$
         Stellenbosch University,\\
         Private Bag X1, Matieland 7602, South Africa.}}
 \faculty{\AorE{$fakulteit$}{$faculty$}}
-\supervisor{$supervisor$}
-$if(cosupervisor)$\cosupervisor{$cosupervisor$}$endif$
+$if(supervisor)$
+\supervisor{$for(supervisor)$$supervisor$$sep$\and $endfor$}
+$endif$
+$if(cosupervisor)$
+\cosupervisor{$for(cosupervisor)$$cosupervisor$$sep$\and $endfor$}
+$endif$
 \setdate{$month$}{$year$}
 $if(sponsor)$\SetSponsor{$sponsor$}$endif$
 \makeatletter
@@ -187,47 +364,24 @@ $if(sponsor)$\SetSponsor{$sponsor$}$endif$
 
 %% Headings
 %% --------------------------------------------------------------
-%% \usepackage{titlesec} does not seem to work with stb-thesis
+% \usepackage{titlecaps}
+% \Addlcwords{a an the and but or for nor so yet at by for from in into like near of on over past to}
+
+\usepackage{titlesec}
+%% \chapter spacing from book.cls
 \makeatletter
-\renewcommand{\STB@headfamily}{\normalfont\rmfamily}
-\renewcommand\chapter{\if@openright\cleardoublepage\else\clearpage\fi
-                    \thispagestyle{plain}%
-                    \global\@topnum\z@
-                    \@afterindentfalse
-                    \secdef\@chapter\@schapter}
-\def\@chapter[#1]#2{\ifnum \c@secnumdepth >\m@ne
-                       \if@mainmatter
-                         \refstepcounter{chapter}%
-                         \typeout{\@chapapp\space\thechapter.}%
-                         \addcontentsline{toc}{chapter}%
-                                   {\protect\numberline{\thechapter}#1}%
-                       \else
-                         \addcontentsline{toc}{chapter}{#1}%
-                       \fi
-                    \else
-                      \addcontentsline{toc}{chapter}{#1}%
-                    \fi
-                    \chaptermark{#1}%
-                    \addtocontents{lof}{\protect\addvspace{10\p@}}%
-                    \addtocontents{lot}{\protect\addvspace{10\p@}}%
-                    \if@twocolumn
-                      \@topnewpage[\@makechapterhead{#2}]%
-                    \else
-                      \@makechapterhead{#2}%
-                      \@afterheading
-                    \fi}
 \def\@makechapterhead#1{%
-  \vspace*{0.5ex}%
-  {\parindent \z@ \raggedright \normalfont
+  \vspace*{1ex}%
+  {\parindent \z@ \raggedright\rmfamily
     \ifnum \c@secnumdepth >\m@ne
       \if@mainmatter
-        \LARGE\bfseries \@chapapp\space \thechapter
+        \LARGE\bfseries\@chapapp\space \LARGE\thechapter
         \par\nobreak
-        \vskip 0.5ex
+        \vskip
       \fi
     \fi
     \interlinepenalty\@M
-    \huge \bfseries #1\par\nobreak
+    \rmfamily\Huge\bfseries #1\par\nobreak
     \vskip 1ex
   }}
 \def\@schapter#1{\if@twocolumn
@@ -237,33 +391,91 @@ $if(sponsor)$\SetSponsor{$sponsor$}$endif$
                    \@afterheading
                  \fi}
 \def\@makeschapterhead#1{%
-  \vspace*{0.5ex}%
-  {\parindent \z@ \raggedright
-    \normalfont
+  \vspace*{1ex}%
+  {\parindent \z@ \raggedright\rmfamily
     \interlinepenalty\@M
-    \huge \bfseries  #1\par\nobreak
+    \Huge\bfseries #1\par\nobreak
     \vskip 1ex
   }}
-\def\section{%
-  \@startsection{section}{1}%
-  {\z@}%
-  {1ex plus 2pt minus 1pt}%
-  {1ex plus 2pt minus 1pt}%
-  {\STB@headfamily\Large\bfseries\raggedright}}
-\def\subsection{%
-  \@startsection{subsection}{2}%
-  {\z@}%
-  {.75ex plus 2pt minus 1pt}%
-  {.75ex plus 2pt minus 1pt}%
-  {\STB@headfamily\large\bfseries\raggedright}}%
-\def\subsubsection{%
-  \@startsection{subsubsection}{3}%
-  {\z@}%
-  {.75ex plus 2pt minus 1pt}%
-  {.75ex plus 2pt minus 1pt}%
-  {\STB@headfamily\normalsize\bfseries\raggedright}}
 \makeatother
 
+%% Now all other headings with titlesec
+% \titleformat{⟨command⟩}[⟨shape⟩]{⟨format⟩}{⟨label⟩}{⟨sep⟩}{⟨before-code⟩}[⟨after-code⟩]
+
+\titleformat
+{\section}
+{\sffamily\fontseries{sb}\Large\scshape}
+{\thesection}
+{0pt}
+{\hspace*{1em}}
+
+\titleformat
+{name=\section,numberless}
+{\sffamily\fontseries{sb}\Large\scshape}
+{}
+{0pt}
+{}
+
+\titlespacing
+{\section}
+{0pt}
+{1.5ex plus 0.2ex minus .2ex}
+{1ex plus 0.2ex minus .2ex}
+
+\titleformat
+{\subsection}
+{\sffamily\fontseries{sb}\large\scshape}
+{\thesubsection}
+{0pt}
+{\hspace*{1em}}
+
+\titleformat
+{name=\subsection,numberless}
+{\sffamily\fontseries{sb}\large\scshape}
+{}
+{0pt}
+{}
+
+\titlespacing
+{\subsection}
+{0pt}
+{1ex plus 0.2ex minus .2ex}
+{1ex plus 0.2ex minus .2ex}
+
+\titleformat
+{\subsubsection}
+{\sffamily\fontseries{sb}\scshape}
+{\thesubsubsection}
+{0pt}
+{\hspace*{1em}}
+
+\titleformat
+{name=\subsubsection,numberless}
+{\sffamily\fontseries{sb}\scshape}
+{}
+{0pt}
+{}
+
+\titlespacing
+{\subsubsection}
+{0pt}
+{1ex plus 0.2ex minus .2ex}
+{1ex plus 0.2ex minus .2ex}
+
+\titleformat
+{\paragraph}
+[runin]
+{\sffamily\fontseries{sb}\scshape}
+{}
+{0pt}
+{}
+[\quad]
+
+\titlespacing
+{\paragraph}
+{0pt} % {left}
+{1ex plus 0.2ex minus .2ex} % {before}
+{1ex plus 0.2ex minus .2ex} % {after}
 
 %% Nomenclature and lists
 %% --------------------------------------------------------------
@@ -407,6 +619,15 @@ $if(sponsor)$\SetSponsor{$sponsor$}$endif$
 %% Start of document
 %% --------------------------------------------------------------
 \begin{document}
+\hypersetup{pageanchor=false}
+
+%% User's latex at start of document defined in YAML of Rmd
+%% --------------------------------------------------------------
+$for(include-before)$
+$include-before$
+$endfor$
+%% --------------------------------------------------------------
+
 \frontmatter
 \TitlePage
 
@@ -436,8 +657,10 @@ $endif$
 \mainmatter
 \numberwithin{figure}{chapter}
 \numberwithin{table}{chapter}
+\hypersetup{pageanchor=true}
 
-$body$ % includes appendix
+$body$
+% includes appendix
 
 \cleardoublepage
 \backmatter
@@ -445,4 +668,9 @@ $body$ % includes appendix
 \fancyhead[R]{\footnotesize\nouppercase{\rightmark}}
 \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
 
+%% %% User's latex at end of the document defined in YAML of Rmd
+%% --------------------------------------------------------------
+$for(include-after)$
+$include-after$
+$endfor$
 \end{document}

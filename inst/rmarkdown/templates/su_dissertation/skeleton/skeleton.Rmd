@@ -1,9 +1,10 @@
 ---
+# YAML Header
 output: 
   pdf_document:
     template: styles/template.tex
-    keep_tex: TRUE
-    latex_engine: xelatex
+    keep_tex: FALSE
+    latex_engine: pdflatex
     citation_package: natbib
     pandoc_args: --top-level-division=chapter
 
@@ -27,8 +28,13 @@ departement: Departement van Ekonomie
 faculty: Faculty of Economic and Management Sciences
 fakulteit: Fakulteit Ekonomiese en Bestuurswetenskappe
 
-supervisor: Prof.\ F.\ Flintstone
-# cosupervisor: Prof.\ G.\ Jetson
+supervisor: 
+  - Prof.\ F.\ Flintstone
+  # - Prof.\ G.\ Jetson
+
+cosupervisor:
+  - Prof.\ H.\ Simpson
+  - Prof.\ P.\ Griffin
 
 year: 2025
 month: 04
@@ -39,11 +45,12 @@ abstract: matter/abstract.Rmd
 acknowledgements: matter/acknowledgements.Rmd
 nomenclature: matter/nomenclature.Rmd
 bibliography: matter/mybib.bib
-
-colorlinks: TRUE
 ---
 
 ```{r setup, include = F}
+
+# For more information about the YAML fields above
+# See https://github.com/WihanZA/wihantemplates?tab=readme-ov-file#su_dissertation
 
 rm(list = ls())
 gc() 
@@ -67,7 +74,7 @@ knitr::opts_chunk$set(
   fig.path ='figures/',
   fig.process = function(x) {x2 = sub('-\\d+([.][a-z]+)$', '\\1', x) 
   if (file.rename(x, x2)) x2 else x},
-  fig.pos = "h",
+  fig.pos = "htbp",
   fig.align = 'center',
   dev = "ragg_png", 
   fig.ext = "png",
@@ -81,32 +88,46 @@ source("code/functions.R", local = knitr::knit_global())
 ```
 
 
-# Heading level 1
+# Chapter Heading
 
 This is an R Markdown (`.Rmd`) document. 
 Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents.
 For more details on using R Markdown see this [link](http://rmarkdown.rstudio.com).
+When you click the **Knit** button (or `Ctrl + Shift + K`) a document will be generated based on the content of this document, as well as the underlying LaTeX template at `styles/template.tex`.
 
-When you click the **Knit** button (or `Ctrl + Shift + K`) a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. 
-You can embed an R code chunk like this (`Ctrl + Alt + I`):
+## Section heading
+
+`r lorem::ipsum(sentences = 4, paragraphs = 1)`
+
+### Subsection heading
+
+`r lorem::ipsum(sentences = 4, paragraphs = 1)`
+
+#### Subsubsection heading
+
+`r lorem::ipsum(sentences = 4, paragraphs = 1)`
+
+##### Paragraph heading
+
+`r lorem::ipsum(sentences = 4, paragraphs = 1)`
+
+# Code Chunks
+
+When you knit this file a document will be generated based on its contents as well as the output of any code chunks embedded within the file. 
+You can embed an R code chunk, like the one `cars` below, with `Ctrl + Alt + I`.
+The chunk label for each chunk, e.g., `cars`, is assumed to be unique within the document.
 
 ```{r cars, echo = T}
 summary(cars)
 ```
 
-Note that the `echo = T` parameter was added to the code chunk to print the R code that generated the output.
-By default, this is set to `echo = F`.
-Code chunk default options are set in `knitr::opts_chunk$set(...)` in the chunk above called `setup`.
+One of the most crucial code chunks in an R Markdown document is the `setup` code chunk placed at the beginning of the document (after the YAML header).
+It can be used to load packages and data, and configure the default behaviour of code chunks, used throughout the remainder of the document.
+Default chunk options are set globally using `knitr::opts_chunk$set` with arguments such as  `echo`, `warning`, and `message`.^[For example, the code chunk option `echo` controls whether the code in an code chunk is printed in the final document. This is set globally to `echo = F` in the `setup` chunk.However, in an individual code chunk, like `cars`, you can specify `echo = T` if you want its code printed.]
 Learn more about code chunk options at this [link](https://yihui.org/knitr/options/#chunk-options>).
 
-## Heading level 2
-
-Prevent header numbering with `{-}`, e.g., `# Header level 1 {-}` or `## Header level 2 {-}` and so on.
-
-### Heading level 3
-
-With `source()`, you can load scripts of code stored elsewhere in your directory.
-In the example below, all custom functions stored in `code/functions.R` are loaded, e.g., the `hello_function()` which prints the name stored in the YAML metadata.
+With `source`, you can load scripts of code stored elsewhere in your directory.
+In the example below, all custom functions stored in `code/functions.R` are loaded, e.g., the `hello_function` which prints the name stored in the YAML metadata.
 It may be worthwhile to run `source("code/functions.R", local = knitr::knit_global())` in your setup chunk, making your own functions accessible throughout your `.Rmd` document.
 
 ```{r examplefunction, echo = T}
@@ -116,7 +137,7 @@ hello_function()
 
 ```
 
-# Useful Commands
+# Basics
 
 ## Lists
 
@@ -132,74 +153,30 @@ Numbered lists can be created using Markdown syntax like this:
 1. Item 2
 1. Item 3
 
-These are equivalent to using the \LaTeX\ syntax:
+These are equivalent to using the LaTeX environments  `itemize` and `enumerate`.
 
-\begin{verbatim}
-\begin{itemize} % or enumerate
-\item Item 1
-\item Item 2
-\item Item 3
-\end{itemize} % or enumerate
-\end{verbatim}
+## Equations and symbols
 
-## References and Citations
-
-The bibliography file can be found in [`matter/mybib.bib`](matter/mybib.bib).
-Bibliography entries are stored in the `bibtex` format.
-Each entry is associated with a unique key, e.g., "anderson_etal16".
-The citation package is set to `natbib`.
-
-- `\citet{key}`:	Textual citation, e.g., \citet{anderson_etal16}
-- `\citep{key}`:	Parenthetical citation, e.g., \citep{anderson_etal16}
-- `\citet*{key}`:	Same as \citet but if there are several authors, all names are printed, e.g., \citet*{anderson_etal16}
-- `\citep*{key}`:	The same as \citep but if there are several authors, all names are printed, e.g., \citep*{anderson_etal16}
-- `\citeauthor{key}`:	Prints only the name of the authors(s), e.g., \citeauthor{anderson_etal16}
-- `\citeyear{key}`:	Prints only the year of the publication, e.g., \citeyear{anderson_etal16}
-
-Citations can also be made using Markdown syntax:
-
-- `@key`: Textual citation, e.g., @anderson_vanwincoop03
-- `[@key]`: Parenthetical citation, e.g., [@anderson_vanwincoop03]
-- `-@key`: Parenthetical citation of year, e.g., [-@anderson_vanwincoop03]
-
-## Abbreviations
-
-- `\ac{PPML}` produces \ac{PPML} the first time, and \ac{PPML} the second time.
-- `\acf{OLS}` produces \acf{OLS} and `\acs{OLS}` produces \acs{OLS}.
-- `\Acp{MNO}` produces \Acp{MNO} and `\acp{MNO}` produces \acp{MNO} (the second time).
-
-## Footnotes
-
-Footnotes are created with `\footnote{}` using \LaTeX\ or `^[]` using Markdown.
-See this example.^[This is an example of a footnote.]
-
-## Equations
-
-Equations are constructed with the help of the \LaTeX\ package `amsmath`.
-An equation must read like part of the text.
-Use a full stop after the equation to indicate the end of the sentence:
+Equations are created with the help of the LaTeX package `amsmath`.
+An equation must read like part of the text, using a full stop to indicate the end of the sentence:
 \begin{equation}
 e^{ i\theta } = \cos \theta + i\sin \theta . \label{eq:Euler1}
 \end{equation}
-
-If the equation is in the middle of the sentence, end the equations with a comma.
-Then subsequent text should start with lower case.
+End an equation with a comma if used in the middle of a sentence and start the subsequent text in lower case.
 For example, Euler's identity is 
 \begin{equation}
-    e^{i \pi} + 1 = 0 , \notag
+    e^{i \pi} + 1 = 0 ,
 \end{equation}
 where $e$ is Euler's number, the base of natural logarithms.
-
-Here is another pair of equations, this time using `&` to align multiple lines:
+Here is another pair of equations, this time using `&` to horizontally align multiple lines on their equals signs:
 \begin{align}
   a^2 + b^2 &= c^2 \\
-  e^{i \pi} + 1 &= 0 
+  e^{i \pi} + 1 &= 0.
 \end{align}
 
-In the `subequations` \LaTeX\ environment, a series of equations that should share a common number.
-It only affects the numbering of numbered equations that are within it.
-In the `gather` \LaTeX\ environment, several displayed equations are typeset after one another. 
-Using these environments together it produces, for example:
+A series of equations within the `subequations` LaTeX environment share a common label.
+In the `gather` LaTeX environment, equations are typeset sequentially.
+Using these environments together produces, for example:
 \begin{subequations}
 \begin{gather}
     \frac{\partial \rho}{\partial t} +
@@ -216,20 +193,20 @@ Using these environments together it produces, for example:
 \end{subequations}
 
 Markdown syntax can also be used.
-Here is an equation created with a pair of `$$`, which is useful to observe a preview of the equation in your `.Rmd` document prior to knitting:
-
+An equation is created below with a pair of `$$` (double `$`).
+This is particularly useful to observe a visual preview of the equation in your `.Rmd` document.
 $$ 
-  f_{X}(x) = \left(\frac{\alpha}{\beta}\right)
-  \left(\frac{x}{\beta}\right)^{\alpha-1}
-  e^{-\left(\frac{x}{\beta}\right)^{\alpha}}; 
-  \alpha,\beta,x > 0 .
+f_{X}(x) = \left(\frac{\alpha}{\beta}\right)
+\left(\frac{x}{\beta}\right)^{\alpha-1}
+e^{-\left(\frac{x}{\beta}\right)^{\alpha}}; 
+\alpha,\beta,x > 0 .
 $$
+A mathematical expression within a line of text can be created with the use of a pair of `$` (single `$`), like this $\sum_{i = 2}^\infty\{\alpha_i^\beta\}$, also providing a visual preview of the expression.
 
-Inline equations are created with a pair of `$`: $\sum_{i = 2}^\infty\{\alpha_i^\beta\}$
-
-## Symbols
-
-Symbols that represent values of properties should be printed in italics, but SI units and names of functions (e.g. sin, cos and tan) must not be printed in italics. There must be a small hard space between a number and its unit, e.g. \qty{120}{km}. Use the \texttt{siunitx} package to typeset numbers, angles and quantities with units:
+Symbols representing values of properties should be printed in italics, but SI units and names of functions (e.g. sin, cos and tan) should not be printed in italics.
+There should be a small hard space between a number and its unit.
+This can be achieved with, e.g., `\qty{120}{km}` which produces \qty{120}{km}.
+Use the \texttt{siunitx} package to typeset numbers, angles and quantities with units:
 \begin{tabbing}
 \hspace*{\parindent}\=\verb|\qty{20}{N.m}|\quad\=$\rightarrow$\quad\=\kill
     \>\verb|\num{1.23e3}| \>$\rightarrow$\> $\num{1.23e3}$ \\
@@ -237,34 +214,38 @@ Symbols that represent values of properties should be printed in italics, but SI
     \>\verb|\qty{20}{N.m}|\>$\rightarrow$\> $\qty{20}{N.m}$
 \end{tabbing}
 
-## Other
+## Floats
 
-- `\paragraph{title}`
-- `\pagebreak`
-- `\clearpage`
+Floating environments in LaTeX prevent figures and tables from being split across pages.
+Their placement can be controlled by the following placement specifiers:
 
-# Figures and Tables
+- `h`: Here at approximately the same point in the source text.
+- `t`: Top of the page.
+- `b`: Bottom of the page.
+- `p`: A special page for floats only.
+- `!`: Override LaTeX's internal parameters.
+- `H`: Precisely at this location in the source (with the `float` LaTeX package).
 
-The `figure` and `table` environments are floating environments. 
-Floats are containers for things that cannot be broken over a page, such as tables and figures.
-\LaTeX\ places figures and tables where it deems it befitting.
-The behavior can be controlled by different placement specifiers and code chunk options such as `fig.pos = "H"`.
-Below is a list of possible specifiers:
+Specifiers can also be combined, e.g., `!b` forces placement at the bottom of a page.
+You may also considering making use of the LaTeX package `placeins` by specifying the `\FloatBarrier` command twice to create barriers that figures cannot escape.
 
-- `h`: Place the float _here_, i.e., approximately at the same point in the source text.
-- `t`: Position at the _top_ of the page.
-- `b`: Position at the _bottom_ of the page.
-- `p`: Put on a special _page_ for floats only.
-- `!`: Override \LaTeX\'s internal parameters for determining "good" positions.
-- `H`: Place the float at precisely the location in the \LaTeX\ code.
+## Figures
 
-These specifiers can be used in conjunction, e.g., `!b` forces \LaTeX\ to place the figure at the bottom of a page. 
-The default behavior is `htbp`.
+A figure's placement can be set in its particular code chunk's options, as in the `waterplants` chunk with `fig.pos = "h"`.
+Other chunk options for figures include, among others, `fig.cap`, `fig.height`, `fig.width` and `out.width`.
+The default behavior for figures arising from all code chunks is set in the `setup` chunk with `knitr::opts_chunk$set`. 
+Existing figures or images can be included with `knitr::include_graphics`, which can import `PDF`, `PNG`, or `JPG` files like \cref{fig:waterplants}.
 
-Create plots with, e.g., the [`ggplot`](https://ggplot2.tidyverse.org/) package from `tidyverse`, using a code chunk like the one below.
-The resulting plot will be automatically embedded in the document.
+```{r waterplants, fig.cap = "Water plants", out.width = "50%", fig.pos="h"}
 
-```{r fancyplot, fig.cap = "Manufacturer fuel efficiency"}
+knitr::include_graphics("figures/waterplants.jpg")
+
+```
+
+Plots can also be created using, e.g., [`ggplot`](https://ggplot2.tidyverse.org/) from the `tidyverse`, as shown below.
+The resulting plot, \cref{fig:fancyplot}, is embedded in the document.
+
+```{r fancyplot, fig.height=4, fig.cap = "Manufacturer fuel efficiency", fig.pos="ht"}
 
 mpg %>% 
   ggplot(aes(x = cyl, y = hwy, color = manufacturer)) + 
@@ -277,20 +258,12 @@ mpg %>%
 
 ```
 
-Figures can also be included with `knitr::include_graphics`.
-It relies on the `graphicx` package to import `PDF`, `PNG` or  `JPG` graphic files.
+## Tables
 
-```{r waterplants, fig.cap = "Water plants", out.width = "50%", echo = T, fig.pos = "H"}
+To create tables, I recommend using the `kbl` and `kable_styling` functions from the [`kableExtra`](https://haozhu233.github.io/kableExtra/awesome_table_in_pdf.pdf) R package. 
+\cref{tab:tab1} is created with the code chunk below.
 
-knitr::include_graphics("figures/waterplants.jpg")
-
-```
-
-
-I recommend using `kbl` and `kable_styling` from the [`kableExtra`](https://haozhu233.github.io/kableExtra/awesome_table_in_pdf.pdf) package for the creation of tables. 
-
-
-```{r tab1, echo = T}
+```{r tab1, echo = F}
 
 head(mtcars)[,1:4] %>% 
   kbl(digits = 2, 
@@ -299,27 +272,103 @@ head(mtcars)[,1:4] %>%
       centering = T,
       position = "H",
       escape = T,
+      table.envir = "table",
       caption = "Caption centered above table") %>%
   kable_styling(font_size = 10) %>% 
-  footnote(general_title = "Note:",
-           general = "This is my table footnote.")
+  footnote(general_title = "My footnote:",
+           general = "This is my table footnote.",
+           footnote_as_chunk = T,
+           threeparttable = T)
 
 ```
 
+The first four columns of the `mtcars` data frame are used as input for `kbl`, which generates a basic table. 
+The function includes several useful arguments:
 
-# Cross-referencing
+- `digits = 2`: Sets the number of decimal places.
+- `booktabs = TRUE`: Uses `booktabs` for a more appealing formatting.
+- `linesep = ""`: Removes default line separators.
+- `centering = TRUE`: Centres the table.
+- `position = "H"`: Positions the table precisely with the float specifier.
+- `escape = TRUE`: `FALSE` allows the use of special LaTeX characters.
+- `table.envir = "table"`: Sets the LaTeX environment.
+- `caption = "Caption centered above table"`: Adds a caption above the table.
 
-- `\label{key}` and `\ref{key}`
-- Label individual equations with `\label{key}`
-- Prevent numbering of individual equations with `\notag`
-- Reference equations with `\eqref{key}`, `\cref{key}` or `\ref{key}`, e.g.:
-  - `\eqref{eq:Euler1}` produces \eqref{eq:Euler1}
-  - `\cref{eq:Euler1}` produces \cref{eq:Euler1}
+In turn, `kable_styling` enhances the appearance of the table by setting, e.g., the table's font size.
+Additionally, a footnote is added using `footnote`, with arguments that set the title, content and layout of the footnote.
+
+## Footnotes
+
+Footnotes provide additional information without cluttering the main text and are inserted using `\footnote{}` in LaTeX or `^[]` in Markdown.
+See this example.^[This is an example of a footnote.]
+Footnotes can also be managed with `\footnotemark` and `\footnotetext` for more control over their placement and numbering.
+
+- `\footnotemark` adds a superscript number at the text location, and can be used in LaTeX when you need to refer to the same footnote multiple times or to place the marker manually. In Markdown, the equivalent is using `[^1]` to reference a footnote.
+- `\footnotetext` is used to input the footnote's text and can be placed anywhere in the text to match the corresponding `\footnotemark`. In Markdown, define the footnote content at the document's end with `[^1]: Text of the footnote`.
+
+
+## Acronyms
+
+Using the [`acronym`](https://mirror.ufs.ac.za/ctan/macros/latex/contrib/acronym/acronym.pdf) LaTeX package, acronyms are defined in the `acronym` environment of the `matter/nomenclature.Rmd` file, making them available throughout your document.
+Acronyms are defined with `\acro{key}[short]{long}` where `short` the abbreviated form, and `long` the full form, e.g., `\acro{arpu}{ARPU}{average revenue per unit}`.
+In most cases, use `\ac{key}` to insert an acronym. 
+It will automatically expand to its full form the first time and to its short form on subsequent references.
+Here are some variations on the use of `\ac{key}`.
+
+- `\ac{ppml}` produces \ac{ppml} the first time, and \ac{ppml} the second time.
+- `\acf{ols}` uses the long form \acf{ols} every time.
+- `\acs{ols}` uses the short form \acs{ols} every time.
+- Plural forms can also be automatically managed by adding an `p` to the command, e.g., `\acp{mno}` for \acp{mno}.
+
+Notably, the `acronym` package is set up with the `printonlyused` option, implying that the list of acronyms in your final document (printed in the "Nomenclature" chapter) will only include those used at least once in the document.
+
+## Referencing, Citations, and Cross-Referencing
+
+The bibliography file is stored at [`matter/mybib.bib`](matter/mybib.bib), formatted in `bibtex` with unique keys for each entry. The `natbib` package manages citations effectively, supporting a range of styles:
+
+- `\citet{key}` for textual citations (e.g., \citet{anderson_etal16}). `\citet*{key}` expands to list all authors.
+- `\citep{key}` for parenthetical citations (e.g., \citep{anderson_etal16}), with `\citep*{key}` for a full author list.
+- `\citeauthor{key}` and `\citeyear{key}` (`\citeyearpar{key}`) cite the author(s) or year (in parentheses), respectively., e.g., \citeauthor{anderson_vanwincoop03}, \citeyear{anderson_vanwincoop03}, and \citeyearpar{anderson_vanwincoop03}.
+
+  
+Markdown offers similar functionality using `@key` for textual citations and `[@key]` for parenthetical citations. The `-@key` form cites just the year.
+
+For bibliography management, I recommend using [Zotero](https://www.zotero.org/) to automatically export collections of bibliography entries to `matter/mybib.bib`.
+See **[Better BibTeX](https://retorque.re/zotero-better-bibtex/)**, **[Citations in R Markdown's Visual Mode](https://rstudio.github.io/visual-markdown-editing/citations.html)**, and **[ZotFile](https://zotfile.com/)** for additional tools making citation and reference management easier.
+
+Cross-referencing is made possible with LaTeX package `hyperref`, and streamlined with the `cleveref` package, configured with `\usepackage[capitalize,noabbrev]{cleveref}` to capitalize and use full names (e.g., Figure, Equation) in references:
+
+- `\label{key}` marks a target location.\tightlist
+
+  - Tables and figures are automatically labelled in R Markdown, using code chunk names with an appropriate prefix as keys, e.g., `fig:fancyplot` and `tab:tab1`.
+
+  - Headings are also automatically labelled, taking their text (in lower-case, spaces swapped with hyphens) as keys, e.g. the "Equations and symbols" section is labelled as `equations-and-symbols`.
+  
+- `\ref{key}` retrieves a basic reference.
+
+  - `\ref{fig:fancyplot}` produces \ref{fig:fancyplot}
+  - `\ref{tab:tab1}` produces \ref{tab:tab1}
   - `\ref{eq:Euler1}` produces \ref{eq:Euler1}
+  - `\ref{equations-and-symbols}` produces \ref{equations-and-symbols}.
+
+- `\eqref{key}` provides a parenthesized number for equations
+
+  - `\eqref{eq:Euler1}` produces \eqref{eq:Euler1}.
+
+- `\cref{key}` offers context-dependent referencing, adapting to the type of the referenced object.
+
+  - `\cref{fig:fancyplot}` produces \cref{fig:fancyplot}
+  - `\cref{tab:tab1}` produces \cref{tab:tab1}
+  - `\cref{eq:Euler1}` produces \cref{eq:Euler1}
+  - `\cref{equations-and-symbols}` produces \cref{equations-and-symbols}.
+
+- `\notag` is used to suppress the numbering of an equation when it is unnecessary, ensuring that un-referenced equations remain unnumbered.
+
+With both citations and cross-references, dynamic links are created, aiding document navigation.
 
 # Conclusion
 
-`r lorem::ipsum(paragraphs = 13)`
+`r lorem::ipsum(paragraphs = 6)`
 
 ```{r childappendix, child = 'matter/appendix.Rmd'}
 ```
