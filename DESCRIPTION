@@ -1,5 +1,5 @@
 Package: wihantemplates
-Title: What the Package Does (One Line, Title Case)
+Title: Installs my collection of `R Markdown` templates
 Version: 0.0.0.9000
 Authors@R: 
     person(
@@ -8,8 +8,12 @@ Authors@R:
     email = "wihanmarais@sun.ac.za", 
     role = c("aut", "cre", "cph"),
     comment = c(ORCID = "0000-0002-4720-0929"))
-Description: These are my collection of 'R Markdown' templates, mostly for compilation to PDF.
+Description: My collection of 'R Markdown' templates mostly for compilation to PDF.
 License: Apache License (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+Suggests: 
+    rmarkdown,
+    tidyverse,
+    tinytex
