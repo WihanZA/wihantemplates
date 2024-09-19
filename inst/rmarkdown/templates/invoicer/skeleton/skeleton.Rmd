@@ -2,7 +2,7 @@
 output:
   pdf_document:
     template: resources/template.tex
-    keep_tex: TRUE
+    keep_tex: FALSE
     latex_engine: xelatex
     citation_package: natbib
 
@@ -26,7 +26,7 @@ params:
   author_city: "Looneyville"
   author_zip: "54321"
   author_email: "bugs.bunny@looneytoons.com"
-  author_phone: "+1 (555) 987-6543"
+  author_phone: "+27 71 987 6543"
   
   # Beneficiary and Banking Details
   beneficiary: "Elmer Fudd"
@@ -56,7 +56,8 @@ author_city: "`r params$author_city`"
 author_zip: "`r params$author_zip`"
 author_email: "`r params$author_email`"
 author_phone: "`r params$author_phone`"
-signature: "resources/signature.jpg"
+signature: "resources/signature.jpg" # optional
+sig_size: 5ex # optional
 
 # Beneficiary and Banking Details References
 beneficiary: "`r params$beneficiary`"
@@ -68,17 +69,16 @@ account: "`r params$account`"
 ---
 
 ```{r setup, include = F}
+
 rm(list = ls())
-gc()
+invisible(gc())
 
 library(rmarkdown)
-library(ragg)
-library(knitr)
 library(kableExtra)
-library(tidyverse)
-library(tinytex)
+library(dplyr)
+library(tidyr)
+library(stringr)
 library(readxl)
-library(writexl)
 library(lubridate)
 library(tibble)
 library(wihantemplates)
@@ -87,12 +87,7 @@ knitr::opts_chunk$set(
   echo = F,
   message = F,
   warning = F,
-  cache = F,
-  fig.pos = "H",
-  fig.align = "center",
-  dev = "ragg_png",
-  fig.ext = "png",
-  out.width = "1\\textwidth"
+  cache = F
 )
 
 options(knitr.table.format = "latex")
@@ -156,7 +151,7 @@ rm(totals, rate_other, rate_x, rate_y)
 items %>%
   kbl(
     escape = T,
-    position = "H",
+    position = "h",
     booktabs = T,
     linesep = "",
     align = "lrrr",
@@ -165,6 +160,8 @@ items %>%
   row_spec(nrow(items) - 1, hline_after = T) %>%
   row_spec(nrow(items), bold = T) %>%
   kable_styling(font_size = 10) %>%
+  column_spec(1, width = "15em") %>% 
+  column_spec(c(2,3,4), width = "6em") %>% 
   footnote(
     general = "Record of billable activities as submitted in \\\\cref{tab:timesheet} on the next page.",
     general_title = "",
@@ -194,12 +191,8 @@ totals <- timesheet %>%
   mutate(Include = case_when(Include ~ "Included", TRUE ~ "Excluded")) %>%
   spread(Include, Hours) %>%
   mutate(Total = Excluded + Included) %>%
-  gather(Item, Hours, 1:ncol(.)) %>%
-  mutate(Date = NA, Activity = NA, Include = TRUE, Begin = NA, End = NA) %>% 
-  mutate(Item = case_when(
-    Item == "Excluded" ~ paste0(Item, "\\textsuperscript{*}"),
-    TRUE ~ Item
-  )) 
+  gather(Activity, Hours, 1:ncol(.)) %>%
+  mutate(Date = NA, Item = NA, Include = c(FALSE, TRUE, TRUE), Begin = NA, End = NA)
 
 timesheet <- timesheet %>%
   bind_rows(totals)
@@ -225,13 +218,16 @@ timesheet %>%
   kbl(
     escape = F,
     booktabs = T,
-    position = "t",
+    # position = "h",
     linesep = "",
     caption = "Complete record of related billable activities",
     align = "l",
     table.envir = "table"
   ) %>%
-  row_spec(nrow(timesheet) - 3, hline_after = T) %>%
+  row_spec(
+    nrow(timesheet) - 3, 
+    hline_after = T
+    ) %>%
   collapse_rows(
     1:2,
     latex_hline = "none",
@@ -239,7 +235,7 @@ timesheet %>%
     valign = "top"
   ) %>%
   kable_styling(
-    font_size = 8,
+    font_size = 10,
     latex_options = c("repeat_header")) %>%
   footnote(
     general = "\\\\textsuperscript{*}Entries excluded from the final amount.",

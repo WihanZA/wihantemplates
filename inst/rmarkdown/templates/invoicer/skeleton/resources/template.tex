@@ -76,12 +76,13 @@
 \fancyfoot{}
 \fancyfoot[C]{\small\thepage}
 
-\usepackage[font=footnotesize,
+\usepackage[
+font=small,
 singlelinecheck=true,
-% labelfont={bf},
+labelfont={bf},
 % labelformat=original,
 % labelformat=empty,
-% labelsep=colon,
+labelsep=quad,
 format=plain,
 textformat=simple]{caption}
 \captionsetup[figure]{name={Figure},skip=3pt,position=bottom}
@@ -126,6 +127,12 @@ $endif$
 
 \usepackage[section]{placeins}
 
+% Table to top if alone on floats page
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
+
 \makeatletter
 \@ifpackageloaded{hyperref}{}{
   \PassOptionsToPackage{hyphens}{url}
@@ -138,8 +145,8 @@ $endif$
 $if(title-meta)$
 pdftitle={$title-meta$},
 $endif$
-$if(author-meta)$
-pdfauthor={$author-meta$},
+$if(author_name-meta)$
+pdfauthor={$author_name-meta$},
 $endif$
 breaklinks=true,
 bookmarks=true,
@@ -175,8 +182,10 @@ $endfor$
   \hspace{-1em} \multirow{7}{*}{
   \begin{tabular}{l}
   \small{\uppercase{From}}\\
-  \small{\textbf{$author$}}\\
-  $for(author_address)$\small $author_address$$sep$\\ $endfor$ \\
+  \small{\textbf{$author_name$}}\\
+  \small{$author_street$}\\
+  \small{$author_city$}\\
+  \small{$author_zip$}\\
   \small{\faPhone\ $author_phone$} \\
   \small{\faEnvelopeO\ $author_email$}
   \end{tabular}} &
@@ -184,9 +193,9 @@ $endfor$
   \multirow{6}{*}{
   \begin{tabular}{r}
   \LARGE{\textbf{\uppercase{Invoice}}}\vspace{0.2em}\\
-  \small{\uppercase{Reference}} \\
+  \small{\fontseries{sb}\uppercase{Reference}} \\
   \small{$reference$} \\
-  \small{\uppercase{Date}} \\
+  \small{\fontseries{sb}\uppercase{Date}} \\
   \small{$date$}
   \end{tabular}}\\
 \end{tabularx}
@@ -203,9 +212,13 @@ $endfor$
 
 \vspace*{1em}
 
-{\centering\large
-\textbf{\titlecap{$project_name$}}\\
-\textit{\titlecap{$project_description$}}\\}
+\begin{center}
+\Large\bfseries\selectfont\titlecap{$project_name$}
+\end{center}
+
+\begin{center}
+\large\fontshape{it}\selectfont\titlecap{$project_description$}
+\end{center}
 
 $body$
 % \vspace*{1em}
@@ -224,27 +237,34 @@ Thank you for your business.\\
 \\
 Kind regards,\\
 $if(signature)$
-\includegraphics[height=1.8em]{$signature$}\\
+\includegraphics[height=$if(sig_size)$$sig_size$$else$5ex$endif$]{$signature$}\\
 $endif$
-$author$
+$author_name$
 
 \clearpage
+
+% \begin{center}
+% \Large\bfseries\selectfont\titlecap{Billable activities}
+% \end{center}
+
+% \section*{\titlecap{Billable activities}}
 
 \hypertarget{timesheet}{}
 
 $if(has-frontmatter)$
-  \backmatter
+\backmatter
 $endif$
 $if(natbib)$
-  $if(bibliography)$
-    $if(biblio-title)$
-      $if(has-chapters)$
-        \renewcommand\bibname{$biblio-title$}
-      $else$
-        \renewcommand\refname{$biblio-title$}
-      $endif$
-    $endif$
-    \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
-  $endif$
+$if(bibliography)$
+$if(biblio-title)$
+$if(has-chapters)$
+\renewcommand\bibname{$biblio-title$}
+$else$
+\renewcommand\refname{$biblio-title$}
 $endif$
+$endif$
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+$endif$
+$endif$
+
 \end{document}
