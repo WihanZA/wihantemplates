@@ -7,3 +7,4 @@
 ^examples$
 ^thumbnails
 ^inst/rmarkdown/templates/su_dissertation$
+^.github$
