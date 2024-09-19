@@ -1,0 +1,292 @@
+
+\documentclass[
+  11pt,
+  a4paper,
+  UKenglish,
+  ]{article}
+
+% \usepackage{lmodern}
+\usepackage{fontspec}
+\usepackage{noto}
+\usepackage{setspace}
+\usepackage{fontawesome}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{unicode-math}
+\defaultfontfeatures{Scale=MatchLowercase}
+\defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\usepackage{upquote}
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath}
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 2pt}
+\usepackage{fancyvrb}
+\VerbatimFootnotes
+\usepackage[dvipsnames,svgnames,x11names]{xcolor}
+\usepackage[
+  a4paper,
+  left=1in,
+  right=1in,
+  top=0.9in,
+  bottom=0.9in
+]{geometry}
+\usepackage{longtable,booktabs}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+\usepackage{footnote}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\usepackage[normalem]{ulem}
+\setlength{\emergencystretch}{3em}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}}
+\usepackage{selnolig}
+\linespread{1.05}
+
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{ragged2e}
+\usepackage{hhline}
+\usepackage{array}
+\usepackage{float}
+\usepackage{threeparttable}
+
+\usepackage{titlecaps}
+\Addlcwords{a an the and but or for nor so yet at by for from in into like near of on over past to}
+
+\pagenumbering{roman}
+% \pagenumbering{Roman}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead{}
+\fancyfoot{}
+\fancyfoot[C]{\small\thepage}
+
+\usepackage[font=footnotesize,
+singlelinecheck=true,
+% labelfont={bf},
+% labelformat=original,
+% labelformat=empty,
+% labelsep=colon,
+format=plain,
+textformat=simple]{caption}
+\captionsetup[figure]{name={Figure},skip=3pt,position=bottom}
+\captionsetup[table]{name={Table},skip=3pt,position=top}
+\renewcommand{\thetable}{\Alph{table}}
+
+  \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+  \usepackage[]{natbib}
+  \bibliographystyle{plainnat}
+  \renewcommand\bibsection{
+     \section*{References}
+     \markboth{\MakeUppercase{\refname}}{\MakeUppercase{\refname}}
+    }
+
+\usepackage{abstract}
+\renewcommand{\abstractname}{}
+\renewcommand{\absnamepos}{empty}
+
+\renewenvironment{abstract}
+  {{\setlength{\leftmargin}{0mm}
+    \setlength{\rightmargin}{\leftmargin}}
+  \relax}
+  {\endlist}
+
+\usepackage{titlesec}
+
+% \titlespacing*{\section}{0pt}{1\baselineskip}{0.5\baselineskip}
+% \titleformat*{\section}{\Large\bfseries\uppercase}
+% \titleformat*{\subsection}{\bfseries}
+% \titleformat*{\subsubsection}{\normalsize\itshape}
+% \titleformat*{\paragraph}{\normalsize\itshape}
+% \titleformat*{\subparagraph}{\normalsize\itshape}
+
+\usepackage[section]{placeins}
+
+\makeatletter
+\@ifpackageloaded{hyperref}{}{
+  \PassOptionsToPackage{hyphens}{url}
+  \usepackage[setpagesize=false,
+              unicode=false,
+              xetex]{hyperref}
+}
+
+\hypersetup{
+pdftitle={INV-2024-09 Invoice},
+breaklinks=true,
+bookmarks=true,
+colorlinks=true,
+citecolor=black,
+urlcolor=black,
+linkcolor=black,
+pdfborder={0 0 0}}
+
+\urlstyle{same}
+
+% cleveref must be loaded after hyperref
+\usepackage[capitalize,noabbrev]{cleveref}
+
+  \usepackage{booktabs}
+  \usepackage{longtable}
+  \usepackage{array}
+  \usepackage{multirow}
+  \usepackage{wrapfig}
+  \usepackage{float}
+  \usepackage{colortbl}
+  \usepackage{pdflscape}
+  \usepackage{tabu}
+  \usepackage{threeparttable}
+  \usepackage{threeparttablex}
+  \usepackage[normalem]{ulem}
+  \usepackage{makecell}
+  \usepackage{xcolor}
+\newcommand{\blankline}{\quad\pagebreak[2]}
+
+\begin{document}
+
+\begin{table}[t]
+\begin{tabularx}{\textwidth}{@{}l X r@{}}
+  \hspace{-1em} \multirow{7}{*}{
+  \begin{tabular}{l}
+  \small{\uppercase{From}}\\
+  \small{\textbf{}}\\
+   \\
+  \small{\faPhone\ +1 (555) 987-6543} \\
+  \small{\faEnvelopeO\ \href{mailto:bugs.bunny@looneytoons.com}{\nolinkurl{bugs.bunny@looneytoons.com}}}
+  \end{tabular}} &
+  \hfill &
+  \multirow{6}{*}{
+  \begin{tabular}{r}
+  \LARGE{\textbf{\uppercase{Invoice}}}\vspace{0.2em}\\
+  \small{\uppercase{Reference}} \\
+  \small{INV-2024-09} \\
+  \small{\uppercase{Date}} \\
+  \small{19 September 2024}
+  \end{tabular}}\\
+\end{tabularx}
+\end{table}
+
+\vspace*{4.5em}
+
+\small{\uppercase{To}}\\
+\small{\textbf{Mickey Mouse}}\\
+\small{1313 Disneyland Drive}\\
+\small{Anaheim}\\
+\small{92802}\\
+\small{\faEnvelopeO\ \href{mailto:mickey.mouse@disney.com}{\nolinkurl{mickey.mouse@disney.com}}}
+
+\vspace*{1em}
+
+{\centering\large
+\textbf{\titlecap{Magic Kingdom Expansion}}\\
+\textit{\titlecap{Design and implementation of new facilities}}\\}
+
+\begin{table}[H]
+\centering
+\fontsize{10}{12}\selectfont
+\begin{threeparttable}
+\begin{tabular}[t]{lrrr}
+\toprule
+Item & Hours & Rate & Amount\\
+\midrule
+X & 6.5 & R 300.00 & R 1 950.00\\
+Y & 5.5 & R 400.00 & R 2 200.00\\
+Z & 1.5 & R 150.00 & R 225.00\\
+\midrule
+\textbf{Total} & \textbf{13.5} & \textbf{} & \textbf{R 4 375.00}\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para]
+\item Record of billable activities as submitted in \cref{tab:timesheet} on the next page.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\phantomsection\label{timesheet}
+\begin{table}[t]
+\centering
+\caption{\label{tab:timesheet}Complete record of related billable activities}
+\centering
+\fontsize{8}{10}\selectfont
+\begin{threeparttable}
+\begin{tabular}[t]{lllllll}
+\toprule
+Month & Day & Item & Activity & Begin & End & Hours\\
+\midrule
+January 2024 & 1 & X & Task A & 08:00 & 09:00 & 1.0\\
+
+ & 2 & X & Task B & 09:15 & 10:45 & 1.5\textsuperscript{*}\\
+
+ & 3 & Y & Task C & 07:30 & 09:00 & 1.5\\
+
+ & 4 & X & Task D & 10:00 & 11:30 & 1.5\\
+
+ & 5 & Y & Task E & 13:00 & 14:30 & 1.5\\
+
+ & 6 & X & Task F & 15:00 & 16:00 & 1.0\\
+
+ & 7 & X & Task G & 08:30 & 09:30 & 1.0\\
+
+ & 8 & X & Task H & 10:45 & 12:15 & 1.5\textsuperscript{*}\\
+
+ & 9 & Y & Task I & 14:00 & 15:00 & 1.0\\
+
+ & 10 & Z & Task J & 09:00 & 10:30 & 1.5\\
+
+ & 11 & X & Task K & 07:45 & 09:15 & 1.5\textsuperscript{*}\\
+
+ & 12 & X & Task L & 10:30 & 11:30 & 1.0\\
+
+ & 13 & X & Task M & 12:00 & 13:00 & 1.0\\
+
+ & 14 & Y & Task N & 14:15 & 15:45 & 1.5\\
+
+ & 15 & X & Task O & 16:00 & 17:00 & 1.0\textsuperscript{*}\\
+
+\midrule
+ &  & Excluded\textsuperscript{*} &  &  &  & 5.5\\
+
+ &  & Included &  &  &  & 13.5\\
+
+ &  & Total &  &  &  & 19.0\\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[para]
+\item \textsuperscript{*}Entries excluded from the final amount.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+% \vspace*{1em}
+
+{\small
+Please transfer the amount due according to the following payment instructions:\\
+\\
+\textbf{Beneficiary: } Elmer Fudd\\
+\textbf{Bank:} Acme Bank\\
+\textbf{Branch:} 100200\\
+\textbf{Account:} 9876543210\\
+\textbf{SWIFT code:} LOONYBUN\\
+\textbf{Reference:} INV-2024-09}\\
+\\
+Thank you for your business.\\
+\\
+Kind regards,\\
+\includegraphics[height=1.8em]{resources/signature.jpg}\\
+
+
+\clearpage
+
+\hypertarget{timesheet}{}
+
+  \end{document}
