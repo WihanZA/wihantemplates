@@ -10,15 +10,17 @@
 #' escape_latex("100% sure!")
 #' @export
 
-escape_latex <- function (x, newlines = FALSE, spaces = FALSE) {
+escape_latex <- function(x, newlines = FALSE, spaces = FALSE) {
   x <- gsub("\\\\", "\\\\textbackslash", x)
   x <- gsub("([#$%&_{}])", "\\\\\\1", x)
   x <- gsub("\\\\textbackslash", "\\\\textbackslash{}", x)
   x <- gsub("~", "\\\\textasciitilde{}", x)
   x <- gsub("\\^", "\\\\textasciicircum{}", x)
-  if (newlines)
+  if (newlines) {
     x <- gsub("(?<!\n)\n(?!\n)", "\\\\\\\\", x, perl <- TRUE)
-  if (spaces)
+  }
+  if (spaces) {
     x <- gsub("(?<<- ) ", "\\\\ ", x, perl <- TRUE)
+  }
   x
 }

@@ -69,7 +69,6 @@ account: "`r params$account`"
 ---
 
 ```{r setup, include = F}
-
 rm(list = ls())
 invisible(gc())
 
@@ -96,11 +95,9 @@ options(scipen = 999)
 knitr::knit_hooks$set(inline = function(x) {
   prettyNum(x, big.mark = " ")
 })
-
 ```
 
 ```{r items}
-
 rate_x <- 300
 rate_y <- 400
 rate_other <- 150
@@ -112,14 +109,14 @@ items <- read_xlsx("data/timesheet.xlsx") %>%
   mutate(Hours = round(Hours, 1)) %>%
   mutate(across(
     c(Begin, End),
-    ~format(as_datetime(.), "%H:%M")
-  )) %>% 
-    group_by(Item) %>% 
-    summarise(
+    ~ format(as_datetime(.), "%H:%M")
+  )) %>%
+  group_by(Item) %>%
+  summarise(
     Date = min(Date, na.rm = T),
     Hours = sum(Hours, na.rm = T),
     .groups = "drop"
-  ) %>% 
+  ) %>%
   arrange(Date) %>%
   select(-Date) %>%
   mutate(Rate = case_when(
@@ -136,14 +133,14 @@ totals <- tibble(
   Amount = sum(items$Amount, na.rm = T)
 )
 
-items <- items %>% 
-  bind_rows(totals) %>% 
+items <- items %>%
+  bind_rows(totals) %>%
   mutate(across(
     c(Rate, Amount),
-    ~case_when(
+    ~ case_when(
       !is.na(.) ~ paste0("R ", prettyNum(., big.mark = " "), ".00"),
       TRUE ~ NA_character_
-      )
+    )
   ))
 
 rm(totals, rate_other, rate_x, rate_y)
@@ -160,8 +157,8 @@ items %>%
   row_spec(nrow(items) - 1, hline_after = T) %>%
   row_spec(nrow(items), bold = T) %>%
   kable_styling(font_size = 10) %>%
-  column_spec(1, width = "15em") %>% 
-  column_spec(c(2,3,4), width = "6em") %>% 
+  column_spec(1, width = "15em") %>%
+  column_spec(c(2, 3, 4), width = "6em") %>%
   footnote(
     general = "Record of billable activities as submitted in \\\\cref{tab:timesheet} on the next page.",
     general_title = "",
@@ -174,15 +171,14 @@ items %>%
 ::: {#timesheet}
 
 ```{r timesheet}
-
 timesheet <- read_xlsx("data/timesheet.xlsx") %>%
   mutate(Date = ymd(Date)) %>%
   mutate(Hours = round(Hours, 1)) %>%
   mutate(across(
     c(Begin, End),
-    ~format(as_datetime(.), "%H:%M")
-  )) %>% 
-  select(Date, Item, everything()) %>% 
+    ~ format(as_datetime(.), "%H:%M")
+  )) %>%
+  select(Date, Item, everything()) %>%
   arrange(Date)
 
 totals <- timesheet %>%
@@ -200,7 +196,7 @@ timesheet <- timesheet %>%
 rm(totals)
 
 timesheet <- timesheet %>%
-  mutate(Activity = wihantemplates::escape_latex(Activity)) %>% 
+  mutate(Activity = wihantemplates::escape_latex(Activity)) %>%
   mutate(
     Month = str_squish(format(Date, "%B %Y")),
     Day = str_squish(format(Date, "%e"))
@@ -225,9 +221,9 @@ timesheet %>%
     table.envir = "table"
   ) %>%
   row_spec(
-    nrow(timesheet) - 3, 
+    nrow(timesheet) - 3,
     hline_after = T
-    ) %>%
+  ) %>%
   collapse_rows(
     1:2,
     latex_hline = "none",
@@ -236,7 +232,8 @@ timesheet %>%
   ) %>%
   kable_styling(
     font_size = 10,
-    latex_options = c("repeat_header")) %>%
+    latex_options = c("repeat_header")
+  ) %>%
   footnote(
     general = "\\\\textsuperscript{*}Entries excluded from the final amount.",
     general_title = "",
@@ -244,7 +241,6 @@ timesheet %>%
     threeparttable = T,
     escape = F
   )
-
 ```
 
 :::
