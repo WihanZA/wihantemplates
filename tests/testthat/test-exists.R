@@ -6,6 +6,9 @@ for (i in templates_all) {
   expect_true(
     file.exists(
       system.file(
-        "rmarkdown", "templates", i, "skeleton", "resources", "template.tex", package = "wihantemplates"
-      )))
+        "rmarkdown", "templates", i, "skeleton", "resources", "template.tex",
+        package = "wihantemplates"
+      )
+    )
+  )
 }
