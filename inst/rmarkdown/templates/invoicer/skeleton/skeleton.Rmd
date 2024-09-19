@@ -1,0 +1,258 @@
+---
+output:
+  pdf_document:
+    template: resources/template.tex
+    keep_tex: TRUE
+    latex_engine: xelatex
+    citation_package: natbib
+
+params:
+  # Client Information
+  client_name: "Mickey Mouse"
+  client_street: "1313 Disneyland Drive"
+  client_city: "Anaheim"
+  client_zip: "92802"
+  client_email: "mickey.mouse@disney.com"
+  
+  # Invoice Details
+  reference: "INV-2024-09"
+  date: !r stringr::str_squish(format(Sys.Date(), "%e %B %Y"))
+  project_name: "Magic Kingdom Expansion"
+  project_description: "Design and implementation of new facilities"
+
+  # Author Information
+  author_name: "Bugs Bunny"
+  author_street: "123 Carrot Lane"
+  author_city: "Looneyville"
+  author_zip: "54321"
+  author_email: "bugs.bunny@looneytoons.com"
+  author_phone: "+1 (555) 987-6543"
+  
+  # Beneficiary and Banking Details
+  beneficiary: "Elmer Fudd"
+  swift: "LOONYBUN"
+  bank: "Acme Bank"
+  branch: "100200"
+  account: "9876543210"
+
+# Client Information References
+client_name: "`r params$client_name`"
+client_street: "`r params$client_street`"
+client_city: "`r params$client_city`"
+client_zip: "`r params$client_zip`"
+client_email: "`r params$client_email`"
+
+# Invoice Details References
+title: "`r params$reference` Invoice"
+reference: "`r params$reference`"
+date: "`r params$date`"
+project_name: "`r params$project_name`"
+project_description: "`r params$project_description`"
+
+# Author Information References
+author_name: "`r params$author_name`"
+author_street: "`r params$author_street`"
+author_city: "`r params$author_city`"
+author_zip: "`r params$author_zip`"
+author_email: "`r params$author_email`"
+author_phone: "`r params$author_phone`"
+signature: "resources/signature.jpg"
+
+# Beneficiary and Banking Details References
+beneficiary: "`r params$beneficiary`"
+swift: "`r params$swift`"
+bank: "`r params$bank`"
+branch: "`r params$branch`"
+account: "`r params$account`"
+
+---
+
+```{r setup, include = F}
+rm(list = ls())
+gc()
+
+library(rmarkdown)
+library(ragg)
+library(knitr)
+library(kableExtra)
+library(tidyverse)
+library(tinytex)
+library(readxl)
+library(writexl)
+library(lubridate)
+library(tibble)
+library(wihantemplates)
+
+knitr::opts_chunk$set(
+  echo = F,
+  message = F,
+  warning = F,
+  cache = F,
+  fig.pos = "H",
+  fig.align = "center",
+  dev = "ragg_png",
+  fig.ext = "png",
+  out.width = "1\\textwidth"
+)
+
+options(knitr.table.format = "latex")
+options(knitr.kable.NA = "")
+options(scipen = 999)
+knitr::knit_hooks$set(inline = function(x) {
+  prettyNum(x, big.mark = " ")
+})
+
+```
+
+```{r items}
+
+rate_x <- 300
+rate_y <- 400
+rate_other <- 150
+
+items <- read_xlsx("data/timesheet.xlsx") %>%
+  mutate(Date = ymd(Date)) %>%
+  filter(Include) %>%
+  select(-Include) %>%
+  mutate(Hours = round(Hours, 1)) %>%
+  mutate(across(
+    c(Begin, End),
+    ~format(as_datetime(.), "%H:%M")
+  )) %>% 
+    group_by(Item) %>% 
+    summarise(
+    Date = min(Date, na.rm = T),
+    Hours = sum(Hours, na.rm = T),
+    .groups = "drop"
+  ) %>% 
+  arrange(Date) %>%
+  select(-Date) %>%
+  mutate(Rate = case_when(
+    Item == "X" ~ rate_x,
+    Item == "Y" ~ rate_y,
+    TRUE ~ rate_other
+  )) %>%
+  mutate(Amount = Hours * Rate)
+
+totals <- tibble(
+  Item = "Total",
+  Hours = sum(items$Hours, na.rm = T),
+  Rate = NA,
+  Amount = sum(items$Amount, na.rm = T)
+)
+
+items <- items %>% 
+  bind_rows(totals) %>% 
+  mutate(across(
+    c(Rate, Amount),
+    ~case_when(
+      !is.na(.) ~ paste0("R ", prettyNum(., big.mark = " "), ".00"),
+      TRUE ~ NA_character_
+      )
+  ))
+
+rm(totals, rate_other, rate_x, rate_y)
+
+items %>%
+  kbl(
+    escape = T,
+    position = "H",
+    booktabs = T,
+    linesep = "",
+    align = "lrrr",
+    table.envir = "table"
+  ) %>%
+  row_spec(nrow(items) - 1, hline_after = T) %>%
+  row_spec(nrow(items), bold = T) %>%
+  kable_styling(font_size = 10) %>%
+  footnote(
+    general = "Record of billable activities as submitted in \\\\cref{tab:timesheet} on the next page.",
+    general_title = "",
+    footnote_as_chunk = T,
+    threeparttable = T,
+    escape = F
+  )
+```
+
+::: {#timesheet}
+
+```{r timesheet}
+
+timesheet <- read_xlsx("data/timesheet.xlsx") %>%
+  mutate(Date = ymd(Date)) %>%
+  mutate(Hours = round(Hours, 1)) %>%
+  mutate(across(
+    c(Begin, End),
+    ~format(as_datetime(.), "%H:%M")
+  )) %>% 
+  select(Date, Item, everything()) %>% 
+  arrange(Date)
+
+totals <- timesheet %>%
+  group_by(Include) %>%
+  summarise(Hours = sum(Hours, na.rm = T)) %>%
+  mutate(Include = case_when(Include ~ "Included", TRUE ~ "Excluded")) %>%
+  spread(Include, Hours) %>%
+  mutate(Total = Excluded + Included) %>%
+  gather(Item, Hours, 1:ncol(.)) %>%
+  mutate(Date = NA, Activity = NA, Include = TRUE, Begin = NA, End = NA) %>% 
+  mutate(Item = case_when(
+    Item == "Excluded" ~ paste0(Item, "\\textsuperscript{*}"),
+    TRUE ~ Item
+  )) 
+
+timesheet <- timesheet %>%
+  bind_rows(totals)
+
+rm(totals)
+
+timesheet <- timesheet %>%
+  mutate(Activity = wihantemplates::escape_latex(Activity)) %>% 
+  mutate(
+    Month = str_squish(format(Date, "%B %Y")),
+    Day = str_squish(format(Date, "%e"))
+  ) %>%
+  select(Date, Month, Day, everything()) %>%
+  arrange(Date, Begin) %>%
+  mutate(Hours = sprintf("%.1f", round(Hours, 1))) %>%
+  mutate(Hours = case_when(
+    !Include ~ paste0(Hours, "\\textsuperscript{*}"),
+    TRUE ~ Hours
+  )) %>%
+  select(-c(Include, Date))
+
+timesheet %>%
+  kbl(
+    escape = F,
+    booktabs = T,
+    position = "t",
+    linesep = "",
+    caption = "Complete record of related billable activities",
+    align = "l",
+    table.envir = "table"
+  ) %>%
+  row_spec(nrow(timesheet) - 3, hline_after = T) %>%
+  collapse_rows(
+    1:2,
+    latex_hline = "none",
+    row_group_label_position = "first",
+    valign = "top"
+  ) %>%
+  kable_styling(
+    font_size = 8,
+    latex_options = c("repeat_header")) %>%
+  footnote(
+    general = "\\\\textsuperscript{*}Entries excluded from the final amount.",
+    general_title = "",
+    footnote_as_chunk = T,
+    threeparttable = T,
+    escape = F
+  )
+
+```
+
+:::
+
+
+
+

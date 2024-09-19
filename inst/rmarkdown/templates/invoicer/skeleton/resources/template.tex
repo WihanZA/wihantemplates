@@ -1,0 +1,250 @@
+
+\documentclass[
+  11pt,
+  a4paper,
+  UKenglish,
+  $for(classoption)$
+    $classoption$$sep$,
+  $endfor$
+]{$documentclass$}
+
+% \usepackage{lmodern}
+\usepackage{fontspec}
+\usepackage{noto}
+\usepackage{setspace}
+\usepackage{fontawesome}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{unicode-math}
+\defaultfontfeatures{Scale=MatchLowercase}
+\defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\usepackage{upquote}
+\usepackage[$for(microtypeoptions)$$microtypeoptions$$sep$,$endfor$]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath}
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 2pt}
+\usepackage{fancyvrb}
+\VerbatimFootnotes
+\usepackage[dvipsnames,svgnames,x11names]{xcolor}
+\usepackage[
+  a4paper,
+  left=1in,
+  right=1in,
+  top=0.9in,
+  bottom=0.9in
+]{geometry}
+\usepackage{longtable,booktabs}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+\usepackage{footnote}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\usepackage[normalem]{ulem}
+\setlength{\emergencystretch}{3em}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}}
+\usepackage{selnolig}
+\linespread{1.05}
+
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{ragged2e}
+\usepackage{hhline}
+\usepackage{array}
+\usepackage{float}
+\usepackage{threeparttable}
+
+\usepackage{titlecaps}
+\Addlcwords{a an the and but or for nor so yet at by for from in into like near of on over past to}
+
+\pagenumbering{roman}
+% \pagenumbering{Roman}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead{}
+\fancyfoot{}
+\fancyfoot[C]{\small\thepage}
+
+\usepackage[font=footnotesize,
+singlelinecheck=true,
+% labelfont={bf},
+% labelformat=original,
+% labelformat=empty,
+% labelsep=colon,
+format=plain,
+textformat=simple]{caption}
+\captionsetup[figure]{name={Figure},skip=3pt,position=bottom}
+\captionsetup[table]{name={Table},skip=3pt,position=top}
+\renewcommand{\thetable}{\Alph{table}}
+
+$if(highlighting-macros)$
+  $highlighting-macros$
+$endif$
+$if(numbersections)$
+  \setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+$else$
+  \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+$endif$
+$if(natbib)$
+  \usepackage[$natbiboptions$]{natbib}
+  \bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+  \renewcommand\bibsection{
+     \section*{References}
+     \markboth{\MakeUppercase{\refname}}{\MakeUppercase{\refname}}
+    }
+$endif$
+
+\usepackage{abstract}
+\renewcommand{\abstractname}{}
+\renewcommand{\absnamepos}{empty}
+
+\renewenvironment{abstract}
+  {{\setlength{\leftmargin}{0mm}
+    \setlength{\rightmargin}{\leftmargin}}
+  \relax}
+  {\endlist}
+
+\usepackage{titlesec}
+
+% \titlespacing*{\section}{0pt}{1\baselineskip}{0.5\baselineskip}
+% \titleformat*{\section}{\Large\bfseries\uppercase}
+% \titleformat*{\subsection}{\bfseries}
+% \titleformat*{\subsubsection}{\normalsize\itshape}
+% \titleformat*{\paragraph}{\normalsize\itshape}
+% \titleformat*{\subparagraph}{\normalsize\itshape}
+
+\usepackage[section]{placeins}
+
+\makeatletter
+\@ifpackageloaded{hyperref}{}{
+  \PassOptionsToPackage{hyphens}{url}
+  \usepackage[setpagesize=false,
+              unicode=false,
+              xetex]{hyperref}
+}
+
+\hypersetup{
+$if(title-meta)$
+pdftitle={$title-meta$},
+$endif$
+$if(author-meta)$
+pdfauthor={$author-meta$},
+$endif$
+breaklinks=true,
+bookmarks=true,
+colorlinks=true,
+citecolor=black,
+urlcolor=black,
+linkcolor=black,
+pdfborder={0 0 0}}
+
+\urlstyle{same}
+
+% cleveref must be loaded after hyperref
+\usepackage[capitalize,noabbrev]{cleveref}
+
+$if(endnotes)$
+  \usepackage{endnotes}
+  \renewcommand{\enotesize}{\normalsize}
+  \let\footnote=\endnote
+$endif$
+$if(appendix)$
+  \renewcommand*\thetable{$appendixletter$.\arabic{table}}
+  \renewcommand*\thefigure{$appendixletter$.\arabic{figure}}
+$endif$
+$for(header-includes)$
+  $header-includes$
+$endfor$
+\newcommand{\blankline}{\quad\pagebreak[2]}
+
+\begin{document}
+
+\begin{table}[t]
+\begin{tabularx}{\textwidth}{@{}l X r@{}}
+  \hspace{-1em} \multirow{7}{*}{
+  \begin{tabular}{l}
+  \small{\uppercase{From}}\\
+  \small{\textbf{$author$}}\\
+  $for(author_address)$\small $author_address$$sep$\\ $endfor$ \\
+  \small{\faPhone\ $author_phone$} \\
+  \small{\faEnvelopeO\ $author_email$}
+  \end{tabular}} &
+  \hfill &
+  \multirow{6}{*}{
+  \begin{tabular}{r}
+  \LARGE{\textbf{\uppercase{Invoice}}}\vspace{0.2em}\\
+  \small{\uppercase{Reference}} \\
+  \small{$reference$} \\
+  \small{\uppercase{Date}} \\
+  \small{$date$}
+  \end{tabular}}\\
+\end{tabularx}
+\end{table}
+
+\vspace*{4.5em}
+
+\small{\uppercase{To}}\\
+\small{\textbf{$client_name$}}\\
+\small{$client_street$}\\
+\small{$client_city$}\\
+\small{$client_zip$}\\
+\small{\faEnvelopeO\ $client_email$}
+
+\vspace*{1em}
+
+{\centering\large
+\textbf{\titlecap{$project_name$}}\\
+\textit{\titlecap{$project_description$}}\\}
+
+$body$
+% \vspace*{1em}
+
+{\small
+Please transfer the amount due according to the following payment instructions:\\
+\\
+\textbf{Beneficiary: } $beneficiary$\\
+\textbf{Bank:} $bank$\\
+\textbf{Branch:} $branch$\\
+\textbf{Account:} $account$\\
+\textbf{SWIFT code:} $swift$\\
+\textbf{Reference:} $reference$}\\
+\\
+Thank you for your business.\\
+\\
+Kind regards,\\
+$if(signature)$
+\includegraphics[height=1.8em]{$signature$}\\
+$endif$
+$author$
+
+\clearpage
+
+\hypertarget{timesheet}{}
+
+$if(has-frontmatter)$
+  \backmatter
+$endif$
+$if(natbib)$
+  $if(bibliography)$
+    $if(biblio-title)$
+      $if(has-chapters)$
+        \renewcommand\bibname{$biblio-title$}
+      $else$
+        \renewcommand\refname{$biblio-title$}
+      $endif$
+    $endif$
+    \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+  $endif$
+$endif$
+\end{document}
