@@ -26,3 +26,4 @@ Suggests:
     rmarkdown,
     tinytex,
     yaml
+VignetteBuilder: knitr
