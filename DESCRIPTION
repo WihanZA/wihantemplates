@@ -21,8 +21,7 @@ Suggests:
     stringr,
     testthat,
     tibble,
-    tidyr
-Imports: 
+    tidyr,
     knitr,
     rmarkdown,
     tinytex,
