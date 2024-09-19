@@ -5,3 +5,5 @@
 /scripts
 README.Rmd
 README.html
+inst/doc
+/inst/rmarkdown/templates/su_dissertation/skeleton/cache
