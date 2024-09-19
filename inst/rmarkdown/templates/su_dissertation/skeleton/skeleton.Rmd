@@ -48,43 +48,46 @@ bibliography: matter/mybib.bib
 ---
 
 ```{r setup, include = F}
-
 # For more information about the YAML fields above
 # See https://github.com/WihanZA/wihantemplates?tab=readme-ov-file#su_dissertation
 
 rm(list = ls())
-gc() 
+gc()
 
 library(pacman)
-p_load(tidyverse, 
-       lubridate, 
-       kableExtra,
-       rmarkdown,
-       glue,
-       ragg,
-       ggtext,
-       lorem)
+p_load(
+  tidyverse,
+  lubridate,
+  kableExtra,
+  rmarkdown,
+  glue,
+  ragg,
+  ggtext,
+  lorem
+)
 
 knitr::opts_chunk$set(
-  echo = F, 
-  message = F, 
-  warning = F, 
+  echo = F,
+  message = F,
+  warning = F,
   cache = T,
   cache.path = "cache/",
-  fig.path ='figures/',
-  fig.process = function(x) {x2 = sub('-\\d+([.][a-z]+)$', '\\1', x) 
-  if (file.rename(x, x2)) x2 else x},
+  fig.path = "figures/",
+  fig.process = function(x) {
+    x2 <- sub("-\\d+([.][a-z]+)$", "\\1", x)
+    if (file.rename(x, x2)) x2 else x
+  },
   fig.pos = "htbp",
-  fig.align = 'center',
-  dev = "ragg_png", 
+  fig.align = "center",
+  dev = "ragg_png",
   fig.ext = "png",
   fig.width = 6.27,
   out.width = "0.95\\textwidth",
-  dpi = 144)
+  dpi = 144
+)
 
 source("styles/defaults.R", local = knitr::knit_global())
 source("code/functions.R", local = knitr::knit_global())
-
 ```
 
 
@@ -131,10 +134,8 @@ In the example below, all custom functions stored in `code/functions.R` are load
 It may be worthwhile to run `source("code/functions.R", local = knitr::knit_global())` in your setup chunk, making your own functions accessible throughout your `.Rmd` document.
 
 ```{r examplefunction, echo = T}
-
 source("code/functions.R", local = knitr::knit_global())
 hello_function()
-
 ```
 
 # Basics
@@ -237,25 +238,23 @@ The default behavior for figures arising from all code chunks is set in the `set
 Existing figures or images can be included with `knitr::include_graphics`, which can import `PDF`, `PNG`, or `JPG` files like \cref{fig:waterplants}.
 
 ```{r waterplants, fig.cap = "Water plants", out.width = "50%", fig.pos="h"}
-
 knitr::include_graphics("figures/waterplants.jpg")
-
 ```
 
 Plots can also be created using, e.g., [`ggplot`](https://ggplot2.tidyverse.org/) from the `tidyverse`, as shown below.
 The resulting plot, \cref{fig:fancyplot}, is embedded in the document.
 
 ```{r fancyplot, fig.height=4, fig.cap = "Manufacturer fuel efficiency", fig.pos="ht"}
-
-mpg %>% 
-  ggplot(aes(x = cyl, y = hwy, color = manufacturer)) + 
-  geom_point() + 
-  labs(x = "Cylinders", 
-       y = "Highway miles per gallon",
-       color = "Manufacturer",
-       caption = "Source: MPG (2024).") +
+mpg %>%
+  ggplot(aes(x = cyl, y = hwy, color = manufacturer)) +
+  geom_point() +
+  labs(
+    x = "Cylinders",
+    y = "Highway miles per gallon",
+    color = "Manufacturer",
+    caption = "Source: MPG (2024)."
+  ) +
   theme(legend.position = "right")
-
 ```
 
 ## Tables
@@ -264,22 +263,24 @@ To create tables, I recommend using the `kbl` and `kable_styling` functions from
 \cref{tab:tab1} is created with the code chunk below.
 
 ```{r tab1, echo = F}
-
-head(mtcars)[,1:4] %>% 
-  kbl(digits = 2, 
-      booktabs = T,
-      linesep = "",
-      centering = T,
-      position = "H",
-      escape = T,
-      table.envir = "table",
-      caption = "Caption centered above table") %>%
-  kable_styling(font_size = 10) %>% 
-  footnote(general_title = "My footnote:",
-           general = "This is my table footnote.",
-           footnote_as_chunk = T,
-           threeparttable = T)
-
+head(mtcars)[, 1:4] %>%
+  kbl(
+    digits = 2,
+    booktabs = T,
+    linesep = "",
+    centering = T,
+    position = "H",
+    escape = T,
+    table.envir = "table",
+    caption = "Caption centered above table"
+  ) %>%
+  kable_styling(font_size = 10) %>%
+  footnote(
+    general_title = "My footnote:",
+    general = "This is my table footnote.",
+    footnote_as_chunk = T,
+    threeparttable = T
+  )
 ```
 
 The first four columns of the `mtcars` data frame are used as input for `kbl`, which generates a basic table. 
