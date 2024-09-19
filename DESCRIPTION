@@ -14,6 +14,16 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Suggests: 
+    dplyr,
+    kableExtra,
+    lubridate,
+    readxl,
+    stringr,
+    testthat,
+    tibble,
+    tidyr
+Imports: 
+    knitr,
     rmarkdown,
-    tidyverse,
-    tinytex
+    tinytex,
+    yaml
