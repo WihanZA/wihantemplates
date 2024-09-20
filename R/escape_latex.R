@@ -1,11 +1,14 @@
 #' Escape problematic characters to allow compilation in LaTeX
 #'
 #' This function escapes special LaTeX characters in a string to ensure proper rendering.
-#' Copied from `knitr` because it is unexported and CRAN rejects :::
+#' Copied from `knitr` because it is unexported and CRAN rejects.
 #'
 #' @param x a character string to escape
 #' @param newlines boolean
 #' @param spaces boolean
+#'
+#' @return String with escaped characters
+#'
 #' @examples
 #' escape_latex("100% sure!")
 #' @export
