@@ -6,5 +6,7 @@
 ^scripts$
 ^examples$
 ^thumbnails
-^inst/rmarkdown/templates/su_dissertation$
 ^.github$
+^inst/rmarkdown/templates/su_dissertation/skeleton/skeleton\.pdf$
+^inst/rmarkdown/templates/invoicer/skeleton/skeleton\.pdf$
+^inst/rmarkdown/templates/su_dissertation/skeleton/cache$
