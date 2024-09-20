@@ -2,8 +2,11 @@
 # wihantemplates
 
 <!-- badges: start -->
+
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) [![r-cmd-check](https://github.com/WihanZA/wihantemplates/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/WihanZA/wihantemplates/actions/workflows/check-standard.yaml) [![Styler](https://github.com/WihanZA/wihantemplates/actions/workflows/styler.yaml/badge.svg)](https://github.com/WihanZA/wihantemplates/actions/workflows/styler.yaml)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![r-cmd-check](https://github.com/WihanZA/wihantemplates/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/WihanZA/wihantemplates/actions/workflows/check-standard.yaml)
+[![Styler](https://github.com/WihanZA/wihantemplates/actions/workflows/styler.yaml/badge.svg)](https://github.com/WihanZA/wihantemplates/actions/workflows/styler.yaml)
 <!-- badges: end -->
 
 An R package comprising–hopefully, one day–a suite of templates for the
@@ -86,3 +89,7 @@ writing.
 
 [<img src="thumbnails/su_dissertation-1-2-3-9.png" style="width: 100.0%" />](thumbnails/su_dissertation-1-2-3-9.png)
 [<img src="thumbnails/su_dissertation-10-18-19-22.png" style="width: 100.0%" />](thumbnails/su_dissertation-10-18-19-22.png)
+
+### `invoicer`: Invoice Template
+
+[<img src="thumbnails/invoicer-1-2.png" style="width: 100.0%" />](thumbnails/invoicer-1-2.png)
