@@ -9,8 +9,7 @@
 #' @return The contents of the `invoicer` template produced at specified `file`
 #' @export
 
-create_invoice <- function(file, create_dir = FALSE, edit = FALSE){
-
+create_invoice <- function(file, create_dir = FALSE, edit = FALSE) {
   rmarkdown::draft(
     file = file,
     template = "invoicer",
@@ -18,6 +17,4 @@ create_invoice <- function(file, create_dir = FALSE, edit = FALSE){
     edit = edit,
     create_dir = create_dir
   )
-
 }
-
