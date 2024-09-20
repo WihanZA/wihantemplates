@@ -13,9 +13,12 @@ escape_latex(x, newlines = FALSE, spaces = FALSE)
 
 \item{spaces}{boolean}
 }
+\value{
+String with escaped characters
+}
 \description{
 This function escapes special LaTeX characters in a string to ensure proper rendering.
-Copied from \code{knitr} because it is unexported and CRAN rejects :::
+Copied from \code{knitr} because it is unexported and CRAN rejects.
 }
 \examples{
 escape_latex("100\% sure!")
