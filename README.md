@@ -2,9 +2,8 @@
 # wihantemplates
 
 <!-- badges: start -->
-
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) [![r-cmd-check](https://github.com/WihanZA/wihantemplates/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/WihanZA/wihantemplates/actions/workflows/check-standard.yaml) [![Styler](https://github.com/WihanZA/wihantemplates/actions/workflows/styler.yaml/badge.svg)](https://github.com/WihanZA/wihantemplates/actions/workflows/styler.yaml)
 <!-- badges: end -->
 
 An R package comprising–hopefully, one day–a suite of templates for the
