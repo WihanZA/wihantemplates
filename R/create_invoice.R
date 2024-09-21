@@ -10,7 +10,6 @@
 #' @export
 
 create_invoice <- function(reference = "Invoice.Rmd", create_dir = FALSE, edit = FALSE) {
-
   file <- paste(reference, "Invoice.Rmd")
 
   rmarkdown::draft(
