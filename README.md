@@ -72,7 +72,9 @@ and running.
 
 ## Templates
 
-### `su_dissertation`: Stellenbosch University Dissertation Template
+### `su_dissertation`
+
+**Stellenbosch University Dissertation Template**
 
 All the necessary materials for honours, master’s and doctoral students
 using R Markdown to produce dissertations and theses conforming to the
@@ -90,6 +92,8 @@ writing.
 [<img src="thumbnails/su_dissertation-1-2-3-9.png" style="width: 100.0%" />](thumbnails/su_dissertation-1-2-3-9.png)
 [<img src="thumbnails/su_dissertation-10-18-19-22.png" style="width: 100.0%" />](thumbnails/su_dissertation-10-18-19-22.png)
 
-### `invoicer`: Invoice Template
+### `invoicer`
+
+**Invoice Template**
 
 [<img src="thumbnails/invoicer-1-2.png" style="width: 100.0%" />](thumbnails/invoicer-1-2.png)
