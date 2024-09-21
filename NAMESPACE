@@ -2,4 +2,3 @@
 
 export(create_invoice)
 export(escape_latex)
-importFrom(lifecycle,deprecated)
