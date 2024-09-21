@@ -3,10 +3,10 @@
 
 <!-- badges: start -->
 
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/WihanZA/wihantemplates/actions/workflows/r-cmd-check.yaml/badge.svg)](https://github.com/WihanZA/wihantemplates/actions/workflows/r-cmd-check.yaml)
 [![Styler](https://github.com/WihanZA/wihantemplates/actions/workflows/styler.yaml/badge.svg)](https://github.com/WihanZA/wihantemplates/actions/workflows/styler.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/wihantemplates)](https://CRAN.R-project.org/package=wihantemplates)
 <!-- badges: end -->
 
 An R package comprising–hopefully, one day–a suite of templates for the
