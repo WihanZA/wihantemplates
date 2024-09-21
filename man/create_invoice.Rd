@@ -4,10 +4,10 @@
 \alias{create_invoice}
 \title{Create a new document based on the \code{invoicer} template}
 \usage{
-create_invoice(file, create_dir = FALSE, edit = FALSE)
+create_invoice(reference = "Invoice.Rmd", create_dir = FALSE, edit = FALSE)
 }
 \arguments{
-\item{file}{File name for the draft}
+\item{reference}{Invoice reference number}
 
 \item{create_dir}{TRUE to create a new directory for the draft}
 
