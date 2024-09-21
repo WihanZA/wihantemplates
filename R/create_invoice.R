@@ -10,7 +10,6 @@
 #' @export
 
 create_invoice <- function(path, create_dir = FALSE, edit = FALSE) {
-
   rmarkdown::draft(
     file = path,
     template = "invoicer",
@@ -18,5 +17,4 @@ create_invoice <- function(path, create_dir = FALSE, edit = FALSE) {
     edit = edit,
     create_dir = create_dir
   )
-
 }
