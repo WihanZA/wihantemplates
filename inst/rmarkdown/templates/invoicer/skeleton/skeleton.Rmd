@@ -83,10 +83,10 @@ library(tibble)
 library(wihantemplates)
 
 knitr::opts_chunk$set(
-  echo = F,
-  message = F,
-  warning = F,
-  cache = F
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE
 )
 
 options(knitr.table.format = "latex")
@@ -113,8 +113,8 @@ items <- read_xlsx("data/timesheet.xlsx") %>%
   )) %>%
   group_by(Item) %>%
   summarise(
-    Date = min(Date, na.rm = T),
-    Hours = sum(Hours, na.rm = T),
+    Date = min(Date, na.rm = TRUE),
+    Hours = sum(Hours, na.rm = TRUE),
     .groups = "drop"
   ) %>%
   arrange(Date) %>%
@@ -128,15 +128,15 @@ items <- read_xlsx("data/timesheet.xlsx") %>%
 
 totals <- tibble(
   Item = "Total",
-  Hours = sum(items$Hours, na.rm = T),
+  Hours = sum(items$Hours, na.rm = TRUE),
   Rate = NA,
-  Amount = sum(items$Amount, na.rm = T)
+  Amount = sum(items$AmounTRUE, na.rm = TRUE)
 )
 
 items <- items %>%
   bind_rows(totals) %>%
   mutate(across(
-    c(Rate, Amount),
+    c(Rate, AmounTRUE),
     ~ case_when(
       !is.na(.) ~ paste0("R ", prettyNum(., big.mark = " "), ".00"),
       TRUE ~ NA_character_
@@ -147,24 +147,24 @@ rm(totals, rate_other, rate_x, rate_y)
 
 items %>%
   kbl(
-    escape = T,
+    escape = TRUE,
     position = "h",
-    booktabs = T,
+    booktabs = TRUE,
     linesep = "",
     align = "lrrr",
     table.envir = "table"
   ) %>%
-  row_spec(nrow(items) - 1, hline_after = T) %>%
-  row_spec(nrow(items), bold = T) %>%
+  row_spec(nrow(items) - 1, hline_after = TRUE) %>%
+  row_spec(nrow(items), bold = TRUE) %>%
   kable_styling(font_size = 10) %>%
   column_spec(1, width = "15em") %>%
   column_spec(c(2, 3, 4), width = "6em") %>%
   footnote(
     general = "Record of billable activities as submitted in \\\\cref{tab:timesheet} on the next page.",
     general_title = "",
-    footnote_as_chunk = T,
-    threeparttable = T,
-    escape = F
+    footnote_as_chunk = TRUE,
+    threeparttable = TRUE,
+    escape = FALSE
   )
 ```
 
@@ -183,11 +183,11 @@ timesheet <- read_xlsx("data/timesheet.xlsx") %>%
 
 totals <- timesheet %>%
   group_by(Include) %>%
-  summarise(Hours = sum(Hours, na.rm = T)) %>%
+  summarise(Hours = sum(Hours, na.rm = TRUE)) %>%
   mutate(Include = case_when(Include ~ "Included", TRUE ~ "Excluded")) %>%
   spread(Include, Hours) %>%
   mutate(Total = Excluded + Included) %>%
-  gather(Activity, Hours, 1:ncol(.)) %>%
+  gather(Activity, Hours, seq_len(ncol(.))) %>%
   mutate(Date = NA, Item = NA, Include = c(FALSE, TRUE, TRUE), Begin = NA, End = NA)
 
 timesheet <- timesheet %>%
@@ -212,8 +212,8 @@ timesheet <- timesheet %>%
 
 timesheet %>%
   kbl(
-    escape = F,
-    booktabs = T,
+    escape = FALSE,
+    booktabs = TRUE,
     # position = "h",
     linesep = "",
     caption = "Complete record of related billable activities",
@@ -222,7 +222,7 @@ timesheet %>%
   ) %>%
   row_spec(
     nrow(timesheet) - 3,
-    hline_after = T
+    hline_after = TRUE
   ) %>%
   collapse_rows(
     1:2,
@@ -237,9 +237,9 @@ timesheet %>%
   footnote(
     general = "\\\\textsuperscript{*}Entries excluded from the final amount.",
     general_title = "",
-    footnote_as_chunk = T,
-    threeparttable = T,
-    escape = F
+    footnote_as_chunk = TRUE,
+    threeparttable = TRUE,
+    escape = FALSE
   )
 ```
 
