@@ -23,7 +23,9 @@ Suggests:
     tibble,
     tidyr,
     knitr,
-    rmarkdown,
     tinytex,
     yaml
 VignetteBuilder: knitr
+Imports: 
+    glue,
+    rmarkdown

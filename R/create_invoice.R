@@ -11,11 +11,30 @@
 #' @export
 
 create_invoice <- function(path, overwrite = FALSE, create_dir = FALSE, edit = FALSE) {
+  data <- file.path(dirname(path), "data")
+  resources <- file.path(dirname(path), "resources")
+
   if (file.exists(path)) {
     if (overwrite == TRUE) {
       file.remove(path)
     } else {
-      stop("File already exists. Set `overwrite = TRUE` to overwrite.")
+      stop(glue::glue("{path} already exists. Set `overwrite = TRUE` to overwrite."))
+    }
+  }
+
+  if (dir.exists(data)) {
+    if (overwrite == TRUE) {
+      unlink(data, recursive = TRUE)
+    } else {
+      stop(glue::glue("{data} already exists. Set `overwrite = TRUE` to overwrite."))
+    }
+  }
+
+  if (dir.exists(resources)) {
+    if (overwrite == TRUE) {
+      unlink(resources, recursive = TRUE)
+    } else {
+      stop(glue::glue("{resources} already exists. Set `overwrite = TRUE` to overwrite."))
     }
   }
 
