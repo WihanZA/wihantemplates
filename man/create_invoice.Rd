@@ -4,10 +4,12 @@
 \alias{create_invoice}
 \title{Create a new document based on the \code{invoicer} template}
 \usage{
-create_invoice(path, create_dir = FALSE, edit = FALSE)
+create_invoice(path, overwrite = FALSE, create_dir = FALSE, edit = FALSE)
 }
 \arguments{
 \item{path}{File path for invoice \code{.Rmd} destination}
+
+\item{overwrite}{TRUE to overwrite an existing file at \code{path}}
 
 \item{create_dir}{TRUE to create a new directory for the draft}
 
