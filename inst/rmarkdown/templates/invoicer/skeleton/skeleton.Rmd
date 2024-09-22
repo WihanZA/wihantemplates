@@ -69,9 +69,6 @@ account: "`r params$account`"
 ---
 
 ```{r setup, include = F}
-rm(list = ls())
-invisible(gc())
-
 library(rmarkdown)
 library(kableExtra)
 library(dplyr)
@@ -130,13 +127,13 @@ totals <- tibble(
   Item = "Total",
   Hours = sum(items$Hours, na.rm = TRUE),
   Rate = NA,
-  Amount = sum(items$AmounTRUE, na.rm = TRUE)
+  Amount = sum(items$Amount, na.rm = TRUE)
 )
 
 items <- items %>%
   bind_rows(totals) %>%
   mutate(across(
-    c(Rate, AmounTRUE),
+    c(Rate, Amount),
     ~ case_when(
       !is.na(.) ~ paste0("R ", prettyNum(., big.mark = " "), ".00"),
       TRUE ~ NA_character_
@@ -244,7 +241,3 @@ timesheet %>%
 ```
 
 :::
-
-
-
-
