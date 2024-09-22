@@ -27,5 +27,3 @@ Suggests:
     tinytex,
     yaml
 VignetteBuilder: knitr
-Imports: 
-    lifecycle
