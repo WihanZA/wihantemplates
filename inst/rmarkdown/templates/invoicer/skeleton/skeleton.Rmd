@@ -6,50 +6,42 @@ output:
     latex_engine: xelatex
     citation_package: natbib
 
+# params start
 params:
-  # Client Information
   client_name: "Mickey Mouse"
   client_street: "1313 Disneyland Drive"
   client_city: "Anaheim"
   client_zip: "92802"
   client_email: "mickey.mouse@disney.com"
-  
-  # Invoice Details
   reference: "INV-2024-09"
   date: !r stringr::str_squish(format(Sys.Date(), "%e %B %Y"))
   project_name: "Magic Kingdom Expansion"
   project_description: "Design and implementation of new facilities"
-
-  # Author Information
   author_name: "Bugs Bunny"
   author_street: "123 Carrot Lane"
   author_city: "Looneyville"
   author_zip: "54321"
   author_email: "bugs.bunny@looneytoons.com"
   author_phone: "+27 71 987 6543"
-  
-  # Beneficiary and Banking Details
   beneficiary: "Elmer Fudd"
   swift: "LOONYBUN"
   bank: "Acme Bank"
   branch: "100200"
   account: "9876543210"
+# params end
 
-# Client Information References
 client_name: "`r params$client_name`"
 client_street: "`r params$client_street`"
 client_city: "`r params$client_city`"
 client_zip: "`r params$client_zip`"
 client_email: "`r params$client_email`"
 
-# Invoice Details References
 title: "`r params$reference` Invoice"
 reference: "`r params$reference`"
 date: "`r params$date`"
 project_name: "`r params$project_name`"
 project_description: "`r params$project_description`"
 
-# Author Information References
 author_name: "`r params$author_name`"
 author_street: "`r params$author_street`"
 author_city: "`r params$author_city`"
@@ -59,7 +51,6 @@ author_phone: "`r params$author_phone`"
 signature: "resources/signature.jpg" # optional
 sig_size: 5ex # optional
 
-# Beneficiary and Banking Details References
 beneficiary: "`r params$beneficiary`"
 swift: "`r params$swift`"
 bank: "`r params$bank`"
@@ -68,7 +59,7 @@ account: "`r params$account`"
 
 ---
 
-```{r setup, include = F}
+```{r setup, include = FALSE}
 library(rmarkdown)
 library(kableExtra)
 library(dplyr)
