@@ -616,6 +616,31 @@ $if(sponsor)$\SetSponsor{$sponsor$}$endif$
 \fi}%
 \makeatother
 
+%% Fix problem with amsmath cleveref acronym
+%% https://tex.stackexchange.com/a/735502
+%% --------------------------------------------------------------
+\makeatletter
+    \AtBeginDocument
+    {
+      \def\ltx@label#1{\cref@label{#1}}
+      \def\label@in@display@noarg#1{\cref@old@label@in@display{#1}}
+    }
+\makeatother
+
+%% https://tex.stackexchange.com/questions/71364/acronym-acresetall-cleveref-multiply-defined-labels
+%% but remember to add \AC before @verridelabel
+%% --------------------------------------------------------------
+\makeatletter
+\newcommand*{\org@overidelabel}{}
+\let\org@overridelabel\AC@verridelabel
+\renewcommand*{\AC@verridelabel}[1]{%
+  \@bsphack
+  \protected@write\@auxout{}{\string\AC@undonewlabel{#1@cref}}%
+  \org@overridelabel{#1}%
+  \@esphack
+}%
+\makeatother
+
 %% Start of document
 %% --------------------------------------------------------------
 \begin{document}
