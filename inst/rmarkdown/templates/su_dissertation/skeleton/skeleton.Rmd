@@ -1,5 +1,5 @@
 ---
-# YAML Header
+# YAML Header ----
 output: 
   pdf_document:
     template: resources/template.tex
@@ -47,30 +47,24 @@ nomenclature: matter/nomenclature.Rmd
 bibliography: matter/mybib.bib
 ---
 
-```{r setup, include = F}
-# For more information about the YAML fields above
-# See https://github.com/WihanZA/wihantemplates?tab=readme-ov-file#su_dissertation
+```{r setup, include = FALSE}
+# packages ----
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(kableExtra)
+library(rmarkdown)
+library(glue)
+library(ragg)
+library(ggtext)
+library(lorem)
 
-rm(list = ls())
-gc()
-
-library(pacman)
-p_load(
-  tidyverse,
-  lubridate,
-  kableExtra,
-  rmarkdown,
-  glue,
-  ragg,
-  ggtext,
-  lorem
-)
-
+# code chunk settings ----
 knitr::opts_chunk$set(
-  echo = F,
-  message = F,
-  warning = F,
-  cache = T,
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  cache = TRUE,
   cache.path = "cache/",
   fig.path = "figures/",
   fig.process = function(x) {
@@ -86,8 +80,11 @@ knitr::opts_chunk$set(
   dpi = 144
 )
 
-source("resources/defaults.R", local = knitr::knit_global())
-source("code/functions.R", local = knitr::knit_global())
+# ggplot and table defaults ----
+source("resources/defaults.R")
+
+# custom functions ----
+source("code/functions.R")
 ```
 
 
@@ -120,21 +117,21 @@ When you knit this file a document will be generated based on its contents as we
 You can embed an R code chunk, like the one `cars` below, with `Ctrl + Alt + I`.
 The chunk label for each chunk, e.g., `cars`, is assumed to be unique within the document.
 
-```{r cars, echo = T}
+```{r cars, echo = TRUE}
 summary(cars)
 ```
 
 One of the most crucial code chunks in an R Markdown document is the `setup` code chunk placed at the beginning of the document (after the YAML header).
 It can be used to load packages and data, and configure the default behaviour of code chunks, used throughout the remainder of the document.
-Default chunk options are set globally using `knitr::opts_chunk$set` with arguments such as  `echo`, `warning`, and `message`.^[For example, the code chunk option `echo` controls whether the code in an code chunk is printed in the final document. This is set globally to `echo = F` in the `setup` chunk.However, in an individual code chunk, like `cars`, you can specify `echo = T` if you want its code printed.]
+Default chunk options are set globally using `knitr::opts_chunk$set` with arguments such as  `echo`, `warning`, and `message`.^[For example, the code chunk option `echo` controls whether the code in an code chunk is printed in the final document. This is set globally to `echo = FALSE` in the `setup` chunk.However, in an individual code chunk, like `cars`, you can specify `echo = TRUE` if you want its code printed.]
 Learn more about code chunk options at this [link](https://yihui.org/knitr/options/#chunk-options>).
 
 With `source`, you can load scripts of code stored elsewhere in your directory.
 In the example below, all custom functions stored in `code/functions.R` are loaded, e.g., the `hello_function` which prints the name stored in the YAML metadata.
-It may be worthwhile to run `source("code/functions.R", local = knitr::knit_global())` in your setup chunk, making your own functions accessible throughout your `.Rmd` document.
+It may be worthwhile to run `source("code/functions.R")` in your setup chunk, making your own functions accessible throughout your `.Rmd` document.
 
-```{r examplefunction, echo = T}
-source("code/functions.R", local = knitr::knit_global())
+```{r examplefunction, echo = TRUE}
+source("code/functions.R")
 hello_function()
 ```
 
@@ -262,15 +259,15 @@ mpg %>%
 To create tables, I recommend using the `kbl` and `kable_styling` functions from the [`kableExtra`](https://haozhu233.github.io/kableExtra/awesome_table_in_pdf.pdf) R package. 
 \cref{tab:tab1} is created with the code chunk below.
 
-```{r tab1, echo = F}
+```{r tab1, echo = FALSE}
 head(mtcars)[, 1:4] %>%
   kbl(
     digits = 2,
-    booktabs = T,
+    booktabs = TRUE,
     linesep = "",
-    centering = T,
+    centering = TRUE,
     position = "H",
-    escape = T,
+    escape = TRUE,
     table.envir = "table",
     caption = "Caption centered above table"
   ) %>%
@@ -278,8 +275,8 @@ head(mtcars)[, 1:4] %>%
   footnote(
     general_title = "My footnote:",
     general = "This is my table footnote.",
-    footnote_as_chunk = T,
-    threeparttable = T
+    footnote_as_chunk = TRUE,
+    threeparttable = TRUE
   )
 ```
 
