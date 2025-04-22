@@ -616,9 +616,10 @@ $if(sponsor)$\SetSponsor{$sponsor$}$endif$
 \fi}%
 \makeatother
 
+%% Fixes https://github.com/WihanZA/wihantemplates/issues/2
+%% --------------------------------------------------------------
 %% Fix problem with amsmath cleveref acronym
 %% https://tex.stackexchange.com/a/735502
-%% --------------------------------------------------------------
 \makeatletter
     \AtBeginDocument
     {
@@ -629,7 +630,6 @@ $if(sponsor)$\SetSponsor{$sponsor$}$endif$
 
 %% https://tex.stackexchange.com/questions/71364/acronym-acresetall-cleveref-multiply-defined-labels
 %% but remember to add \AC before @verridelabel
-%% --------------------------------------------------------------
 \makeatletter
 \newcommand*{\org@overidelabel}{}
 \let\org@overridelabel\AC@verridelabel
