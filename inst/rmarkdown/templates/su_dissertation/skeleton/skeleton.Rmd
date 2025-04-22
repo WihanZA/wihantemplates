@@ -278,7 +278,6 @@ head(mtcars)[, 1:4] %>%
     footnote_as_chunk = TRUE,
     threeparttable = TRUE
   )
-
 ```
 
 The first four columns of the `mtcars` data frame are used as input for `kbl`, which generates a basic table. 
