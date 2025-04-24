@@ -92,8 +92,18 @@ writing.
 [<img src="thumbnails/su_dissertation-1-2-3-9.png" style="width: 100.0%" />](thumbnails/su_dissertation-1-2-3-9.png)
 [<img src="thumbnails/su_dissertation-10-18-19-22.png" style="width: 100.0%" />](thumbnails/su_dissertation-10-18-19-22.png)
 
-### `invoicer`
+### `invoice`
 
 **Invoice Template**
 
-[<img src="thumbnails/invoicer-1-2.png" style="width: 100.0%" />](thumbnails/invoicer-1-2.png)
+Produce professional invoices using R Markdown.
+With customisable YAML parameters for information typically found in invoices, this template is designed to streamline the invoicing process.
+The template includes:
+- A fully parameterised document with fields for client and author information
+- Support for importing and processing timesheet data containing your specific billing items and hours
+- Automatic calculation of billable amounts based on hours and rates
+- Professional formatting with optional signature image inclusion
+- Banking/payment details section
+- Organised presentation of billable activities with totals
+
+[<img src="thumbnails/invoice-1-2.png" style="width: 100.0%" />](thumbnails/invoice-1-2.png)
