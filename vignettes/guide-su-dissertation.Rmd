@@ -1,8 +1,8 @@
 ---
-title: "`su_dissertation`"
+title: "Guide to `su_dissertation`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{`su_dissertation`}
+  %\VignetteIndexEntry{Guide to `su_dissertation`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
