@@ -1,4 +1,3 @@
-
 \documentclass[
   11pt,
   a4paper,
@@ -178,27 +177,27 @@ $endfor$
 \begin{document}
 
 \begin{table}[t]
-\begin{tabularx}{\textwidth}{@{}l X r@{}}
-  \hspace{-1em} \multirow{7}{*}{
-  \begin{tabular}{l}
-  \small{\uppercase{From}}\\
-  \small{\textbf{$author_name$}}\\
-  \small{$author_street$}\\
-  \small{$author_city$}\\
-  \small{$author_zip$}\\
-  \small{\faPhone\ $author_phone$} \\
-  \small{\faEnvelopeO\ $author_email$}
-  \end{tabular}} &
-  \hfill &
-  \multirow{6}{*}{
-  \begin{tabular}{r}
-  \LARGE{\textbf{\uppercase{Invoice}}}\vspace{0.2em}\\
-  \small{\fontseries{sb}\uppercase{Reference}} \\
-  \small{$reference$} \\
-  \small{\fontseries{sb}\uppercase{Date}} \\
-  \small{$date$}
-  \end{tabular}}\\
-\end{tabularx}
+  \begin{tabularx}{\textwidth}{@{}l X r@{}}
+    \hspace{-1em} \multirow{7}{*}{
+    \begin{tabular}{l}
+        \small{\uppercase{From}}         \\
+        \small{\textbf{$author_name$}}   \\
+        \small{$author_street$}          \\
+        \small{$author_city$}            \\
+        \small{$author_zip$}             \\
+        \small{\faPhone\ $author_phone$} \\
+        \small{\faEnvelopeO\ $author_email$}
+      \end{tabular}} &
+    \hfill                                   &
+    \multirow{6}{*}{
+    \begin{tabular}{r}
+        \LARGE{\textbf{\uppercase{Invoice}}}\vspace{0.2em} \\
+        \small{\fontseries{sb}\uppercase{Reference}}       \\
+        \small{$reference$}                                \\
+        \small{\fontseries{sb}\uppercase{Date}}            \\
+        \small{$date$}
+      \end{tabular}} \\
+  \end{tabularx}
 \end{table}
 
 \vspace*{4.5em}
@@ -213,25 +212,25 @@ $endfor$
 \vspace*{1em}
 
 \begin{center}
-\Large\bfseries\selectfont\titlecap{$project_name$}
+  \Large\bfseries\selectfont\titlecap{$project_name$}
 \end{center}
 
 \begin{center}
-\large\fontshape{it}\selectfont\titlecap{$project_description$}
+  \large\fontshape{it}\selectfont\titlecap{$project_description$}
 \end{center}
 
 $body$
 % \vspace*{1em}
 
 {\small
-Please transfer the amount due according to the following payment instructions:\\
-\\
-\textbf{Beneficiary: } $beneficiary$\\
-\textbf{Bank:} $bank$\\
-\textbf{Branch:} $branch$\\
-\textbf{Account:} $account$\\
-\textbf{SWIFT code:} $swift$\\
-\textbf{Reference:} $reference$}\\
+    Please transfer the amount due according to the following payment instructions:\\
+    \\
+    \textbf{Beneficiary: } $beneficiary$\\
+    \textbf{Bank:} $bank$\\
+    \textbf{Branch:} $branch$\\
+    \textbf{Account:} $account$\\
+    \textbf{SWIFT code:} $swift$\\
+    \textbf{Reference:} $reference$}\\
 \\
 Thank you for your business.\\
 \\

@@ -90,7 +90,7 @@ rate_x <- 300
 rate_y <- 400
 rate_other <- 150
 
-items <- read_xlsx("data/timesheet.xlsx") %>%
+items <- read_xlsx("resources/timesheet.xlsx") %>%
   mutate(Date = ymd(Date)) %>%
   filter(Include) %>%
   select(-Include) %>%
@@ -159,7 +159,7 @@ items %>%
 ::: {#timesheet}
 
 ```{r timesheet}
-timesheet <- read_xlsx("data/timesheet.xlsx") %>%
+timesheet <- read_xlsx("resources/timesheet.xlsx") %>%
   mutate(Date = ymd(Date)) %>%
   mutate(Hours = round(Hours, 1)) %>%
   mutate(across(
