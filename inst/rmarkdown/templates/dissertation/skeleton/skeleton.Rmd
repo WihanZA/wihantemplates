@@ -75,7 +75,7 @@ knitr::opts_chunk$set(
   dpi = 300,
   fig.retina = 2,
   fig.width = plot_width,
-  fig.height = plot_width / golden_ratio, 
+  fig.height = plot_width / golden_ratio,
   out.width = "0.95\\textwidth",
   fig.path = "figures/",
   fig.process = function(x) {
