@@ -1,4 +1,4 @@
 name: dissertation
 description: |
-  This template contains all the necessary materials for doctoral and master's students to reproduce dissertations and theses in R Markdown, which conform to the requirements of Stellenbosch University. The template relies heavily on the excellent suite of $\LaTeX$ packages, [`stellenbosch-2`](https://ctan.org/pkg/stellenbosch-2), created and maintained by [Daniel Els](mailto:dnjels@sun.ac.za).
+  This template provides all the necessary components for creating professional dissertations and theses in R Markdown that conform to the requirements of Stellenbosch University. It features a structured directory organization, customizable YAML fields for metadata, bilingual support for English and Afrikaans content, and proper formatting for abstracts, acknowledgements, chapters, bibliography, and appendices. The template relies heavily on the excellent suite of $\LaTeX$ packages, [`stellenbosch-2`](https://ctan.org/pkg/stellenbosch-2), created and maintained by [Daniel Els](mailto:dnjels@sun.ac.za).
 create_dir: TRUE
