@@ -1,12 +1,6 @@
 ^wihantemplates\.Rproj$
-^\.Rproj\.user$
 ^LICENSE\.md$
-^README\.Rmd$
-^README\.html$
-^scripts$
-^examples$
-^thumbnails
+^scripts
 ^.github$
-^inst/rmarkdown/templates/su_dissertation/skeleton/skeleton\.pdf$
-^inst/rmarkdown/templates/invoicer/skeleton/skeleton\.pdf$
-^inst/rmarkdown/templates/su_dissertation/skeleton/cache$
+^thumbnails$
+^tests$
