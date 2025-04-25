@@ -1,50 +1,67 @@
 ---
-# YAML Header ----
+# Core document formatting - changing these parameters may break the template
 output: 
   pdf_document:
     template: resources/template.tex
-    keep_tex: FALSE
+    keep_tex: FALSE  # Set to TRUE to save the intermediate .tex file (useful for debugging)
     latex_engine: pdflatex
     citation_package: natbib
     pandoc_args: --top-level-division=chapter
 
+# Document type - affects front matter formatting and description
+# Options: PhD, masters-t (thesis), masters-a (assignment)
 thesistype: PhD
 
+# Author information
 author: Johnny Elvis Bravo
+
+# Short version used in abstracts
 authorshort: J.\ E.\ Bravo
 
+# Document title (bilingual support for Stellenbosch University requirements)
+# Afrikaans fields - used in Afrikaans abstract
 title: My Dissertation
 titel: My Proefskrif
 
+# Degree information (bilingual)
 degree: Doctor of Philosophy in Economics
 graad: Doktor in die Wysbegeerte in Ekonomie
 
+# Short degree versions used in abstract headers
 degreeshort: PhD (Economics)
 graadshort: PhD (Ekonomie)
 
+# Department/Faculty information (bilingual)
 department: Department of Economics
 departement: Departement van Ekonomie
 
 faculty: Faculty of Economic and Management Sciences
 fakulteit: Fakulteit Ekonomiese en Bestuurswetenskappe
 
+# Supervisors - add multiple entries with hyphen prefix, comment out with # if not needed
 supervisor: 
   - Prof.\ F.\ Flintstone
   # - Prof.\ G.\ Jetson
 
+# Co-supervisors (optional)
 cosupervisor:
   - Prof.\ H.\ Simpson
   - Prof.\ P.\ Griffin
 
+# Publication date
 year: 2025
 month: 04
 
+# Sponsorship acknowledgment (optional) - displayed on title page
+# Delete or comment out this field to remove from output
 sponsor: The financial assistance of the National Research Foundation (NRF) towards this research is hereby acknowledged. Opinions expressed and conclusions arrived at, are those of the author and are not necessarily to be attributed to the NRF.
 
-abstract: matter/abstract.Rmd
-acknowledgements: matter/acknowledgements.Rmd
-nomenclature: matter/nomenclature.Rmd
-bibliography: matter/mybib.bib
+# File paths for front and back matter
+# Required components stored in the matter/ directory
+abstract: matter/abstract.Rmd # Required for Stellenbosch University
+acknowledgements: matter/acknowledgements.Rmd # Optional but recommended
+nomenclature: matter/nomenclature.Rmd # Optional - defines acronyms and symbols
+bibliography: matter/mybib.bib # Required for citations
 ---
 
 ```{r setup, include = FALSE}
