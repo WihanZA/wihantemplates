@@ -40,7 +40,7 @@ theme_classic(base_size = 11) +
       margin = margin(t = 5, b = 5, unit = "pt")
     )
   ) %>%
-    theme_set()
+  theme_set()
 
 # ggplot geoms defaults ----
 update_geom_defaults(
