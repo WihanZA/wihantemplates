@@ -1,8 +1,8 @@
 ---
-title: "Guide to `su_dissertation`"
+title: "Guide to `dissertation`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Guide to `su_dissertation`}
+  %\VignetteIndexEntry{Guide to `dissertation`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,7 +20,7 @@ library(wihantemplates)
 
 All the necessary materials for honours, master's and doctoral students using R Markdown to produce dissertations and theses conforming to the requirements of Stellenbosch University. 
 The template heavily relies on the excellent suite of LaTeX packages, [`stellenbosch-2`](https://ctan.org/pkg/stellenbosch-2), created and maintained by [Daniel Els](mailto:dnjels@sun.ac.za).
-You can find a complete example [here](https://github.com/WihanZA/wihantemplates/blob/master/examples/su_dissertation.pdf).
+You can find a complete example [here](https://github.com/WihanZA/wihantemplates/blob/master/examples/dissertation.pdf).
 The template is initially populated with helpful content covering various aspects of dissertation writing.
 
 
