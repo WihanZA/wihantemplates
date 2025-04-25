@@ -1,37 +1,30 @@
-
 # wihantemplates
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-An R package comprising–hopefully, one day–a suite of templates for the
-creation documents in **R Markdown** which I’ve come to use on a regular
-basis. The package is still in its experimental stage and I’ll be
-working out the kinks. The best way to contribute to its development and
-address its inevitable problems is by logging a new issue
-[here](https://github.com/WihanZA/wihantemplates/issues).
+An R package providing a suite of professional templates for document creation in **R Markdown**.
+Designed for academic and professional document workflows, these templates streamline the production of dissertations, invoices, and manuscripts with consistent, high-quality formatting.
 
 ## Getting Started
 
-You can install the development version from this Github repository via
-the [`remotes`](https://github.com/r-lib/remotes#readme) package in R.
+### Installation
 
-``` r
+Install the development version from GitHub using the [`remotes`](https://github.com/r-lib/remotes#readme) package:
+
+```r
 # install.packages("remotes")
 remotes::install_github("WihanZA/wihantemplates")
 library(wihantemplates)
 ```
 
-You should ensure that certain essential packages are installed and
-loaded in R. Since all templates produce PDFs, you’ll need a TeX
-distribution installed on your machine. I recommend using the
-lightweight TeX installation [TinyTeX](https://yihui.org/tinytex/).
-Follow the steps below to have both the
-[`tinytex`](https://github.com/rstudio/tinytex) package and distribution
-in place. The [`rmarkdown`](https://github.com/rstudio/rmarkdown)
-package is also included here for good measure.
+### Prerequisites
 
-``` r
+Since all templates produce PDF documents, you'll need a TeX distribution installed.
+I recommend the lightweight [TinyTeX](https://yihui.org/tinytex/) distribution.
+Install both the [`tinytex`](https://github.com/rstudio/tinytex) R package and the TinyTeX distribution with:
+
+```r
 if (!requireNamespace("tinytex", quietly = TRUE)) {
   install.packages("tinytex")
 }
@@ -47,69 +40,71 @@ if (!tinytex::is_tinytex() || is.null(tinytex::tinytex_root())) {
 }
 ```
 
-To ensure that all necessary LaTeX packages and dependencies are
-available, especially those not included in the TinyTeX distribution by
-default, you can use
-[`tinytex::parse_install`](https://yihui.org/tinytex/r/#compile-latex-documents).
-This reads the `.log` file from a failed compilation, identifies the
-missing packages and styles, and installs them.
+### LaTeX Dependencies
 
-``` r
+To ensure all necessary LaTeX packages are available, use [`tinytex::parse_install`](https://yihui.org/tinytex/r/#compile-latex-documents) when you encounter missing packages.
+This function reads the `.log` file from a failed compilation, identifies missing packages, and installs them automatically:
+
+```r
 tinytex::parse_install("dissertation.log")
 ```
 
-Once the package has been installed, go to
-`File > New File > R Markdown > From Template` in RStudio to select your
-desired template. My templates are those denoted with `{wihantemplates}`
-alongside templates’ names. Choose a name (“example”) and location for
-the new directory containing the template, select `OK`, and you’ll be up
-and running.
+### Using the Templates
+
+After installation:
+
+1. Go to `File > New File > R Markdown > From Template` in RStudio
+2. Select your desired template (marked with `{wihantemplates}`)
+3. Choose a name and location for the new directory
+4. Click `OK` to create the template
 
 ## Templates
 
-### `dissertation`
+### Dissertation
 
 **Stellenbosch University Dissertation Template**
 
-All the necessary materials for honours, master’s and doctoral students
-using R Markdown to produce dissertations and theses conforming to the
-requirements of Stellenbosch University. The template heavily relies on
-the excellent suite of LaTeX packages,
-[`stellenbosch-2`](https://ctan.org/pkg/stellenbosch-2), created and
-maintained by [Daniel Els](mailto:dnjels@sun.ac.za). You can find a
-complete example
-[here](inst/rmarkdown/templates//skeleton/skeleton.pdf)
-and a corresponding helper vignette
-[here](vignettes/.Rmd). The template is initially
-populated with helpful content covering various aspects of dissertation
-writing.
+Create professional dissertations and theses conforming to Stellenbosch University requirements.
+Features include:
+
+- Structured directory organization
+- Customizable YAML fields for metadata
+- Bilingual support for English and Afrikaans content
+- Proper formatting for abstracts, acknowledgements, chapters, and references
+- Built on the [`stellenbosch-2`](https://ctan.org/pkg/stellenbosch-2) LaTeX package
 
 [<img src="thumbnails/dissertation-1-2-3-9.png" style="width: 100.0%" />](thumbnails/dissertation-1-2-3-9.png)
-[<img src="thumbnails/dissertation-10-18-19-22.png" style="width: 100.0%" />](thumbnails/dissertation-10-18-19-22.png)
 
-### `invoice`
+### Invoice
 
-**Invoice Template**
+**Professional Invoice Template**
 
-Produce professional invoices using R Markdown.
-With customisable YAML parameters for information typically found in invoices, this template is designed to streamline the invoicing process.
-The template includes:
-- A fully parameterised document with fields for client and author information
-- Support for importing and processing timesheet data containing your specific billing items and hours
-- Automatic calculation of billable amounts based on hours and rates
-- Professional formatting with optional signature image inclusion
-- Banking/payment details section
-- Organised presentation of billable activities with totals
+Generate polished, professional invoices with precision and ease.
+Features include:
+
+- Customizable fields for client and author information
+- Timesheet data integration and processing
+- Automatic calculation of billable amounts
+- Professional formatting with optional signature
+- Banking and payment details section
 
 [<img src="thumbnails/invoice-1-2.png" style="width: 100.0%" />](thumbnails/invoice-1-2.png)
 
-### `manuscript`
+### Manuscript
 
 **Academic Manuscript Template**
 
-This template provides all the necessary components for creating professional academic manuscripts in R Markdown.
-It includes proper formatting for sections, equations, tables, figures, citations, cross-references, footnotes, and acronyms.
-The template uses clean typography with sensible defaults and produces publication-ready PDF documents using LaTeX.
-Features include customizable document metadata, proper handling of mathematical notations, built-in support for tables and figures, bibliography management with natbib, and comprehensive cross-referencing capabilities.
+Produce publication-ready academic manuscripts with professional formatting.
+Features include:
+
+- Proper structure for sections, equations, tables, and figures
+- Support for citations and cross-references
+- Footnotes and acronyms handling
+- Clean typography with sensible defaults
+- LaTeX-based PDF output
 
 [<img src="thumbnails/manuscript-1-2-3.png" style="width: 100.0%" />](thumbnails/manuscript-1-2-3.png)
+
+## Contributing
+
+Feedback and contributions are welcome! Please log issues or suggest improvements on the [GitHub repository](https://github.com/WihanZA/wihantemplates/issues).
