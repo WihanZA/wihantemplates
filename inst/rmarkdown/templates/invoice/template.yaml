@@ -1,4 +1,4 @@
-name: invoice
+name: Invoice
 description: |
-  This template provides all the necessary components for creating professional invoices in R Markdown. It features customizable fields for client and author information, supports importing timesheet data, automatically calculates billable amounts, and includes sections for payment details. The template produces clean, professional-looking PDF invoices with organized presentation of billable activities, subtotals, and final amounts.
+  Generate professional invoices with customizable client and author information. Features include timesheet data integration, automatic calculation of billable amounts, and organized presentation of activities and totals.
 create_dir: TRUE

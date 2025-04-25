@@ -6,30 +6,24 @@
 \alias{wihantemplates-package}
 \title{wihantemplates}
 \description{
-An R package comprising--hopefully, one day--a suite of
-templates for the creation documents in \strong{R Markdown} which I've come to use
-on a regular basis. The package is still in its experimental stage and I'll
-be working out the kinks. The best way to contribute to its development and
-address its inevitable problems is by logging a new issue
-\href{https://github.com/WihanZA/wihantemplates/issues}{here}.
+An R package providing professional templates for creating
+documents in R Markdown. This package is designed for common document
+creation tasks in academic and professional settings. For questions,
+issues, or contributions, please visit the project repository at
+\href{https://github.com/WihanZA/wihantemplates/issues}{GitHub}.
 }
-\section{Features}{
+\section{Templates}{
 
-\strong{Templates:}
 \itemize{
-\item \code{dissertation}: All the necessary materials for honours, master's and
-doctoral students using R Markdown to produce dissertations and theses
-conforming to the requirements of Stellenbosch University. The template
-heavily relies on the excellent suite of LaTeX packages,
-\href{https://ctan.org/pkg/stellenbosch-2}{\code{stellenbosch-2}}, created and
-maintained by \href{mailto:dnjels@sun.ac.za}{Daniel Els}.
-\item \code{invoice}: Create professional invoices with customizable fields for client
-and author information, support for importing timesheet data, automatic
-calculation of billable amounts, and sections for payment details.
-\item \code{manuscript}: Create professional academic manuscripts with proper formatting
-for sections, equations, tables, figures, citations, cross-references,
-footnotes, and acronyms. The template uses clean typography with sensible
-defaults and produces publication-ready PDF documents.
+\item \code{dissertation}: Create professional dissertations and theses conforming
+to Stellenbosch University requirements. Built on the
+\href{https://ctan.org/pkg/stellenbosch-2}{\code{stellenbosch-2}} LaTeX package
+by \href{mailto:dnjels@sun.ac.za}{Daniel Els}.
+\item \code{invoice}: Generate professional invoices with client information,
+timesheet integration, automatic calculations, and payment details.
+\item \code{manuscript}: Produce academic manuscripts with formatting for sections,
+equations, tables, figures, citations, cross-references, footnotes,
+and acronyms.
 }
 }
 
