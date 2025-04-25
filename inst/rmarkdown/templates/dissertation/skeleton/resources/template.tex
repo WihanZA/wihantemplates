@@ -118,14 +118,14 @@ verbose=true
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
 
-%% %% User's latex before document defined in YAML of Rmd
+%% User's latex before document defined in YAML of Rmd
 %% --------------------------------------------------------------
 $for(header-includes)$
 $header-includes$
 $endfor$
 
 %% Colours hyperlink setup
-%% --------------------------------------------------------------
+
 \PassOptionsToPackage{hyphens}{url}
 \usepackage[table,dvipsnames]{xcolor}
 \definecolor{stbMaroon}{rgb}{0.38, 0.13, 0.23}
@@ -151,13 +151,13 @@ $endfor$
 \urlstyle{same}
 
 %% Code chunk printing
-%% --------------------------------------------------------------
+
 $if(highlighting-macros)$
 $highlighting-macros$
 $endif$
 
 %% Cross referening citations bibliography
-%% --------------------------------------------------------------
+
 % Load after amsmath and hyperref
 \usepackage[capitalize,noabbrev]{cleveref}
 \usepackage[round]{natbib}
@@ -168,7 +168,7 @@ $endif$
 
 %% If for some reason user deletes citation_package = natbib in YAML
 %% Don't do this, rather use the natbib package
-%% --------------------------------------------------------------
+
 $if(csl-refs)$
 % definitions for citeproc citations
 \NewDocumentCommand\citeproctext{}{}
@@ -206,7 +206,7 @@ $if(csl-refs)$
 $endif$
 
 %% Change spacing of stb-thesis.cls declaration page
-%% --------------------------------------------------------------
+
 \makeatletter
 \renewcommand{\DeclarationPage}[1][\ThesisDeclare]{%
   \if@twocolumn
@@ -236,7 +236,7 @@ $endif$
 \makeatother
 
 %% Change spacing of stb-thesis.cls abstract environment
-%% --------------------------------------------------------------
+
 \makeatletter
 \renewenvironment{abstract}[1][\languagename]%
 {%
@@ -270,7 +270,7 @@ $endif$
 \makeatother
 
 %% Change vertical spacing of supervisors
-%% --------------------------------------------------------------
+
 \makeatletter
 \renewcommand*{\STB@spvand}[1][-6pt]{%
 \global\STB@spvmulttrue%
@@ -285,7 +285,7 @@ $endif$
 
 
 %% Appearance of thesis description on title page
-%% --------------------------------------------------------------
+
 \makeatletter
 \renewcommand{\TitlePage}{%
   \STB@putfrntpage
@@ -329,7 +329,7 @@ $endif$
 \makeatother
 
 %% Title page front matter
-%% --------------------------------------------------------------
+
 \title{\bfseries\AorE{$titel$\\ \normalfont\small\itshape (``$title$'')}{$title$}}
 \author{$authorshort$}{$author$}
 \degree{\AorE{$graadshort$}{$degreeshort$}}{\AorE{$graad$}{$degree$}}
@@ -363,7 +363,7 @@ $if(sponsor)$\SetSponsor{$sponsor$}$endif$
 \setcounter{tocdepth}{2}
 
 %% Headings
-%% --------------------------------------------------------------
+
 % \usepackage{titlecaps}
 % \Addlcwords{a an the and but or for nor so yet at by for from in into like near of on over past to}
 
@@ -478,7 +478,7 @@ $if(sponsor)$\SetSponsor{$sponsor$}$endif$
 {1ex plus 0.2ex minus .2ex} % {after}
 
 %% Nomenclature and lists
-%% --------------------------------------------------------------
+
 \usepackage{enumitem}
 \usepackage[printonlyused]{acronym}
 \usepackage{stb-nomencl}
@@ -617,7 +617,7 @@ $if(sponsor)$\SetSponsor{$sponsor$}$endif$
 \makeatother
 
 %% Fixes https://github.com/WihanZA/wihantemplates/issues/2
-%% --------------------------------------------------------------
+
 %% Fix problem with amsmath cleveref acronym
 %% https://tex.stackexchange.com/a/735502
 \makeatletter
@@ -642,16 +642,16 @@ $if(sponsor)$\SetSponsor{$sponsor$}$endif$
 \makeatother
 
 %% Start of document
-%% --------------------------------------------------------------
+
 \begin{document}
 \hypersetup{pageanchor=false}
 
 %% User's latex at start of document defined in YAML of Rmd
-%% --------------------------------------------------------------
+
 $for(include-before)$
 $include-before$
 $endfor$
-%% --------------------------------------------------------------
+
 
 \frontmatter
 \TitlePage
@@ -693,8 +693,8 @@ $body$
 \fancyhead[R]{\footnotesize\nouppercase{\rightmark}}
 \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
 
-%% %% User's latex at end of the document defined in YAML of Rmd
-%% --------------------------------------------------------------
+%% User's latex at end of the document defined in YAML of Rmd
+
 $for(include-after)$
 $include-after$
 $endfor$

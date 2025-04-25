@@ -72,7 +72,7 @@ and running.
 
 ## Templates
 
-### `su_dissertation`
+### `dissertation`
 
 **Stellenbosch University Dissertation Template**
 
@@ -83,14 +83,14 @@ the excellent suite of LaTeX packages,
 [`stellenbosch-2`](https://ctan.org/pkg/stellenbosch-2), created and
 maintained by [Daniel Els](mailto:dnjels@sun.ac.za). You can find a
 complete example
-[here](inst/rmarkdown/templates/su_dissertation/skeleton/skeleton.pdf)
+[here](inst/rmarkdown/templates//skeleton/skeleton.pdf)
 and a corresponding helper vignette
-[here](vignettes/su_dissertation.Rmd). The template is initially
+[here](vignettes/.Rmd). The template is initially
 populated with helpful content covering various aspects of dissertation
 writing.
 
-[<img src="thumbnails/su_dissertation-1-2-3-9.png" style="width: 100.0%" />](thumbnails/su_dissertation-1-2-3-9.png)
-[<img src="thumbnails/su_dissertation-10-18-19-22.png" style="width: 100.0%" />](thumbnails/su_dissertation-10-18-19-22.png)
+[<img src="thumbnails/-1-2-3-9.png" style="width: 100.0%" />](thumbnails/-1-2-3-9.png)
+[<img src="thumbnails/-10-18-19-22.png" style="width: 100.0%" />](thumbnails/-10-18-19-22.png)
 
 ### `invoice`
 

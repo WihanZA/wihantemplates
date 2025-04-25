@@ -60,24 +60,28 @@ library(ggtext)
 library(lorem)
 
 # code chunk settings ----
+plot_width <- 6.5
+golden_ratio <- (1 + sqrt(5)) / 2
+
 knitr::opts_chunk$set(
   echo = FALSE,
   message = FALSE,
   warning = FALSE,
   cache = TRUE,
   cache.path = "cache/",
+  fig.pos = "htbp",
+  fig.align = "center",
+  dev = "ragg_png",
+  dpi = 300,
+  fig.retina = 2,
+  fig.width = plot_width,
+  fig.height = plot_width / golden_ratio, 
+  out.width = "0.95\\textwidth",
   fig.path = "figures/",
   fig.process = function(x) {
     x2 <- sub("-\\d+([.][a-z]+)$", "\\1", x)
     if (file.rename(x, x2)) x2 else x
-  },
-  fig.pos = "htbp",
-  fig.align = "center",
-  dev = "ragg_png",
-  fig.ext = "png",
-  fig.width = 6.27,
-  out.width = "0.95\\textwidth",
-  dpi = 144
+  }
 )
 
 # ggplot and table defaults ----
@@ -86,7 +90,6 @@ source("resources/defaults.R")
 # custom functions ----
 source("code/functions.R")
 ```
-
 
 # Chapter Heading
 
