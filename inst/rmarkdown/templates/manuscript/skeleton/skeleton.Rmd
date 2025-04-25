@@ -1,0 +1,288 @@
+---
+output: 
+  pdf_document:
+    template: resources/template.tex
+    keep_tex: TRUE
+    latex_engine: pdflatex
+    citation_package: natbib
+
+title: "My Manuscript"
+
+subtitle: "A Template^[Thanks to all the participants at the conference for their feedback.]"
+
+# footnotes can be defined in either or both title and subtitle fields
+
+author:
+  - name: "Johnny E. Bravo"
+    note: "Corresponding author. Department of Economics, Hanna-Barbera University."
+    email: "johnnybravo@gmail.com"
+  - name: "Homer J. Simpson"
+    note: "Department of Economics, University of Springfield."
+    email: "homersimpson@yahoo.com"
+
+date: "`r stringr::str_squish(format(Sys.Date(), '%e %b %Y'))`"
+
+abstract: "`r lorem::ipsum(2,5)`"
+
+jel: 
+  - C78
+  - D86
+  - L14
+
+keywords:
+  - "Keyword 1"
+  - "Keyword 2"
+  - "Keyword 3"
+
+bibliography: resources/mybib.bib
+
+acronyms: 
+  - id: ppml
+    short: PPML
+    long: poisson pseudo-maximum likelihood
+  - id: ols
+    short: OLS
+    long: ordinary least squares
+  - id: mno
+    short: MNO
+    long: mobile network operator
+  - id: ma
+    # note the use of \ to escape the ampersand (&)
+    short: M\&A
+    long: mergers and acquisitions
+
+linenumbers: FALSE
+---
+
+```{r setup, include = FALSE}
+# packages ----
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(kableExtra)
+library(rmarkdown)
+library(glue)
+library(ragg)
+library(ggtext)
+library(lorem)
+
+# code chunk settings ----
+plot_width <- 6.5
+golden_ratio <- (1 + sqrt(5)) / 2
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  cache = FALSE,
+  cache.path = "cache/",
+  fig.pos = "htbp",
+  fig.align = "center",
+  dev = "ragg_png",
+  dpi = 300,
+  fig.retina = 2,
+  fig.width = plot_width,
+  fig.height = plot_width / golden_ratio,
+  out.width = "0.95\\textwidth",
+  fig.path = "figures/",
+  fig.process = function(x) {
+    x2 <- sub("-\\d+([.][a-z]+)$", "\\1", x)
+    if (file.rename(x, x2)) x2 else x
+  }
+)
+
+# ggplot and table defaults ----
+source("resources/defaults.R")
+```
+
+# Introduction
+
+`r lorem::ipsum(3)`
+
+## Subsection heading
+
+`r lorem::ipsum(3)`
+
+### Subsubsection heading
+
+`r lorem::ipsum(3)`
+
+#### Paragraph heading
+
+`r lorem::ipsum(3)`
+
+# Basics
+
+## Footnotes
+
+Footnotes are inserted using `\footnote{}` in LaTeX or `^[]` in Markdown.
+See this example.^[This is an example of a footnote.]
+Footnotes can also be managed with `\footnotemark` (or `[^1]`) and `\footnotetext` (or `[^1]: Text`) for more control over their placement and numbering.
+Here is a long footnote.\footnote{`r lorem::ipsum(3,4)`}
+
+## LaTeX sizes
+
+- `\baselineskip`: \the\baselineskip
+- `\smallskipamount`: \the\smallskipamount
+- `\medskipamount`: \the\medskipamount
+- `\bigskipamount`: \the\bigskipamount
+- `\1em`: \the\fontdimen6\font
+- `\1ex`: \the\fontdimen5\font
+
+## Lists
+
+Itemized lists can be created using Markdown syntax like this:
+
+- Item 1
+- Item 2
+- Item 3
+
+Numbered lists can be created using Markdown syntax like this:
+
+1. Item 1
+1. Item 2
+1. Item 3
+
+These are equivalent to using the LaTeX environments  `itemize` and `enumerate`.
+
+## Equations
+
+\def\bE{\mathbf{E}}
+\def\bB{\mathbf{B}}
+\def\bJ{\mathbf{J}}
+\def\bx{\mathbf{x}}
+\def\by{\mathbf{y}}
+\def\bv{\mathbf{v}}
+\def\bp{\mathbf{p}}
+\def\bxdot{\mathbf{\dot x}}
+\def\bal{\boldsymbol{\alpha}}
+\def\bphi{\boldsymbol{\varphi}}
+\def\e{\varepsilon}
+\textbf{An inversion formula:} Let $g:\mathbb{R}^+\to \mathbb{R}$
+ be bounded and right continuous, and let
+$\varphi(\alpha)\coloneq\int_0^\infty e^{-\alpha t}g(t)\,dt$ denote its Laplace transform. Then, for every $t>0$,
+\begin{equation}
+g(t)=\lim_{\mathstrut\e\to 0}\lim_{\mathstrut\lambda\to\infty}\e^{-1}\sum_{\lambda t<k\le (\lambda+\e)t}
+\frac{(-1)^k}{k!}\lambda^k\varphi ^{(k)}(\lambda).\label{eq:inversion}
+\end{equation}
+
+\textbf{Solutions of systems of ODEs:} Let $\bv(\bx,\bal)$ denote a parametrized vector field ($\bx\in U$, $\bal\in A$) where $U$ is a domain in $\mathbb{R}^n$ and the parameter space $A$ is a domain in $\mathbb{R}^m$. We assume that $\bv$ is $C^k$-differentiable as a function of~$(\bx,\bal)$, where~$k\ge 2$. Consider a system of differential equations in~$U$:
+\begin{equation}
+\bxdot=\bv(\bx,\bal),\qquad \bx\in U\label{eq:first}
+\end{equation}
+ Fix an initial point $\bp_0$ in the interior of $U$, and assume $\bv(\bp_0,\bal_0)\neq\mathbf{0}$. Then, for sufficiently small $t$, $|\bp-\bp_0|$ and $|\bal-\bal_0|$, the system~(\ref{eq:first}) has a unique solution $\bx_{\bal}(t)$  satisfying the initial condition $\bx_{\bal}(0)=\bp$, and that solution depends differentiably (of class~$C^k$) on $t$, $\bp$ and $\bal$.
+
+\textbf{Maxwell's equations:}
+\begin{equation*}
+\begin{aligned}
+\bB'&=-c\nabla\times\bE\\
+\bE'&=c\nabla\times\bB-4\pi \bJ.
+\end{aligned}
+\end{equation*}
+
+\textbf{Residue theorem:} Let $f$ be analytic in the region $G$ except for the isolated singularities $a_1$, $a_2$, \ldots, $a_m$. If $\gamma$ is a closed rectifiable curve in $G$ which does not pass through any of the points $a_k$ and if $\gamma\approx 0$ in $G$, then
+\[\frac{1}{2\pi i}\int_\gamma f=\sum_{k=1}^m n(\gamma;a_k)\,\mathrm{Res}(f;a_k).\]
+
+\textbf{Maximum modulus principle:} Let $G$ be a bounded open set in  $\mathbb{C}$ and suppose that $f$ is a continuous function on $\bar G$ which is analytic in $G$. Then
+\[\max \{|f(z)| : z\in \bar G\}=\max\{|f(z)| : z\in \partial G\}.\]
+
+## Figures
+
+```{r fancyplot, fig.height=3, fig.cap = "Manufacturer fuel efficiency"}
+mpg %>%
+  ggplot(aes(x = cyl, y = hwy, color = manufacturer)) +
+  geom_point(show.legend = FALSE) +
+  labs(
+    x = "Cylinders",
+    y = "Highway miles per gallon",
+    color = "Manufacturer",
+    caption = "Source: MPG (2024)."
+  )
+```
+
+## Tables
+
+```{r tab1, echo = FALSE}
+head(mtcars)[, 1:4] %>%
+  kbl(
+    digits = 2,
+    booktabs = TRUE,
+    linesep = "",
+    centering = TRUE,
+    position = "H",
+    escape = TRUE,
+    table.envir = "table",
+    caption = "Caption centered above table"
+  ) %>%
+  kable_styling(font_size = 10) %>%
+  footnote(
+    general_title = "My footnote:",
+    general = "This is my table footnote.",
+    footnote_as_chunk = TRUE,
+    threeparttable = TRUE
+  )
+```
+
+## Acronyms
+
+- `\ac{ppml}` produces "\ac{ppml}" the first time, and "\ac{ppml}" thereafter.
+- `\acs{ols}` produces the short form "\acs{ols}" every time.
+- `\acl{ols}` produces the long form "\acl{ols}" every time.
+- `\acf{ols}` produces the full form "\acf{ols}" every time.
+- Plural forms are produced by adding `p` to the command, e.g., `\acp{mno}` for \acp{mno}.
+- Capitalization is produced by capitalizing the `A` of the command. For example, `\Acl{ppml}` produces "\Acl{ppml}".
+- When defining acronym with key `ma`, remember to use slash (`\`) to escape the ampersand (&) in "M&A" so that `\acs{ma}` produces \ac{ma}.
+
+## Citations
+
+- `\citet{key}` for textual citations like "\citet{anderson_etal16}".
+
+- `\citet*{key}` expands to list all authors like "\citet*{anderson_etal16}".
+
+- `\citep{key}` for parenthetical citations like "\citep{anderson_etal16}".
+
+- `\citep*{key}` for a full author list like "\citep*{anderson_etal16}".
+
+- `\citeauthor{key}` and `\citeyear{key}` (`\citeyearpar{key}`) cite the author(s) or year (in parentheses), respectively like:
+  - "\citeauthor{anderson_vanwincoop03}"
+  - "\citeyear{anderson_vanwincoop03}"
+  - "\citeyearpar{anderson_vanwincoop03}"
+
+- Markdown offers similar functionality:
+  - `@key` for textual citations and 
+  - `[@key]` for parenthetical citations.
+  - `-@key` cites just the year.
+
+- Mutliple citations can be combined using `\citep{key1,key2}` like "\citep{anderson_etal16, anderson_vanwincoop03}".
+
+- Where possible, common elements in multiple citations are merged:
+  - `\citet{fudd2020, fudd2021}` produces "\citet{fudd2020, fudd2021}"
+  - `\citep{fudd2020, fudd2020b}` produces "\citep{fudd2020, fudd2020b}".
+
+## Cross-referencing
+
+- `\label{key}` marks a target location.
+- `\ref{key}` retrieves a basic reference.
+- `\cref{key}` offers context-dependent referencing, adapting to the type of the referenced object.
+- `\notag` is used to suppress the numbering of a line of an equation.
+
+\begin{table}[H]
+\caption{Cross-referencing commands and their outputs}
+\label{tab:crossref}
+\centering
+\fontsize{10}{12}\selectfont
+\begin{tabular}{@{}llll@{}}
+\toprule
+\texttt{key} & \texttt{\textbackslash ref\{key\}} & \texttt{\textbackslash cref\{key\}} & \texttt{\textbackslash eqref\{key\}} \\
+\midrule
+\texttt{fig:fancyplot} & \ref{fig:fancyplot} & \cref{fig:fancyplot} & - \\
+\texttt{tab:tab1} & \ref{tab:tab1} & \cref{tab:tab1} & - \\
+\texttt{eq:inversion} & \ref{eq:inversion} & \cref{eq:inversion} & \eqref{eq:inversion} \\
+\texttt{equations} & \ref{equations} & \cref{equations} & - \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+# Conclusion
+
+`r lorem::ipsum(8)`

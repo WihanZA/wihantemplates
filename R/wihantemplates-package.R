@@ -9,14 +9,20 @@
 #'
 #' @section Features:
 #' **Templates:**
-#' - `su_dissertation`: All the necessary materials for honours, master's and
+#' - `dissertation`: All the necessary materials for honours, master's and
 #'   doctoral students using R Markdown to produce dissertations and theses
 #'   conforming to the requirements of Stellenbosch University. The template
 #'   heavily relies on the excellent suite of LaTeX packages,
 #'   [`stellenbosch-2`](https://ctan.org/pkg/stellenbosch-2), created and
 #'   maintained by [Daniel Els](mailto:dnjels@sun.ac.za).
-#' - `invoicer`: Invoice Template
-
+#' - `invoice`: Create professional invoices with customizable fields for client
+#'   and author information, support for importing timesheet data, automatic
+#'   calculation of billable amounts, and sections for payment details.
+#' - `manuscript`: Create professional academic manuscripts with proper formatting
+#'   for sections, equations, tables, figures, citations, cross-references,
+#'   footnotes, and acronyms. The template uses clean typography with sensible
+#'   defaults and produces publication-ready PDF documents.
+#'
 #' @keywords internal
 "_PACKAGE"
 

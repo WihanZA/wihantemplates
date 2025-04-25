@@ -1,0 +1,385 @@
+%% --------------------------------------------------------------
+%% Academic Manuscript Template
+%% WihanZA
+%% wihanmarais@sun.ac.za
+%% --------------------------------------------------------------
+
+%% Document class
+\documentclass[
+12pt,
+a4paper,
+twoside,
+]{article}
+
+%% Language | Dates
+\usepackage[main=british]{babel}
+\usepackage[english]{isodate}
+\cleanlookdateon
+
+%% Margins | Spacing
+\usepackage[left=1in, right=1in, top=1.2in, bottom=1.2in]{geometry}
+\usepackage[skip, parfill, indent=1em]{parskip}
+% default parskip is .5\baselineskip plus 2pt
+\usepackage{setspace}
+\setstretch{1}
+\setlength{\emergencystretch}{3em}
+\raggedbottom
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\def\lineheight{16}
+\usepackage{pdflscape}
+
+%% Ignore badboxes of less than 3pt
+\hfuzz=3pt
+
+%% Math | Font
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage[vvarbb, upint, subscriptcorrection, uprightscript]{notomath}
+\usepackage{noto-mono}
+\usepackage[rmdefault]{sourceserifpro}
+\usepackage[sfdefault]{sourcesanspro}
+\usepackage[T1]{fontenc}
+\renewcommand\familydefault{\rmdefault}
+\usepackage[normalem]{ulem}
+\usepackage{bm}
+\let\bm\symbfit
+\usepackage{fontawesome}
+
+%% Microtypography
+\usepackage[
+protrusion=true,
+factor=1000,
+expansion=true,
+auto=true,
+verbose=true
+]{microtype}
+
+\DisableLigatures{encoding=T1,shape=sc}
+
+%% Headings
+\usepackage{titlesec}
+
+% Section format
+\titleformat{\section}
+    {\sffamily\fontseries{sb}\scshape\Large\selectfont}
+    {\thesection}
+    {1ex}
+    {}
+
+% \titlespacing{\section}
+%     {0pt}
+%     {2ex plus 0.2ex minus .1ex}
+%     {1.5ex plus 0.2ex minus .1ex}
+
+% Unnumbered section format
+\titleformat{name=\section,numberless}
+    {\sffamily\fontseries{sb}\scshape\Large\selectfont}
+    {}
+    {0pt}
+    {}
+
+% Subsection format - smaller than section
+\titleformat{\subsection}
+    {\sffamily\fontseries{sb}\scshape\large\selectfont}
+    {\thesubsection}
+    {1ex}
+    {}
+
+% Subsubsection - even smaller for better hierarchy
+\titleformat{\subsubsection}
+    {\sffamily\fontseries{sb}\scshape\normalsize\selectfont}
+    {\thesubsubsection}
+    {1ex}
+    {}
+
+% Paragraph format
+\titleformat{\paragraph}
+    [runin]
+    {\sffamily\fontseries{sb}\scshape\normalsize\selectfont}
+    {}
+    {0pt}
+    {}
+    [\quad]
+
+%% Symbols
+\usepackage{siunitx}
+\sisetup{}
+\sisetup{
+detect-all = true,
+detect-family = true,
+output-decimal-marker = {.},
+group-separator = {\,},
+number-unit-product = {\,},
+inter-unit-product = \mathord{\cdot},
+exponent-product = \mathord{\times},
+separate-uncertainty = true}
+
+%% Packages
+\usepackage{calc}
+\usepackage{etoolbox}
+
+%% Floats
+\usepackage{float}
+% figures only float within the sections they are defined in
+\usepackage[section]{placeins}
+
+%% Tables
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.25}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage{makecell}
+
+%% Figures | Graphics
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+%% Captions
+\usepackage[font={footnotesize, singlespacing}]{caption}
+\captionsetup[figure]{labelfont={bf},labelformat={default},labelsep=quad,name={Fig.}}
+\captionsetup[table]{labelfont={bf},labelformat={default},labelsep=quad,name={Table}}
+
+%% Code chunk printing
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+%% Lists
+\usepackage{enumitem}
+
+%% Metadata
+$if(subtitle)$
+\makeatletter
+\providecommand{\subtitle}[1]{
+\apptocmd{\@title}{\par {\large\textit{#1} \par}}{}{}
+}
+\makeatother
+\title{$title$}
+\subtitle{$subtitle$}
+$else$
+\title{$title$}
+$endif$
+
+\author{
+$for(author)$
+$author.name$%
+$if(author.note)$
+\thanks{$author.note$
+$if(author.email)$\\ \faEnvelopeO \ $author.email$$endif$}
+$endif$
+$sep$ \and %
+$endfor$}
+
+$if(date)$\date{$date$}$endif$
+
+%% Customise \maketitle
+\makeatletter
+\def\@maketitle{%
+  \newpage
+  \null
+  \vskip 1em%
+  \begin{center}%
+  \let \footnote \thanks
+  {\LARGE \@title \par}%
+    \vskip 1em%
+  {\large \lineskip .5em%
+  \begin{tabular}[t]{c}%
+  \@author
+    \end{tabular}\par}%
+  \vskip 1em%
+  % {\normalsize\sffamily\fontseries{sb}\scshape Version}\par\vspace{-.5em}
+  {\normalsize \@date}%
+  \end{center}%
+  \par
+  \vskip 1em}
+\makeatother
+
+%% Abstract
+\makeatletter
+\renewenvironment{abstract}{%
+\if@twocolumn
+    \section*{\abstractname}%
+\else
+    \normalsize
+    \begin{center}%
+      {\sffamily\fontseries{sb}\scshape \abstractname\vspace{-.5em}\vspace{\z@}}%
+    \end{center}%
+\fi}
+\makeatother
+
+%% Headers | Footers | Page numbers
+\usepackage{fancyhdr}
+% title page style is set to empty below
+\pagestyle{plain}
+\pagenumbering{arabic}
+
+%% Footnotes
+% setspace package must load before footmisc
+\usepackage[hang, multiple]{footmisc}
+
+% defaults
+% \hangfootparskip =  0.5\baselineskip
+% \hangfootparindent = 0em
+% \footnotemargin = 1.8em
+
+\renewcommand*{\hangfootparskip}{.5\baselineskip}
+\renewcommand*{\hangfootparindent}{0em}
+\renewcommand*{\footnotemargin}{1em}
+
+%% make title page footnotes same as rest
+\makeatletter
+\patchcmd\maketitle{\@makefntext}{\@@@ddt}{}{}
+\patchcmd\maketitle{\rlap}{\mbox}{}{}
+\makeatother
+
+%% Color
+\usepackage[table,dvipsnames]{xcolor}
+\definecolor{stbWine}{rgb}{0.65, 0.04, 0.24}
+
+%% URLs
+\usepackage[hyphens]{url}
+\urlstyle{same}
+
+%% Hyperref
+\usepackage[unicode]{hyperref}
+\hypersetup{breaklinks=true,
+            pdftitle={$title-meta$},
+            pdfauthor={$author-meta$},
+            colorlinks=true,
+            filecolor={teal},
+            linkcolor={teal},
+            citecolor={teal},
+            urlcolor={teal},
+            pdfborder={0 0 0}}
+
+%% Bibliography
+\usepackage[round, nonamebreak]{natbib}
+\bibliographystyle{plainnat}
+\renewcommand{\bibsection}{\section*{\refname}\pdfbookmark{References}{sec:references}}
+\renewcommand\bibfont{\small}
+
+%% Acronyms
+$if(acronyms)$
+\usepackage{acronym}
+$for(acronyms)$
+\acrodef{$acronyms.id$}[$acronyms.short$]{$acronyms.long$}
+$endfor$
+$endif$
+
+%% Cross-referencing
+\usepackage[capitalize,noabbrev]{cleveref}
+
+%% Subfigures
+\usepackage[labelformat=simple,labelfont=sf]{subcaption}
+
+%% Fix cross-referencing for subfigures
+\renewcommand\thesubfigure{(\alph{subfigure})}
+\makeatletter
+\renewcommand\p@subfigure{\thefigure\space} % prefix used in \ref and \cref for subfigures
+\makeatother
+
+%% Fix problem with amsmath cleveref acronym
+%% https://github.com/WihanZA/wihantemplates/issues/2
+%% https://tex.stackexchange.com/a/735502
+\makeatletter
+    \AtBeginDocument
+    {
+      \def\ltx@label#1{\cref@label{#1}}
+      \def\label@in@display@noarg#1{\cref@old@label@in@display{#1}}
+    }
+\makeatother
+
+%% Adapted from %% https://tex.stackexchange.com/questions/71364/acronym-acresetall-cleveref-multiply-defined-labels
+%% Add \AC before @verridelabel
+\makeatletter
+\newcommand*{\org@overidelabel}{}
+\let\org@overridelabel\AC@verridelabel
+\renewcommand*{\AC@verridelabel}[1]{%
+  \@bsphack
+  \protected@write\@auxout{}{\string\AC@undonewlabel{#1@cref}}%
+  \org@overridelabel{#1}%
+  \@esphack
+}%
+\makeatother
+
+%% Line numbering
+%% Load after amsmath because of conflict
+%% https://github.com/latex-lineno/lineno/issues/5
+$if(linenumbers)$
+  \usepackage{lineno}
+  \linenumbers 
+$endif$
+
+%% Header includes
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+%% Document
+\begin{document}
+
+%% Include before
+$for(include-before)$
+$include-before$
+$endfor$
+
+\maketitle
+
+%% no headers and page numbers in the title page
+\thispagestyle{empty}
+
+$if(abstract)$
+\begin{abstract}
+  \quotation
+  \small \selectfont \noindent $abstract$
+  $if(jel)$
+  $if(keywords)$
+  \vspace{1ex}
+  \begin{description}[font=\sffamily\fontseries{sb}\scshape, itemsep=1ex]
+    \item[JEL Classification:] $for(jel)$ $jel$ $sep$ \( \cdot \) $endfor$
+    \item[Keywords:] $for(keywords)$ $keywords$ $sep$ \( \cdot \) $endfor$
+  \end{description}
+  $else$
+  \vspace{1ex}
+  \begin{description}[font=\sffamily\fontseries{sb}\scshape, itemsep=1ex]
+    \item[JEL Classification:] $for(jel)$ $jel$ $sep$ \( \cdot \) $endfor$
+  \end{description}
+  $endif$
+  $else$
+  $if(keywords)$
+  \vspace{1ex}
+  \begin{description}[font=\sffamily\fontseries{sb}\scshape, itemsep=1ex]
+    \item[Keywords:] $for(keywords)$ $keywords$ $sep$ \( \cdot \) $endfor$
+  \end{description}
+  $endif$
+  $endif$
+  \endquotation
+\end{abstract}
+$endif$
+
+$for(include-before)$
+$include-before$
+$endfor$
+
+\clearpage
+
+$if(body)$
+$body$
+$endif$
+
+\clearpage
+
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+
+%% Include after
+$for(include-after)$
+$include-after$
+$endfor$
+
+\end{document}

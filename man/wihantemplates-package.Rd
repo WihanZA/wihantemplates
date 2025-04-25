@@ -17,13 +17,19 @@ address its inevitable problems is by logging a new issue
 
 \strong{Templates:}
 \itemize{
-\item \code{su_dissertation}: All the necessary materials for honours, master's and
+\item \code{dissertation}: All the necessary materials for honours, master's and
 doctoral students using R Markdown to produce dissertations and theses
 conforming to the requirements of Stellenbosch University. The template
 heavily relies on the excellent suite of LaTeX packages,
 \href{https://ctan.org/pkg/stellenbosch-2}{\code{stellenbosch-2}}, created and
 maintained by \href{mailto:dnjels@sun.ac.za}{Daniel Els}.
-\item \code{invoicer}: Invoice Template
+\item \code{invoice}: Create professional invoices with customizable fields for client
+and author information, support for importing timesheet data, automatic
+calculation of billable amounts, and sections for payment details.
+\item \code{manuscript}: Create professional academic manuscripts with proper formatting
+for sections, equations, tables, figures, citations, cross-references,
+footnotes, and acronyms. The template uses clean typography with sensible
+defaults and produces publication-ready PDF documents.
 }
 }
 

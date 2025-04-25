@@ -1,0 +1,4 @@
+name: Manuscript
+description: |
+  This template provides all the necessary components for creating professional academic manuscripts in R Markdown. It includes proper formatting for sections, equations, tables, figures, citations, cross-references, footnotes, and acronyms. The template uses a clean typography with sensible defaults and produces publication-ready PDF documents using LaTeX.
+create_dir: TRUE

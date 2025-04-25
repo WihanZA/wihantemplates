@@ -89,8 +89,8 @@ and a corresponding helper vignette
 populated with helpful content covering various aspects of dissertation
 writing.
 
-[<img src="thumbnails/-1-2-3-9.png" style="width: 100.0%" />](thumbnails/-1-2-3-9.png)
-[<img src="thumbnails/-10-18-19-22.png" style="width: 100.0%" />](thumbnails/-10-18-19-22.png)
+[<img src="thumbnails/dissertation-1-2-3-9.png" style="width: 100.0%" />](thumbnails/dissertation-1-2-3-9.png)
+[<img src="thumbnails/dissertation-10-18-19-22.png" style="width: 100.0%" />](thumbnails/dissertation-10-18-19-22.png)
 
 ### `invoice`
 
@@ -107,3 +107,14 @@ The template includes:
 - Organised presentation of billable activities with totals
 
 [<img src="thumbnails/invoice-1-2.png" style="width: 100.0%" />](thumbnails/invoice-1-2.png)
+
+### `manuscript`
+
+**Academic Manuscript Template**
+
+This template provides all the necessary components for creating professional academic manuscripts in R Markdown.
+It includes proper formatting for sections, equations, tables, figures, citations, cross-references, footnotes, and acronyms.
+The template uses clean typography with sensible defaults and produces publication-ready PDF documents using LaTeX.
+Features include customizable document metadata, proper handling of mathematical notations, built-in support for tables and figures, bibliography management with natbib, and comprehensive cross-referencing capabilities.
+
+[<img src="thumbnails/manuscript-1-2-3.png" style="width: 100.0%" />](thumbnails/manuscript-1-2-3.png)
