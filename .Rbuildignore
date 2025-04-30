@@ -4,3 +4,7 @@
 ^.github$
 ^thumbnails$
 ^tests$
+^scripts$
+^inst/rmarkdown/templates/invoice/skeleton/skeleton\.pdf$
+^inst/rmarkdown/templates/dissertation/skeleton/skeleton\.pdf$
+^inst/rmarkdown/templates/manuscript/skeleton/skeleton\.pdf$

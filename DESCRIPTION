@@ -25,4 +25,3 @@ Suggests:
     knitr,
     tinytex,
     yaml
-VignetteBuilder: knitr
