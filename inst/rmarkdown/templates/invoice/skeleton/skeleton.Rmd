@@ -159,7 +159,6 @@ bill$subtotal <- scales::label_currency(
   decimal = "."
 )(bill$subtotal)
 
-
 flextable(bill) %>%
   set_header_labels(
     code = "Code",
@@ -231,149 +230,63 @@ cat(instructions, sep = "\n")
 
 \clearpage
 
-
-```{r items, eval = FALSE}
-rate_x <- 300
-rate_y <- 400
-rate_other <- 150
-
-items <- read_xlsx(timesheet) %>%
-  mutate(Date = ymd(Date)) %>%
-  filter(Include) %>%
-  select(-Include) %>%
-  mutate(Hours = round(Hours, 1)) %>%
-  mutate(across(
-    c(Begin, End),
-    ~ format(as_datetime(.), "%H:%M")
+```{r timesheet}
+timesheet <- sessions %>%
+  mutate(date = format(ymd(date), "%e %b %y")) %>%
+  group_by(date) %>%
+  mutate(n = n(), start_min = (start == min(start, na.rm = TRUE))) %>%
+  ungroup() %>%
+  mutate(date = case_when(
+    n == 1 ~ date,
+    n > 1 & start_min ~ date,
+    n > 1 & !start_min ~ "",
+    TRUE ~ NA
   )) %>%
-  group_by(Item) %>%
-  summarise(
-    Date = min(Date, na.rm = TRUE),
-    Hours = sum(Hours, na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  arrange(Date) %>%
-  select(-Date) %>%
-  mutate(Rate = case_when(
-    Item == "X" ~ rate_x,
-    Item == "Y" ~ rate_y,
-    TRUE ~ rate_other
-  )) %>%
-  mutate(Amount = Hours * Rate)
+  mutate(across(start:end, ~ format(., "%H:%M")))
 
-totals <- tibble(
-  Item = "Total",
-  Hours = sum(items$Hours, na.rm = TRUE),
-  Rate = NA,
-  Amount = sum(items$Amount, na.rm = TRUE)
-)
-
-items <- items %>%
-  bind_rows(totals) %>%
-  mutate(across(
-    c(Rate, Amount),
-    ~ case_when(
-      !is.na(.) ~ paste0("R ", prettyNum(., big.mark = " "), ".00"),
-      TRUE ~ NA_character_
-    )
-  ))
-
-rm(totals, rate_other, rate_x, rate_y)
-
-items %>%
-  kbl(
-    escape = TRUE,
-    position = "h",
-    booktabs = TRUE,
-    linesep = "",
-    align = "lrrr",
-    table.envir = "table"
-  ) %>%
-  row_spec(nrow(items) - 1, hline_after = TRUE) %>%
-  row_spec(nrow(items), bold = TRUE) %>%
-  kable_styling(font_size = 10) %>%
-  column_spec(1, width = "15em") %>%
-  column_spec(c(2, 3, 4), width = "6em") %>%
-  footnote(
-    general = "Record of billable activities as submitted in \\\\cref{tab:timesheet} on the next page.",
-    general_title = "",
-    footnote_as_chunk = TRUE,
-    threeparttable = TRUE,
-    escape = FALSE
-  )
-```
-
-
-
-```{r timesheet, eval = FALSE}
-timesheet <- read_xlsx(timesheet) %>%
-  mutate(Date = ymd(Date)) %>%
-  mutate(Hours = round(Hours, 1)) %>%
-  mutate(across(
-    c(Begin, End),
-    ~ format(as_datetime(.), "%H:%M")
-  )) %>%
-  select(Date, Item, everything()) %>%
-  arrange(Date)
-
-totals <- timesheet %>%
-  group_by(Include) %>%
-  summarise(Hours = sum(Hours, na.rm = TRUE)) %>%
-  mutate(Include = case_when(Include ~ "Included", TRUE ~ "Excluded")) %>%
-  spread(Include, Hours) %>%
-  mutate(Total = Excluded + Included) %>%
-  gather(Activity, Hours, seq_len(ncol(.))) %>%
-  mutate(Date = NA, Item = NA, Include = c(FALSE, TRUE, TRUE), Begin = NA, End = NA)
+timesheet_total <- sessions %>%
+  summarise(hours = sum(hours, na.rm = TRUE))
 
 timesheet <- timesheet %>%
-  bind_rows(totals)
+  bind_rows(timesheet_total)
 
-rm(totals)
-
-timesheet <- timesheet %>%
-  mutate(Activity = wihantemplates::escape_latex(Activity)) %>%
-  mutate(
-    Month = str_squish(format(Date, "%B %Y")),
-    Day = str_squish(format(Date, "%e"))
-  ) %>%
-  select(Date, Month, Day, everything()) %>%
-  arrange(Date, Begin) %>%
-  mutate(Hours = sprintf("%.1f", round(Hours, 1))) %>%
-  mutate(Hours = case_when(
-    !Include ~ paste0(Hours, "\\textsuperscript{*}"),
-    TRUE ~ Hours
-  )) %>%
-  select(-c(Include, Date))
-
-timesheet %>%
-  kbl(
-    escape = FALSE,
-    booktabs = TRUE,
-    # position = "h",
-    linesep = "",
-    caption = "Complete record of related billable activities",
-    align = "l",
-    table.envir = "table"
-  ) %>%
-  row_spec(
-    nrow(timesheet) - 3,
-    hline_after = TRUE
-  ) %>%
-  collapse_rows(
-    1:2,
-    latex_hline = "none",
-    row_group_label_position = "first",
-    valign = "top"
-  ) %>%
-  kable_styling(
-    font_size = 10,
-    latex_options = c("repeat_header")
-  ) %>%
-  footnote(
-    general = "\\\\textsuperscript{*}Entries excluded from the final amount.",
-    general_title = "",
-    footnote_as_chunk = TRUE,
-    threeparttable = TRUE,
-    escape = FALSE
+flextable(
+  timesheet,
+  col_keys = c(
+    "date",
+    "start",
+    "end",
+    "hours",
+    "description",
+    "code"
   )
+) %>%
+  set_header_labels(
+    date = "Date",
+    start = "Start",
+    end = "End",
+    hours = "Hours",
+    description = "Description",
+    code = "Code"
+  ) %>%
+  bold(i = nrow_part(x = .)) %>%
+  hline(i = nrow_part(x = .) - 1) %>%
+  colformat_double(
+    j = c("hours"),
+    i = nrow_part(x = .),
+    digits = 0
+  ) %>%
+  align(align = "left", part = "all") %>%
+  align(j = "code", align = "right", part = "all") %>%
+  fontsize(part = "all", size = 8) %>%
+  width(
+    j = c("date", "start", "end", "hours", "code"),
+    width = 0.6
+  ) %>%
+  width(
+    j = "description",
+    width = 3
+  ) %>%
+  set_caption("Timesheet of Billable Activities")
 ```
+
