@@ -1,0 +1,28 @@
+set_flextable_defaults(
+  font.family = "Arial",
+  font.size = 10,
+  font.color = "black",
+  text.align = "left",
+  padding = 5,
+  border.color = "#666666",
+  border.width = 0.75,
+  background.color = "transparent",
+  line_spacing = 1,
+  table.layout = "fixed",
+  decimal.mark = ".",
+  big.mark = " ",
+  digits = 1,
+  pct_digits = 1,
+  na_str = "",
+  nan_str = "",
+  fmt_date = "%Y-%m-%d",
+  fmt_datetime = "%Y-%m-%d %H:%M:%S",
+  table_align = "center",
+  split = NULL,
+  float = "none",
+  tabcolsep = NULL,
+  arraystretch = 1.5,
+  fonts_ignore = TRUE,
+  theme_fun = function(x)
+    theme_booktabs(x, bold_header = TRUE) %>% fit_to_width(max_width = 6.25)
+)

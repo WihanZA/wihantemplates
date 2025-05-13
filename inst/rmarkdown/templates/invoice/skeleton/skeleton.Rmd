@@ -1,96 +1,243 @@
 ---
 output:
-  pdf_document:
+  bookdown::pdf_document2:
+    number_sections: FALSE
     template: resources/template.tex
     keep_tex: FALSE
-    latex_engine: xelatex
-    citation_package: natbib
+    latex_engine: pdflatex
 
-# params start
 params:
-  client_name: "Mickey Mouse"
-  client_street: "1313 Disneyland Drive"
-  client_city: "Anaheim"
-  client_zip: "92802"
-  client_email: "mickey.mouse@disney.com"
-  reference: "INV-2024-09"
-  date: !r stringr::str_squish(format(Sys.Date(), "%e %B %Y"))
-  project_name: "Magic Kingdom Expansion"
-  project_description: "Design and implementation of new facilities"
-  author_name: "Bugs Bunny"
-  author_street: "123 Carrot Lane"
-  author_city: "Looneyville"
-  author_zip: "54321"
-  author_email: "bugs.bunny@looneytoons.com"
-  author_phone: "+27 71 987 6543"
-  beneficiary: "Elmer Fudd"
-  swift: "LOONYBUN"
-  bank: "Acme Bank"
-  branch: "100200"
-  account: "9876543210"
-# params end
-
-client_name: "`r params$client_name`"
-client_street: "`r params$client_street`"
-client_city: "`r params$client_city`"
-client_zip: "`r params$client_zip`"
-client_email: "`r params$client_email`"
-
-title: "`r params$reference` Invoice"
-reference: "`r params$reference`"
-date: "`r params$date`"
-project_name: "`r params$project_name`"
-project_description: "`r params$project_description`"
-
-author_name: "`r params$author_name`"
-author_street: "`r params$author_street`"
-author_city: "`r params$author_city`"
-author_zip: "`r params$author_zip`"
-author_email: "`r params$author_email`"
-author_phone: "`r params$author_phone`"
-signature: "resources/signature.jpg" # optional
-sig_size: 5ex # optional
-
-beneficiary: "`r params$beneficiary`"
-swift: "`r params$swift`"
-bank: "`r params$bank`"
-branch: "`r params$branch`"
-account: "`r params$account`"
+  client:
+    value:
+      name: "Mickey Mouse"
+      street: "1313 Disneyland Drive"
+      city: "Anaheim"
+      zip: "92802"
+      email: "mickey.mouse@disney.com"
+  project:
+    value:
+      reference: "INV-2024-09"
+      name: "Magic Kingdom Expansion"
+      description: "Design and implementation of new facilities"
+  author:
+    value:
+      name: "Bugs Bunny"
+      street: "123 Carrot Lane"
+      city: "Looneyville"
+      zip: "54321"
+      email: "bugs.bunny@looneytoons.com"
+      phone: "+27 71 987 6543"
+  billing:
+    value:
+      beneficiary: "Elmer Fudd"
+      swift: "LOONYBUN"
+      bank: "Acme Bank"
+      branch: "100200"
+      account: "9876543210"
+  date: "`r lubridate::today()`"
 
 ---
 
 ```{r setup, include = FALSE}
-library(rmarkdown)
-library(kableExtra)
+rm(list = ls())
+invisible(gc())
+
 library(dplyr)
-library(tidyr)
-library(stringr)
-library(readxl)
 library(lubridate)
+library(readxl)
+library(rmarkdown)
+library(stringr)
 library(tibble)
-library(wihantemplates)
+library(tidyr)
+library(janitor)
+library(flextable)
 
 knitr::opts_chunk$set(
+  eval = TRUE,
   echo = FALSE,
-  message = FALSE,
   warning = FALSE,
-  cache = FALSE
+  message = FALSE,
+  include = TRUE,
+  fig.align = "left",
+  comment = "#>"
 )
 
-options(knitr.table.format = "latex")
-options(knitr.kable.NA = "")
-options(scipen = 999)
-knitr::knit_hooks$set(inline = function(x) {
-  prettyNum(x, big.mark = " ")
-})
+# determine active file's path ----
+active_file <- if (interactive()) {
+  normalizePath(rstudioapi::getSourceEditorContext()$path)
+} else {
+  normalizePath(knitr::current_input(dir = TRUE))
+}
+
+# load parameters ----
+params <- yaml_front_matter(active_file)$params %>%
+  lapply(function(x) {
+    if (is.list(x)) x$value else x
+  })
+
+# determine file's resources ----
+resources <- fs::path_abs(
+  path = "resources",
+  start = dirname(active_file)
+)
+
+# default table formatting ----
+source(file.path(resources, "defaults.R"))
 ```
 
-```{r items}
+```{r sessions}
+sessions <- file.path(resources, "timesheet.xlsx") %>%
+  read_xlsx() %>%
+  clean_names() %>%
+  mutate(date = ymd(date, tz = Sys.timezone())) %>%
+  mutate(across(
+    start:end,
+    ~ paste0(
+      format(date, "%Y-%m-%d"),
+      " ",
+      format(., "%H:%M")
+    ) %>%
+      ymd_hm(tz = Sys.timezone())
+  )) %>%
+  arrange(start) %>%
+  mutate(index = str_pad(row_number(), 3, pad = "0")) %>%
+  select(-any_of(c("hours", "minutes"))) %>%
+  mutate(hours = as.numeric(difftime(end, start, units = "hours")))
+```
+
+```{r rates}
+rates <- tibble(
+  code = c("X", "Y", "Z"),
+  item = c("Design", "Impact Study", "Construction"),
+  rate = c(500, 200, 600)
+)
+
+sessions <- sessions %>%
+  left_join(rates, by = "code") %>%
+  mutate(subtotal = hours * rate)
+```
+
+```{r bill}
+bill <- sessions %>%
+  group_by(code, item) %>%
+  summarise(
+    sessions = n_distinct(index),
+    hours = sum(hours, na.rm = TRUE),
+    rate = unique(rate),
+    subtotal = sum(subtotal, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+bill_total <- bill %>%
+  summarise(
+    code = NA,
+    item = "Total",
+    sessions = sum(sessions, na.rm = TRUE),
+    hours = sum(hours, na.rm = TRUE),
+    subtotal = sum(subtotal, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(rate = subtotal / hours)
+
+bill <- bill %>%
+  bind_rows(bill_total) %>%
+  mutate(
+    hours = round(hours, 1),
+    subtotal = round(subtotal, 2),
+    rate = round(rate, 2)
+  )
+
+bill$rate <- scales::label_currency(
+  prefix = "R",
+  big.mark = " ",
+  decimal = "."
+)(bill$rate)
+
+bill$subtotal <- scales::label_currency(
+  prefix = "R",
+  big.mark = " ",
+  decimal = "."
+)(bill$subtotal)
+
+
+flextable(bill) %>%
+  set_header_labels(
+    code = "Code",
+    item = "Item",
+    sessions = "Sessions",
+    hours = "Hours",
+    rate = "Rate",
+    subtotal = "Subtotal"
+  ) %>%
+  bold(i = nrow_part(x = .)) %>%
+  hline(i = nrow_part(x = .) - 1) %>%
+  align(
+    j = c("code", "item"),
+    align = "left",
+    part = "body"
+  ) %>%
+  align(
+    j = c("code", "item"),
+    align = "left",
+    part = "header"
+  ) %>%
+  align(
+    j = c("sessions", "rate", "subtotal"),
+    align = "right",
+    part = "body"
+  ) %>%
+  align(
+    j = c("sessions", "rate", "subtotal"),
+    align = "right",
+    part = "header"
+  ) %>%
+  width(
+    j = c("sessions", "hours", "rate", "subtotal"),
+    width = .8
+  ) %>%
+  width(
+    j = "item",
+    width = 1.5
+  ) %>%
+  add_footer_lines(
+    "Billable hours as detailed in the timesheet presented in Table B."
+  ) %>%
+  set_caption("Billable Hours")
+```
+
+```{r payment-instructions, results = "asis"}
+instructions <- c(
+  "Please transfer the amount due according to the following payment instructions:",
+  "",
+  paste0("**Beneficiary**: ", params$billing$beneficiary, "\\newline"),
+  paste0("**Bank**: ", params$billing$bank, "\\newline"),
+  paste0("**Branch**: ", params$billing$branch, "\\newline"),
+  paste0("**Account**: ", params$billing$account, "\\newline"),
+  paste0("**SWIFT**: ", params$billing$swift, "\\newline"),
+  paste0("**Reference**: ", params$project$reference),
+  "",
+  "Thank you for your business.",
+  "",
+  "Kind regards,\\newline",
+  paste0(
+    "\\includegraphics[height=3em]{resources/signature.jpg}\\newline",
+    ""
+  ),
+  params$author$name
+)
+
+cat(instructions, sep = "\n")
+```
+
+\clearpage
+
+
+```{r items, eval = FALSE}
 rate_x <- 300
 rate_y <- 400
 rate_other <- 150
 
-items <- read_xlsx("resources/timesheet.xlsx") %>%
+items <- read_xlsx(timesheet) %>%
   mutate(Date = ymd(Date)) %>%
   filter(Include) %>%
   select(-Include) %>%
@@ -156,10 +303,10 @@ items %>%
   )
 ```
 
-::: {#timesheet}
 
-```{r timesheet}
-timesheet <- read_xlsx("resources/timesheet.xlsx") %>%
+
+```{r timesheet, eval = FALSE}
+timesheet <- read_xlsx(timesheet) %>%
   mutate(Date = ymd(Date)) %>%
   mutate(Hours = round(Hours, 1)) %>%
   mutate(across(
@@ -230,5 +377,3 @@ timesheet %>%
     escape = FALSE
   )
 ```
-
-:::

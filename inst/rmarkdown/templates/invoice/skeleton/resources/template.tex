@@ -1,269 +1,289 @@
+%% --------------------------------------------------------------
+%% Invoice Template
+%% WihanZA
+%% wihanmarais@sun.ac.za
+%% --------------------------------------------------------------
+
+%% Document class
 \documentclass[
-  11pt,
-  a4paper,
-  UKenglish,
-  $for(classoption)$
-    $classoption$$sep$,
-  $endfor$
-]{$documentclass$}
+11pt,
+a4paper,
+twoside,
+]{article}
 
-% \usepackage{lmodern}
-\usepackage{fontspec}
-\usepackage{noto}
+%% Language | Dates
+\usepackage[main=british]{babel}
+\usepackage[english]{isodate}
+\cleanlookdateon
+
+%% Margins | Spacing
+\usepackage[left=1in, right=1in, top=1.2in, bottom=1.2in]{geometry}
+\usepackage[parfill]{parskip}
 \usepackage{setspace}
-\usepackage{fontawesome}
-\usepackage{amssymb,amsmath}
-\usepackage{ifxetex,ifluatex}
-\usepackage{unicode-math}
-\defaultfontfeatures{Scale=MatchLowercase}
-\defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\usepackage{upquote}
-\usepackage[$for(microtypeoptions)$$microtypeoptions$$sep$,$endfor$]{microtype}
-\UseMicrotypeSet[protrusion]{basicmath}
-\usepackage{parskip}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 2pt}
-\usepackage{fancyvrb}
-\VerbatimFootnotes
-\usepackage[dvipsnames,svgnames,x11names]{xcolor}
-\usepackage[
-  a4paper,
-  left=1in,
-  right=1in,
-  top=0.9in,
-  bottom=0.9in
-]{geometry}
-\usepackage{longtable,booktabs}
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
-\makeatother
-\usepackage{footnote}
-\usepackage{graphicx}
-\makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
-\usepackage[normalem]{ulem}
+\setstretch{1}
 \setlength{\emergencystretch}{3em}
-\providecommand{\tightlist}{\setlength{\itemsep}{0pt}}
-\usepackage{selnolig}
-\linespread{1.05}
+\raggedbottom
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\def\lineheight{16}
+\usepackage{pdflscape}
 
-\usepackage{tabularx}
-\usepackage{multirow}
-\usepackage{ragged2e}
-\usepackage{hhline}
-\usepackage{array}
-\usepackage{float}
-\usepackage{threeparttable}
+% \the\baselineskip: 13.6pt
+% \the\smallskipamount: 3.0pt plus 1.0pt minus 1.0pt
+% \the\medskipamount: 6.0pt plus 2.0pt minus 2.0pt
+% \the\bigskipamount: 12.0pt plus 4.0pt minus 4.0pt
+% \the\1em: 10.95pt
+% \the\1ex: 5.20125pt
 
+%% Ignore badboxes of less than 3pt
+\hfuzz=3pt
+
+%% Math | Font
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage[vvarbb, upint, subscriptcorrection, uprightscript]{notomath}
+\usepackage{noto-mono}
+\usepackage[rmdefault]{sourceserifpro}
+\usepackage[sfdefault]{sourcesanspro}
+\usepackage[T1]{fontenc}
+\renewcommand\familydefault{\rmdefault}
+\usepackage[normalem]{ulem}
+\usepackage{bm}
+\let\bm\symbfit
+\usepackage{fontawesome}
+
+%% Microtypography
+\usepackage[
+protrusion=true,
+factor=1000,
+expansion=true,
+auto=true,
+verbose=true
+]{microtype}
+
+\DisableLigatures{encoding=T1,shape=sc}
+
+%% Headings
+\usepackage{titlesec}
 \usepackage{titlecaps}
 \Addlcwords{a an the and but or for nor so yet at by for from in into like near of on over past to}
 
-\pagenumbering{roman}
-% \pagenumbering{Roman}
+%% Remove section numbering
+\setcounter{secnumdepth}{-\maxdimen} 
 
+%% Symbols
+\usepackage{siunitx}
+\sisetup{}
+\sisetup{
+detect-all = true,
+detect-family = true,
+output-decimal-marker = {.},
+group-separator = {\,},
+number-unit-product = {\,},
+inter-unit-product = \mathord{\cdot},
+exponent-product = \mathord{\times},
+separate-uncertainty = true}
+
+%% Packages
+\usepackage{calc}
+\usepackage{etoolbox}
+
+%% Floats
+\usepackage{float}
+% figures only float within the sections they are defined in
+\usepackage[section]{placeins}
+
+%% Tables
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.25}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage{makecell}
+\usepackage{tabularx}
+
+%% Figures | Graphics
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+%% Captions
+\usepackage[font={footnotesize, singlespacing}]{caption}
+\captionsetup[figure]{labelfont={bf},labelformat={default},labelsep=quad,name={Fig.},skip=3pt,position=bottom}
+\captionsetup[table]{labelfont={bf},labelformat={default},labelsep=quad,name={Table},skip=3pt,position=top}
+\renewcommand{\thetable}{\Alph{table}}
+
+%% Code chunk printing
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+%% Lists
+\usepackage{enumitem}
+
+%% Headers | Footers | Page numbers
 \usepackage{fancyhdr}
-\pagestyle{fancy}
+% title page style is set to empty below
+\pagestyle{plain}
+\pagenumbering{roman}
 \renewcommand{\headrulewidth}{0pt}
 \fancyhead{}
 \fancyfoot{}
 \fancyfoot[C]{\small\thepage}
 
-\usepackage[
-font=small,
-singlelinecheck=true,
-labelfont={bf},
-% labelformat=original,
-% labelformat=empty,
-labelsep=quad,
-format=plain,
-textformat=simple]{caption}
-\captionsetup[figure]{name={Figure},skip=3pt,position=bottom}
-\captionsetup[table]{name={Table},skip=3pt,position=top}
-\renewcommand{\thetable}{\Alph{table}}
+%% Footnotes
+% setspace package must load before footmisc
+\usepackage[hang, multiple]{footmisc}
 
-$if(highlighting-macros)$
-  $highlighting-macros$
-$endif$
-$if(numbersections)$
-  \setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
-$else$
-  \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-$endif$
-$if(natbib)$
-  \usepackage[$natbiboptions$]{natbib}
-  \bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
-  \renewcommand\bibsection{
-     \section*{References}
-     \markboth{\MakeUppercase{\refname}}{\MakeUppercase{\refname}}
-    }
-$endif$
+% defaults
+% \hangfootparskip =  0.5\baselineskip
+% \hangfootparindent = 0em
+% \footnotemargin = 1.8em
 
-\usepackage{abstract}
-\renewcommand{\abstractname}{}
-\renewcommand{\absnamepos}{empty}
-
-\renewenvironment{abstract}
-  {{\setlength{\leftmargin}{0mm}
-    \setlength{\rightmargin}{\leftmargin}}
-  \relax}
-  {\endlist}
-
-\usepackage{titlesec}
-
-% \titlespacing*{\section}{0pt}{1\baselineskip}{0.5\baselineskip}
-% \titleformat*{\section}{\Large\bfseries\uppercase}
-% \titleformat*{\subsection}{\bfseries}
-% \titleformat*{\subsubsection}{\normalsize\itshape}
-% \titleformat*{\paragraph}{\normalsize\itshape}
-% \titleformat*{\subparagraph}{\normalsize\itshape}
-
-\usepackage[section]{placeins}
-
-% Table to top if alone on floats page
+%% make title page footnotes same as rest
 \makeatletter
-\setlength{\@fptop}{0pt}
-\setlength{\@fpbot}{0pt plus 1fil}
+\patchcmd\maketitle{\@makefntext}{\@@@ddt}{}{}
+\patchcmd\maketitle{\rlap}{\mbox}{}{}
 \makeatother
 
-\makeatletter
-\@ifpackageloaded{hyperref}{}{
-  \PassOptionsToPackage{hyphens}{url}
-  \usepackage[setpagesize=false,
-              unicode=false,
-              xetex]{hyperref}
-}
+\renewcommand*{\hangfootparskip}{.5\baselineskip}
+\renewcommand*{\hangfootparindent}{0em}
+\renewcommand*{\footnotemargin}{1em}
 
-\hypersetup{
-$if(title-meta)$
-pdftitle={$title-meta$},
-$endif$
-$if(author_name-meta)$
-pdfauthor={$author_name-meta$},
-$endif$
-breaklinks=true,
-bookmarks=true,
-colorlinks=true,
-citecolor=black,
-urlcolor=black,
-linkcolor=black,
-pdfborder={0 0 0}}
+%% Color
+\usepackage[table,dvipsnames]{xcolor}
+\definecolor{stbWine}{rgb}{0.65, 0.04, 0.24}
 
+%% URLs
+\usepackage[hyphens]{url}
 \urlstyle{same}
 
-% cleveref must be loaded after hyperref
+%% Hyperref
+\usepackage[unicode]{hyperref}
+\hypersetup{
+pdftitle={$params.project.value.reference$ Invoice},
+pdfauthor={$params.author.value.name$},
+colorlinks=true,
+citecolor={black},
+urlcolor={black},
+linkcolor={black},
+filecolor={black},
+pdfborder={0 0 0}}
+
+%% Bibliography
+\usepackage[round, nonamebreak]{natbib}
+\bibliographystyle{plainnat}
+\renewcommand{\bibsection}{\section*{\refname}\pdfbookmark{References}{sec:references}}
+\renewcommand\bibfont{\small}
+
+%% Acronyms
+\usepackage{acronym}
+$if(acronyms)$
+$for(acronyms)$
+\acrodef{$acronyms.id$}[$acronyms.short$]{$acronyms.long$}
+$endfor$
+$endif$
+
+%% Cross-referencing
 \usepackage[capitalize,noabbrev]{cleveref}
 
-$if(endnotes)$
-  \usepackage{endnotes}
-  \renewcommand{\enotesize}{\normalsize}
-  \let\footnote=\endnote
-$endif$
-$if(appendix)$
-  \renewcommand*\thetable{$appendixletter$.\arabic{table}}
-  \renewcommand*\thefigure{$appendixletter$.\arabic{figure}}
-$endif$
+%% Subfigures
+\usepackage[labelformat=simple,labelfont=sf]{subcaption}
+
+%% Fix cross-referencing for subfigures
+\renewcommand\thesubfigure{(\alph{subfigure})}
+\makeatletter
+\renewcommand\p@subfigure{\thefigure\space} % prefix used in \ref and \cref for subfigures
+\makeatother
+
+%% Fix problem with amsmath cleveref acronym
+%% https://github.com/WihanZA/wihantemplates/issues/2
+%% https://tex.stackexchange.com/a/735502
+\makeatletter
+    \AtBeginDocument
+    {
+      \def\ltx@label#1{\cref@label{#1}}
+      \def\label@in@display@noarg#1{\cref@old@label@in@display{#1}}
+    }
+\makeatother
+
+%% Adapted from %% https://tex.stackexchange.com/questions/71364/acronym-acresetall-cleveref-multiply-defined-labels
+%% Add \AC before @verridelabel
+\makeatletter
+\newcommand*{\org@overidelabel}{}
+\let\org@overridelabel\AC@verridelabel
+\renewcommand*{\AC@verridelabel}[1]{%
+  \@bsphack
+  \protected@write\@auxout{}{\string\AC@undonewlabel{#1@cref}}%
+  \org@overridelabel{#1}%
+  \@esphack
+}%
+\makeatother
+
+%% Header includes
 $for(header-includes)$
-  $header-includes$
+$header-includes$
 $endfor$
-\newcommand{\blankline}{\quad\pagebreak[2]}
 
 \begin{document}
-
-\begin{table}[t]
-  \begin{tabularx}{\textwidth}{@{}l X r@{}}
-    \hspace{-1em} \multirow{7}{*}{
-    \begin{tabular}{l}
-        \small{\uppercase{From}}         \\
-        \small{\textbf{$author_name$}}   \\
-        \small{$author_street$}          \\
-        \small{$author_city$}            \\
-        \small{$author_zip$}             \\
-        \small{\faPhone\ $author_phone$} \\
-        \small{\faEnvelopeO\ $author_email$}
-      \end{tabular}} &
-    \hfill                                   &
-    \multirow{6}{*}{
-    \begin{tabular}{r}
-        \LARGE{\textbf{\uppercase{Invoice}}}\vspace{0.2em} \\
-        \small{\fontseries{sb}\uppercase{Reference}}       \\
-        \small{$reference$}                                \\
-        \small{\fontseries{sb}\uppercase{Date}}            \\
-        \small{$date$}
-      \end{tabular}} \\
-  \end{tabularx}
-\end{table}
-
-\vspace*{4.5em}
-
-\small{\uppercase{To}}\\
-\small{\textbf{$client_name$}}\\
-\small{$client_street$}\\
-\small{$client_city$}\\
-\small{$client_zip$}\\
-\small{\faEnvelopeO\ $client_email$}
-
-\vspace*{1em}
-
-\begin{center}
-  \Large\bfseries\selectfont\titlecap{$project_name$}
-\end{center}
+\vspace{0pt}
+\begin{minipage}[t]{0.5\textwidth}
+  \vspace{0pt}
+  \begin{flushleft}
+    \uppercase{From}                      \\
+    \textbf{$params.author.value.name$}   \\
+    $params.author.value.street$          \\
+    $params.author.value.city$            \\
+    $params.author.value.zip$             \\
+    \faPhone\ $params.author.value.phone$ \\
+    \faEnvelopeO\ $params.author.value.email$
+  \end{flushleft}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.5\textwidth}
+  \vspace{0pt}
+  \begin{flushright}
+    {\LARGE\bfseries\uppercase{Invoice}}\\
+    {\bfseries Reference}               \\
+    $params.project.value.reference$                   \\
+    {\bfseries Date}                    \\
+    $params.date$
+  \end{flushright}
+\end{minipage}\\[\baselineskip]
+\begin{minipage}{1\textwidth}
+  \begin{flushleft}
+    \uppercase{To}\\
+    \textbf{$params.client.value.name$}\\
+    $params.client.value.street$\\
+    $params.client.value.city$\\
+    $params.client.value.zip$\\
+    \faEnvelopeO\ $params.client.value.email$
+  \end{flushleft}
+\end{minipage}\\
 
 \begin{center}
-  \large\fontshape{it}\selectfont\titlecap{$project_description$}
+  {\Large\bfseries\titlecap{$params.project.value.name$}}\\
+  {\large\itshape\titlecap{$params.project.value.description$}}
 \end{center}
 
+$if(body)$
 $body$
-% \vspace*{1em}
-
-{\small
-    Please transfer the amount due according to the following payment instructions:\\
-    \\
-    \textbf{Beneficiary: } $beneficiary$\\
-    \textbf{Bank:} $bank$\\
-    \textbf{Branch:} $branch$\\
-    \textbf{Account:} $account$\\
-    \textbf{SWIFT code:} $swift$\\
-    \textbf{Reference:} $reference$}\\
-\\
-Thank you for your business.\\
-\\
-Kind regards,\\
-$if(signature)$
-\includegraphics[height=$if(sig_size)$$sig_size$$else$5ex$endif$]{$signature$}\\
 $endif$
-$author_name$
 
-\clearpage
-
-% \begin{center}
-% \Large\bfseries\selectfont\titlecap{Billable activities}
-% \end{center}
-
-% \section*{\titlecap{Billable activities}}
-
-\hypertarget{timesheet}{}
-
-$if(has-frontmatter)$
-\backmatter
-$endif$
-$if(natbib)$
 $if(bibliography)$
-$if(biblio-title)$
-$if(has-chapters)$
-\renewcommand\bibname{$biblio-title$}
-$else$
-\renewcommand\refname{$biblio-title$}
-$endif$
-$endif$
+\clearpage
 \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
 $endif$
+
+%% Include after
+$if(include-after)$
+\clearpage
+$for(include-after)$
+$include-after$
+$endfor$
 $endif$
 
 \end{document}
