@@ -2,7 +2,7 @@
 output: 
   pdf_document:
     template: resources/template.tex
-    keep_tex: TRUE
+    keep_tex: FALSE
     latex_engine: pdflatex
     citation_package: natbib
 
@@ -91,8 +91,21 @@ knitr::opts_chunk$set(
   }
 )
 
-# ggplot and table defaults ----
-source("resources/defaults.R")
+# determine active file's path ----
+active_file <- if (interactive()) {
+  normalizePath(rstudioapi::getSourceEditorContext()$path)
+} else {
+  normalizePath(knitr::current_input(dir = TRUE))
+}
+
+# determine file's resources ----
+resources <- fs::path_abs(
+  path = "resources",
+  start = dirname(active_file)
+)
+
+# default ggplot and table formatting ----
+source(file.path(resources, "defaults.R"))
 ```
 
 # Introduction
