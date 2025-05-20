@@ -1,0 +1,292 @@
+---
+output:
+  bookdown::pdf_document2:
+    number_sections: FALSE
+    template: resources/template_invoice.tex
+    keep_tex: FALSE
+    latex_engine: pdflatex
+
+params:
+  client:
+    value:
+      name: "Mickey Mouse"
+      street: "1313 Disneyland Drive"
+      city: "Anaheim"
+      zip: "92802"
+      email: "mickey.mouse@disney.com"
+  project:
+    value:
+      reference: "INV-2024-09"
+      name: "Magic Kingdom Expansion"
+      description: "Design and implementation of new facilities"
+  author:
+    value:
+      name: "Bugs Bunny"
+      street: "123 Carrot Lane"
+      city: "Looneyville"
+      zip: "54321"
+      email: "bugs.bunny@looneytoons.com"
+      phone: "+27 71 987 6543"
+  billing:
+    value:
+      beneficiary: "Elmer Fudd"
+      swift: "LOONYBUN"
+      bank: "Acme Bank"
+      branch: "100200"
+      account: "9876543210"
+  date: "`r lubridate::today()`"
+
+---
+
+```{r setup, include = FALSE}
+rm(list = ls())
+invisible(gc())
+
+library(dplyr)
+library(lubridate)
+library(readxl)
+library(rmarkdown)
+library(stringr)
+library(tibble)
+library(tidyr)
+library(janitor)
+library(flextable)
+
+knitr::opts_chunk$set(
+  eval = TRUE,
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  include = TRUE,
+  fig.align = "left",
+  comment = "#>"
+)
+
+# determine active file's path ----
+active_file <- if (interactive()) {
+  normalizePath(rstudioapi::getSourceEditorContext()$path)
+} else {
+  normalizePath(knitr::current_input(dir = TRUE))
+}
+
+# load parameters ----
+params <- yaml_front_matter(active_file)$params %>%
+  lapply(function(x) {
+    if (is.list(x)) x$value else x
+  })
+
+# determine file's resources ----
+resources <- fs::path_abs(
+  path = "resources",
+  start = dirname(active_file)
+)
+
+# default table formatting ----
+source(file.path(resources, "defaults.R"))
+```
+
+```{r sessions}
+sessions <- file.path(resources, "timesheet.xlsx") %>%
+  read_xlsx() %>%
+  clean_names() %>%
+  mutate(date = ymd(date, tz = Sys.timezone())) %>%
+  mutate(across(
+    start:end,
+    ~ paste0(
+      format(date, "%Y-%m-%d"),
+      " ",
+      format(., "%H:%M")
+    ) %>%
+      ymd_hm(tz = Sys.timezone())
+  )) %>%
+  arrange(start) %>%
+  mutate(index = str_pad(row_number(), 3, pad = "0")) %>%
+  select(-any_of(c("hours", "minutes"))) %>%
+  mutate(hours = as.numeric(difftime(end, start, units = "hours")))
+```
+
+```{r rates}
+rates <- tibble(
+  code = c("X", "Y", "Z"),
+  item = c("Design", "Impact Study", "Construction"),
+  rate = c(500, 200, 600)
+)
+
+sessions <- sessions %>%
+  left_join(rates, by = "code") %>%
+  mutate(subtotal = hours * rate)
+```
+
+```{r bill}
+bill <- sessions %>%
+  group_by(code, item) %>%
+  summarise(
+    sessions = n_distinct(index),
+    hours = sum(hours, na.rm = TRUE),
+    rate = unique(rate),
+    subtotal = sum(subtotal, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+bill_total <- bill %>%
+  summarise(
+    code = NA,
+    item = "Total",
+    sessions = sum(sessions, na.rm = TRUE),
+    hours = sum(hours, na.rm = TRUE),
+    subtotal = sum(subtotal, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(rate = subtotal / hours)
+
+bill <- bill %>%
+  bind_rows(bill_total) %>%
+  mutate(
+    hours = round(hours, 1),
+    subtotal = round(subtotal, 2),
+    rate = round(rate, 2)
+  )
+
+bill$rate <- scales::label_currency(
+  prefix = "R",
+  big.mark = " ",
+  decimal = "."
+)(bill$rate)
+
+bill$subtotal <- scales::label_currency(
+  prefix = "R",
+  big.mark = " ",
+  decimal = "."
+)(bill$subtotal)
+
+flextable(bill) %>%
+  set_header_labels(
+    code = "Code",
+    item = "Item",
+    sessions = "Sessions",
+    hours = "Hours",
+    rate = "Rate",
+    subtotal = "Subtotal"
+  ) %>%
+  bold(i = nrow_part(x = .)) %>%
+  hline(i = nrow_part(x = .) - 1) %>%
+  align(
+    j = c("code", "item"),
+    align = "left",
+    part = "body"
+  ) %>%
+  align(
+    j = c("code", "item"),
+    align = "left",
+    part = "header"
+  ) %>%
+  align(
+    j = c("sessions", "rate", "subtotal"),
+    align = "right",
+    part = "body"
+  ) %>%
+  align(
+    j = c("sessions", "rate", "subtotal"),
+    align = "right",
+    part = "header"
+  ) %>%
+  width(
+    j = c("sessions", "hours", "rate", "subtotal"),
+    width = .8
+  ) %>%
+  width(
+    j = "item",
+    width = 1.5
+  ) %>%
+  add_footer_lines(
+    "Billable hours as detailed in the timesheet presented in Table B."
+  ) %>%
+  set_caption("Billable Hours")
+```
+
+```{r payment-instructions, results = "asis"}
+instructions <- c(
+  "Please transfer the amount due according to the following payment instructions:",
+  "",
+  paste0("**Beneficiary**: ", params$billing$beneficiary, "\\newline"),
+  paste0("**Bank**: ", params$billing$bank, "\\newline"),
+  paste0("**Branch**: ", params$billing$branch, "\\newline"),
+  paste0("**Account**: ", params$billing$account, "\\newline"),
+  paste0("**SWIFT**: ", params$billing$swift, "\\newline"),
+  paste0("**Reference**: ", params$project$reference),
+  "",
+  "Thank you for your business.",
+  "",
+  "Kind regards,\\newline",
+  paste0(
+    "\\includegraphics[height=3em]{resources/signature.jpg}\\newline",
+    ""
+  ),
+  params$author$name
+)
+
+cat(instructions, sep = "\n")
+```
+
+\clearpage
+
+```{r timesheet}
+timesheet <- sessions %>%
+  mutate(date = format(ymd(date), "%e %b %y")) %>%
+  group_by(date) %>%
+  mutate(n = n(), start_min = (start == min(start, na.rm = TRUE))) %>%
+  ungroup() %>%
+  mutate(date = case_when(
+    n == 1 ~ date,
+    n > 1 & start_min ~ date,
+    n > 1 & !start_min ~ "",
+    TRUE ~ NA
+  )) %>%
+  mutate(across(start:end, ~ format(., "%H:%M")))
+
+timesheet_total <- sessions %>%
+  summarise(hours = sum(hours, na.rm = TRUE))
+
+timesheet <- timesheet %>%
+  bind_rows(timesheet_total)
+
+flextable(
+  timesheet,
+  col_keys = c(
+    "date",
+    "start",
+    "end",
+    "hours",
+    "description",
+    "code"
+  )
+) %>%
+  set_header_labels(
+    date = "Date",
+    start = "Start",
+    end = "End",
+    hours = "Hours",
+    description = "Description",
+    code = "Code"
+  ) %>%
+  bold(i = nrow_part(x = .)) %>%
+  hline(i = nrow_part(x = .) - 1) %>%
+  colformat_double(
+    j = c("hours"),
+    i = nrow_part(x = .),
+    digits = 0
+  ) %>%
+  align(align = "left", part = "all") %>%
+  align(j = "code", align = "right", part = "all") %>%
+  fontsize(part = "all", size = 8) %>%
+  width(
+    j = c("date", "start", "end", "hours", "code"),
+    width = 0.6
+  ) %>%
+  width(
+    j = "description",
+    width = 3
+  ) %>%
+  set_caption("Timesheet of Billable Activities")
+```
+

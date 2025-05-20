@@ -2,7 +2,7 @@
 output:
   bookdown::pdf_document2:
     number_sections: FALSE
-    template: resources/template.tex
+    template: resources/template_quote.tex
     keep_tex: FALSE
     latex_engine: pdflatex
 
