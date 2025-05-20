@@ -174,7 +174,7 @@ $endif$
 %% Hyperref
 \usepackage[unicode]{hyperref}
 \hypersetup{
-pdftitle={$params.project.value.reference$ Quotation},
+pdftitle={$params.project.value.reference$ Quote$if(params.version)$ $params.version$$endif$},
 pdfauthor={$params.author.value.name$},
 colorlinks=true,
 citecolor={black},
@@ -280,7 +280,7 @@ $endfor$
 \end{minipage}\\
 
 \begin{center}
-  {\large\bfseries\titlecap{$params.project.value.name$}:}\\
+  {\large\bfseries\titlecap{$params.project.value.name$}}\\
   {\itshape\titlecap{$params.project.value.description$}}
 \end{center}
 

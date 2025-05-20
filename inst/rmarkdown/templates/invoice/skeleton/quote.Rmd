@@ -72,7 +72,7 @@ resources <- fs::path_abs(
   start = dirname(active_file)
 )
 
-# default table formatting ----
+# default formatting ----
 source(file.path(resources, "defaults.R"))
 ```
 
@@ -119,14 +119,6 @@ quote <- quote %>%
     subtotal = round(subtotal, 2), # Rounded to whole Rands
     rate = round(rate, 2)
   )
-
-# Create a consistent currency formatter for both Rate and Subtotal
-currency_formatter <- scales::label_currency(
-  prefix = "R",
-  big.mark = " ",
-  decimal = ".",
-  accuracy = 0.01 # Ensures consistent decimal display
-)
 
 # Apply formatting
 quote$rate <- currency_formatter(quote$rate)
