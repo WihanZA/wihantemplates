@@ -16,7 +16,7 @@ params:
       email: "mickey.mouse@disney.com"
   project:
     value:
-      reference: "INV-2024-09"
+      reference: "QUO-2024-09"
       name: "Magic Kingdom Expansion"
       description: "Design and implementation of new facilities"
   author:
@@ -27,21 +27,12 @@ params:
       zip: "54321"
       email: "bugs.bunny@looneytoons.com"
       phone: "+27 71 987 6543"
-  billing:
-    value:
-      beneficiary: "Elmer Fudd"
-      swift: "LOONYBUN"
-      bank: "Acme Bank"
-      branch: "100200"
-      account: "9876543210"
+  version: "2.0" # optional
   date: "`r lubridate::today()`"
 
 ---
 
 ```{r setup, include = FALSE}
-rm(list = ls())
-invisible(gc())
-
 library(dplyr)
 library(lubridate)
 library(readxl)
@@ -70,7 +61,7 @@ active_file <- if (interactive()) {
 }
 
 # load parameters ----
-params <- yaml_front_matter(active_file)$params %>%
+my_params <- yaml_front_matter(active_file)$params %>%
   lapply(function(x) {
     if (is.list(x)) x$value else x
   })
@@ -85,208 +76,157 @@ resources <- fs::path_abs(
 source(file.path(resources, "defaults.R"))
 ```
 
-```{r sessions}
-sessions <- file.path(resources, "timesheet.xlsx") %>%
-  read_xlsx() %>%
-  clean_names() %>%
-  mutate(date = ymd(date, tz = Sys.timezone())) %>%
-  mutate(across(
-    start:end,
-    ~ paste0(
-      format(date, "%Y-%m-%d"),
-      " ",
-      format(., "%H:%M")
-    ) %>%
-      ymd_hm(tz = Sys.timezone())
-  )) %>%
-  arrange(start) %>%
-  mutate(index = str_pad(row_number(), 3, pad = "0")) %>%
-  select(-any_of(c("hours", "minutes"))) %>%
-  mutate(hours = as.numeric(difftime(end, start, units = "hours")))
-```
-
 ```{r rates}
+# Define service rates
 rates <- tibble(
   code = c("X", "Y", "Z"),
   item = c("Design", "Impact Study", "Construction"),
   rate = c(500, 200, 600)
 )
-
-sessions <- sessions %>%
-  left_join(rates, by = "code") %>%
-  mutate(subtotal = hours * rate)
 ```
 
-```{r bill}
-bill <- sessions %>%
-  group_by(code, item) %>%
-  summarise(
-    sessions = n_distinct(index),
-    hours = sum(hours, na.rm = TRUE),
-    rate = unique(rate),
-    subtotal = sum(subtotal, na.rm = TRUE),
-    .groups = "drop"
-  )
+```{r line-items}
+# Manually create line items
+items <- tibble(
+  code = c("X", "Y", "Z"),
+  hours = c(12.0, 5.5, 1.5)
+)
+```
 
-bill_total <- bill %>%
+```{r quote}
+# Merge line items with rates
+quote <- items %>%
+  left_join(rates, by = "code") %>%
+  mutate(subtotal = hours * rate) %>%
+  select(code, item, hours, everything())
+
+# Calculate grand totals
+quote_total <- quote %>%
   summarise(
     code = NA,
-    item = "Total",
-    sessions = sum(sessions, na.rm = TRUE),
+    item = "Grand Total",
     hours = sum(hours, na.rm = TRUE),
     subtotal = sum(subtotal, na.rm = TRUE),
     .groups = "drop"
   ) %>%
   mutate(rate = subtotal / hours)
 
-bill <- bill %>%
-  bind_rows(bill_total) %>%
+# Combine items with total
+quote <- quote %>%
+  bind_rows(quote_total) %>%
   mutate(
-    hours = round(hours, 1),
-    subtotal = round(subtotal, 2),
+    hours = round(hours, 2),
+    subtotal = round(subtotal, 2), # Rounded to whole Rands
     rate = round(rate, 2)
   )
 
-bill$rate <- scales::label_currency(
+# Create a consistent currency formatter for both Rate and Subtotal
+currency_formatter <- scales::label_currency(
   prefix = "R",
   big.mark = " ",
-  decimal = "."
-)(bill$rate)
+  decimal = ".",
+  accuracy = 0.01 # Ensures consistent decimal display
+)
 
-bill$subtotal <- scales::label_currency(
-  prefix = "R",
-  big.mark = " ",
-  decimal = "."
-)(bill$subtotal)
+# Apply formatting
+quote$rate <- currency_formatter(quote$rate)
+quote$subtotal <- currency_formatter(quote$subtotal)
+quote$hours <- sprintf("%.2f", quote$hours)
+```
 
-flextable(bill) %>%
+```{r quote-table}
+flextable(quote) %>%
   set_header_labels(
     code = "Code",
     item = "Item",
-    sessions = "Sessions",
     hours = "Hours",
     rate = "Rate",
     subtotal = "Subtotal"
   ) %>%
   bold(i = nrow_part(x = .)) %>%
   hline(i = nrow_part(x = .) - 1) %>%
+  set_caption("ESTIMATE: Billable Hours") %>%
+  width(width = dim_pretty(.)$widths) %>%
   align(
-    j = c("code", "item"),
-    align = "left",
-    part = "body"
-  ) %>%
-  align(
-    j = c("code", "item"),
-    align = "left",
-    part = "header"
-  ) %>%
-  align(
-    j = c("sessions", "rate", "subtotal"),
+    j = c("hours", "rate", "subtotal"),
     align = "right",
-    part = "body"
+    part = "all"
   ) %>%
-  align(
-    j = c("sessions", "rate", "subtotal"),
-    align = "right",
-    part = "header"
-  ) %>%
-  width(
-    j = c("sessions", "hours", "rate", "subtotal"),
-    width = .8
-  ) %>%
-  width(
-    j = "item",
-    width = 1.5
-  ) %>%
-  add_footer_lines(
-    "Billable hours as detailed in the timesheet presented in Table B."
-  ) %>%
-  set_caption("Billable Hours")
+  footnote(
+    i = nrow_part(x = .),
+    j = "rate",
+    value = as_paragraph("Weighted average hourly rate across all items."),
+    ref_symbols = "*"
+  )
 ```
 
-```{r payment-instructions, results = "asis"}
-instructions <- c(
-  "Please transfer the amount due according to the following payment instructions:",
-  "",
-  paste0("**Beneficiary**: ", params$billing$beneficiary, "\\newline"),
-  paste0("**Bank**: ", params$billing$bank, "\\newline"),
-  paste0("**Branch**: ", params$billing$branch, "\\newline"),
-  paste0("**Account**: ", params$billing$account, "\\newline"),
-  paste0("**SWIFT**: ", params$billing$swift, "\\newline"),
-  paste0("**Reference**: ", params$project$reference),
-  "",
-  "Thank you for your business.",
+
+### Scope & Timeline
+
+This project includes the following deliverables, to be completed according to a mutually agreed timeline:
+
+1. Documentation & Design
+    - Complete project design specifications
+    - Technical documentation and guidelines
+2. Analysis & Assessment
+    - Impact and feasibility analysis
+    - Resource requirements and allocation
+3. Implementation & Review
+    - Quality assurance and testing
+    - Compliance and standards certification
+
+```{r projected-duration, include = FALSE}
+# code chunk to assist user in determining timeline
+start <- today()
+finish <- ymd("2025-06-30")
+
+if (finish <= start) stop("`start` must be < `finish`")
+
+duration <- difftime(
+  finish,
+  start,
+  units = "weeks",
+  tz = Sys.timezone()
+) %>%
+  ceiling() %>%
+  format(units = "weeks")
+```
+
+The following timeline represents preliminary estimates and will be finalised upon your acceptance:
+
+- Start date: TBD
+- Completion date: TBD 
+- Duration: `r duration`
+
+### Terms and Conditions
+
+The agreement between the service provider and client is constituted by the acceptance of this quote and are subject to the following terms: 
+
+1. Quote Validity: This estimate remains valid for 30 days from issuance.
+
+2. Acceptance Process: To accept this quote, please confirm via email, including:
+   • Agreement to these terms
+   • Confirmation of project timeline
+   • Any additional requirements not addressed here
+
+3. Scope Management: Changes to project scope may affect timeline and costs. All modifications require documentation and your approval. Additional requests will be billed at the rates shown above.
+
+4. Deliverables: All deliverables will be completed according to the agreed schedule, subject to your review and approval. Final delivery will be in digital format.
+
+5. Payment: Full payment is due upon completion of all deliverables and invoice issuance. This quote is not a request for payment.
+
+```{r signature, results = "asis"}
+signature <- c(
+  "\\bigskip",
+  "We look forward to working with you!",
   "",
   "Kind regards,\\newline",
   paste0(
     "\\includegraphics[height=3em]{resources/signature.jpg}\\newline",
     ""
   ),
-  params$author$name
+  my_params$author$name
 )
 
-cat(instructions, sep = "\n")
+cat(signature, sep = "\n")
 ```
-
-\clearpage
-
-```{r timesheet}
-timesheet <- sessions %>%
-  mutate(date = format(ymd(date), "%e %b %y")) %>%
-  group_by(date) %>%
-  mutate(n = n(), start_min = (start == min(start, na.rm = TRUE))) %>%
-  ungroup() %>%
-  mutate(date = case_when(
-    n == 1 ~ date,
-    n > 1 & start_min ~ date,
-    n > 1 & !start_min ~ "",
-    TRUE ~ NA
-  )) %>%
-  mutate(across(start:end, ~ format(., "%H:%M")))
-
-timesheet_total <- sessions %>%
-  summarise(hours = sum(hours, na.rm = TRUE))
-
-timesheet <- timesheet %>%
-  bind_rows(timesheet_total)
-
-flextable(
-  timesheet,
-  col_keys = c(
-    "date",
-    "start",
-    "end",
-    "hours",
-    "description",
-    "code"
-  )
-) %>%
-  set_header_labels(
-    date = "Date",
-    start = "Start",
-    end = "End",
-    hours = "Hours",
-    description = "Description",
-    code = "Code"
-  ) %>%
-  bold(i = nrow_part(x = .)) %>%
-  hline(i = nrow_part(x = .) - 1) %>%
-  colformat_double(
-    j = c("hours"),
-    i = nrow_part(x = .),
-    digits = 0
-  ) %>%
-  align(align = "left", part = "all") %>%
-  align(j = "code", align = "right", part = "all") %>%
-  fontsize(part = "all", size = 8) %>%
-  width(
-    j = c("date", "start", "end", "hours", "code"),
-    width = 0.6
-  ) %>%
-  width(
-    j = "description",
-    width = 3
-  ) %>%
-  set_caption("Timesheet of Billable Activities")
-```
-

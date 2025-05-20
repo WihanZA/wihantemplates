@@ -23,6 +23,7 @@ set_flextable_defaults(
   tabcolsep = NULL,
   arraystretch = 1.5,
   fonts_ignore = TRUE,
-  theme_fun = function(x)
-    theme_booktabs(x, bold_header = TRUE) %>% fit_to_width(max_width = 6.25)
+  theme_fun = function(x) {
+    theme_booktabs(x, bold_header = TRUE)
+  }
 )

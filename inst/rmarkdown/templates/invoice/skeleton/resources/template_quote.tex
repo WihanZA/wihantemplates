@@ -114,8 +114,17 @@ separate-uncertainty = true}
 %% Captions
 \usepackage[font={footnotesize, singlespacing}]{caption}
 \captionsetup[figure]{labelfont={bf},labelformat={default},labelsep=quad,name={Fig.},skip=3pt,position=bottom}
-\captionsetup[table]{labelfont={bf},labelformat={default},labelsep=quad,name={Table},skip=3pt,position=top}
-\renewcommand{\thetable}{\Alph{table}}
+
+%% Table Captions: Prevent numbering
+
+\captionsetup[table]{
+  labelfont={bf},
+  labelformat={empty},
+  labelsep=quad,
+  name={},
+  skip=3pt,
+  position=top}
+% \renewcommand{\thetable}{\Alph{table}}
 
 %% Code chunk printing
 $if(highlighting-macros)$
@@ -126,14 +135,14 @@ $endif$
 \usepackage{enumitem}
 
 %% Headers | Footers | Page numbers
+\usepackage{lastpage}
 \usepackage{fancyhdr}
 % title page style is set to empty below
-\pagestyle{plain}
-\pagenumbering{roman}
+\pagestyle{fancy}
 \renewcommand{\headrulewidth}{0pt}
-\fancyhead{}
-\fancyfoot{}
-\fancyfoot[C]{\small\thepage}
+% Clear all header/footer fields
+\fancyhf{} 
+\fancyfoot[C]{\small Page \thepage\ of \pageref{LastPage}}
 
 %% Footnotes
 % setspace package must load before footmisc
@@ -165,7 +174,7 @@ $endif$
 %% Hyperref
 \usepackage[unicode]{hyperref}
 \hypersetup{
-pdftitle={$params.project.value.reference$ Invoice},
+pdftitle={$params.project.value.reference$ Quotation},
 pdfauthor={$params.author.value.name$},
 colorlinks=true,
 citecolor={black},
@@ -247,10 +256,15 @@ $endfor$
 \begin{minipage}[t]{0.5\textwidth}
   \vspace{0pt}
   \begin{flushright}
-    {\LARGE\bfseries\uppercase{Invoice}}\\
+    {\LARGE\bfseries\uppercase{Quote}}
+
     {\bfseries Reference}               \\
-    $params.project.value.reference$                   \\
-    {\bfseries Date}                    \\
+    $params.project.value.reference$ \\
+    $if(params.version)$
+    {\bfseries Version}                 \\
+    $params.version$              \\
+    $endif$
+    {\bfseries Issued}                    \\
     $params.date$
   \end{flushright}
 \end{minipage}\\[\baselineskip]
@@ -266,8 +280,8 @@ $endfor$
 \end{minipage}\\
 
 \begin{center}
-  {\Large\bfseries\titlecap{$params.project.value.name$}}\\
-  {\large\itshape\titlecap{$params.project.value.description$}}
+  {\large\bfseries\titlecap{$params.project.value.name$}:}\\
+  {\itshape\titlecap{$params.project.value.description$}}
 \end{center}
 
 $if(body)$
