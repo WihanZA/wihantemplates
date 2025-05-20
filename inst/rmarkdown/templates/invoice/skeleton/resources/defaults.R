@@ -1,3 +1,4 @@
+# flextable defaults ----
 set_flextable_defaults(
   font.family = "Arial",
   font.size = 10,
@@ -26,4 +27,13 @@ set_flextable_defaults(
   theme_fun = function(x) {
     theme_booktabs(x, bold_header = TRUE)
   }
+)
+
+# consistent currency formatter ----
+# for both Rate and Subtotal in tables
+currency_formatter <- scales::label_currency(
+  prefix = "R",
+  big.mark = " ",
+  decimal = ".",
+  accuracy = 0.01 # Ensures consistent decimal display
 )

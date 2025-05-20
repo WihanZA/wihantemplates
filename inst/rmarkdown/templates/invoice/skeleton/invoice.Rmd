@@ -35,13 +35,11 @@ params:
       branch: "100200"
       account: "9876543210"
   date: "`r lubridate::today()`"
+  version: "2.0" # optional
 
 ---
 
 ```{r setup, include = FALSE}
-rm(list = ls())
-invisible(gc())
-
 library(dplyr)
 library(lubridate)
 library(readxl)
@@ -70,7 +68,7 @@ active_file <- if (interactive()) {
 }
 
 # load parameters ----
-params <- yaml_front_matter(active_file)$params %>%
+my_params <- yaml_front_matter(active_file)$params %>%
   lapply(function(x) {
     if (is.list(x)) x$value else x
   })
@@ -81,7 +79,7 @@ resources <- fs::path_abs(
   start = dirname(active_file)
 )
 
-# default table formatting ----
+# default formatting ----
 source(file.path(resources, "defaults.R"))
 ```
 
@@ -131,7 +129,7 @@ bill <- sessions %>%
 bill_total <- bill %>%
   summarise(
     code = NA,
-    item = "Total",
+    item = "Grand Total",
     sessions = sum(sessions, na.rm = TRUE),
     hours = sum(hours, na.rm = TRUE),
     subtotal = sum(subtotal, na.rm = TRUE),
@@ -142,22 +140,15 @@ bill_total <- bill %>%
 bill <- bill %>%
   bind_rows(bill_total) %>%
   mutate(
-    hours = round(hours, 1),
+    hours = round(hours, 2),
     subtotal = round(subtotal, 2),
     rate = round(rate, 2)
   )
 
-bill$rate <- scales::label_currency(
-  prefix = "R",
-  big.mark = " ",
-  decimal = "."
-)(bill$rate)
-
-bill$subtotal <- scales::label_currency(
-  prefix = "R",
-  big.mark = " ",
-  decimal = "."
-)(bill$subtotal)
+# Apply formatting
+bill$rate <- currency_formatter(bill$rate)
+bill$subtotal <- currency_formatter(bill$subtotal)
+bill$hours <- sprintf("%.2f", bill$hours)
 
 flextable(bill) %>%
   set_header_labels(
@@ -170,51 +161,29 @@ flextable(bill) %>%
   ) %>%
   bold(i = nrow_part(x = .)) %>%
   hline(i = nrow_part(x = .) - 1) %>%
+  set_caption("Billable Hours") %>%
+  width(width = dim_pretty(.)$widths) %>%
   align(
-    j = c("code", "item"),
-    align = "left",
-    part = "body"
-  ) %>%
-  align(
-    j = c("code", "item"),
-    align = "left",
-    part = "header"
-  ) %>%
-  align(
-    j = c("sessions", "rate", "subtotal"),
+    j = c("hours", "rate", "subtotal"),
     align = "right",
-    part = "body"
-  ) %>%
-  align(
-    j = c("sessions", "rate", "subtotal"),
-    align = "right",
-    part = "header"
-  ) %>%
-  width(
-    j = c("sessions", "hours", "rate", "subtotal"),
-    width = .8
-  ) %>%
-  width(
-    j = "item",
-    width = 1.5
+    part = "all"
   ) %>%
   add_footer_lines(
     "Billable hours as detailed in the timesheet presented in Table B."
-  ) %>%
-  set_caption("Billable Hours")
+  )
 ```
 
 ```{r payment-instructions, results = "asis"}
 instructions <- c(
-  "Please transfer the amount due according to the following payment instructions:",
+  "Please transfer the amount due according to the following payment instructions:\\medskip",
   "",
-  paste0("**Beneficiary**: ", params$billing$beneficiary, "\\newline"),
-  paste0("**Bank**: ", params$billing$bank, "\\newline"),
-  paste0("**Branch**: ", params$billing$branch, "\\newline"),
-  paste0("**Account**: ", params$billing$account, "\\newline"),
-  paste0("**SWIFT**: ", params$billing$swift, "\\newline"),
-  paste0("**Reference**: ", params$project$reference),
-  "",
+  paste0("**Beneficiary**: ", my_params$billing$beneficiary, "\\newline"),
+  paste0("**Bank**: ", my_params$billing$bank, "\\newline"),
+  paste0("**Branch**: ", my_params$billing$branch, "\\newline"),
+  paste0("**Account**: ", my_params$billing$account, "\\newline"),
+  paste0("**SWIFT**: ", my_params$billing$swift, "\\newline"),
+  paste0("**Reference**: ", my_params$project$reference),
+  "\\bigskip",
   "Thank you for your business.",
   "",
   "Kind regards,\\newline",
@@ -222,7 +191,7 @@ instructions <- c(
     "\\includegraphics[height=3em]{resources/signature.jpg}\\newline",
     ""
   ),
-  params$author$name
+  my_params$author$name
 )
 
 cat(instructions, sep = "\n")
@@ -234,7 +203,10 @@ cat(instructions, sep = "\n")
 timesheet <- sessions %>%
   mutate(date = format(ymd(date), "%e %b %y")) %>%
   group_by(date) %>%
-  mutate(n = n(), start_min = (start == min(start, na.rm = TRUE))) %>%
+  mutate(
+    n = n(),
+    start_min = (start == min(start, na.rm = TRUE))
+  ) %>%
   ungroup() %>%
   mutate(date = case_when(
     n == 1 ~ date,
@@ -248,8 +220,14 @@ timesheet_total <- sessions %>%
   summarise(hours = sum(hours, na.rm = TRUE))
 
 timesheet <- timesheet %>%
-  bind_rows(timesheet_total)
+  bind_rows(timesheet_total) %>%
+  mutate(hours = round(hours, 2))
 
+# Apply formatting
+timesheet$hours <- sprintf("%.2f", timesheet$hours)
+```
+
+```{r timesheet-table}
 flextable(
   timesheet,
   col_keys = c(
@@ -271,22 +249,13 @@ flextable(
   ) %>%
   bold(i = nrow_part(x = .)) %>%
   hline(i = nrow_part(x = .) - 1) %>%
-  colformat_double(
-    j = c("hours"),
-    i = nrow_part(x = .),
-    digits = 0
+  set_caption("Timesheet of Billable Activities") %>%
+  align(
+    j = c("start", "end", "hours", "code"),
+    align = "center",
+    part = "all"
   ) %>%
-  align(align = "left", part = "all") %>%
-  align(j = "code", align = "right", part = "all") %>%
   fontsize(part = "all", size = 8) %>%
-  width(
-    j = c("date", "start", "end", "hours", "code"),
-    width = 0.6
-  ) %>%
-  width(
-    j = "description",
-    width = 3
-  ) %>%
-  set_caption("Timesheet of Billable Activities")
+  width(width = dim_pretty(.)$widths)
 ```
 
