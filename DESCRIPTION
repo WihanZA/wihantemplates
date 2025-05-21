@@ -1,6 +1,6 @@
 Package: wihantemplates
 Title: My collection of R Markdown templates and related utility functions
-Version: 0.2
+Version: 0.0.0.9000
 Authors@R: 
     person(
     given = "Wihan",
@@ -24,6 +24,7 @@ Suggests:
 Imports: 
     dplyr,
     fs,
+    magrittr,
     purrr,
     rmarkdown,
     stringr,
