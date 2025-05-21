@@ -72,7 +72,7 @@ resources <- fs::path_abs(
   start = dirname(active_file)
 )
 
-# default formatting ----
+# start-up script ----
 source(file.path(resources, "defaults.R"))
 ```
 

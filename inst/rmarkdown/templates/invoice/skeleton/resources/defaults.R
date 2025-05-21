@@ -1,3 +1,16 @@
+# perform metadata silimarity check across invoice and quote
+wihantemplates::compare_params(
+  # inherited from setup code chunk
+  file1 = active_file,
+  file2 = if (grepl(pattern = "invoice.Rmd", x = active_file)) {
+    file.path(dirname(active_file), "quote.Rmd")
+  } else {
+    file.path(dirname(active_file), "invoice.Rmd")
+  },
+  common = c("client", "project", "author"),
+  throw_error = TRUE
+)
+
 # flextable defaults ----
 set_flextable_defaults(
   font.family = "Arial",
