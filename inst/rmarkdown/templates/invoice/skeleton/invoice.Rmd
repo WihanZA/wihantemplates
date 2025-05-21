@@ -79,7 +79,9 @@ resources <- fs::path_abs(
   start = dirname(active_file)
 )
 
-# default formatting ----
+# run on-knit script ----
+# compare invoice & quote params
+# table formatting defaults
 source(file.path(resources, "defaults.R"))
 ```
 
