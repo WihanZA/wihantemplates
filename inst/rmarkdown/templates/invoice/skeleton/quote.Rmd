@@ -1,0 +1,226 @@
+---
+output:
+  bookdown::pdf_document2:
+    number_sections: FALSE
+    template: resources/template_quote.tex
+    keep_tex: FALSE
+    latex_engine: pdflatex
+
+params:
+  client:
+    value:
+      name: "Mickey Mouse"
+      street: "1313 Disneyland Drive"
+      city: "Anaheim"
+      zip: "92802"
+      email: "mickey.mouse@disney.com"
+  project:
+    value:
+      reference: "QUO-2024-09"
+      name: "Magic Kingdom Expansion"
+      description: "Design and implementation of new facilities"
+  author:
+    value:
+      name: "Bugs Bunny"
+      street: "123 Carrot Lane"
+      city: "Looneyville"
+      zip: "54321"
+      email: "bugs.bunny@looneytoons.com"
+      phone: "+27 71 987 6543"
+  version: "2.0" # optional
+  date: "`r lubridate::today()`"
+
+---
+
+```{r setup, include = FALSE}
+library(dplyr)
+library(lubridate)
+library(readxl)
+library(rmarkdown)
+library(stringr)
+library(tibble)
+library(tidyr)
+library(janitor)
+library(flextable)
+
+knitr::opts_chunk$set(
+  eval = TRUE,
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  include = TRUE,
+  fig.align = "left",
+  comment = "#>"
+)
+
+# determine active file's path ----
+active_file <- if (interactive()) {
+  normalizePath(rstudioapi::getSourceEditorContext()$path)
+} else {
+  normalizePath(knitr::current_input(dir = TRUE))
+}
+
+# load parameters ----
+my_params <- yaml_front_matter(active_file)$params %>%
+  lapply(function(x) {
+    if (is.list(x)) x$value else x
+  })
+
+# determine file's resources ----
+resources <- fs::path_abs(
+  path = "resources",
+  start = dirname(active_file)
+)
+
+# run on-knit script ----
+# compare invoice & quote params
+# table formatting defaults
+source(file.path(resources, "defaults.R"))
+```
+
+```{r rates}
+# Define service rates
+rates <- tibble(
+  code = c("X", "Y", "Z"),
+  item = c("Design", "Impact Study", "Construction"),
+  rate = c(500, 200, 600)
+)
+```
+
+```{r line-items}
+# Manually create line items
+items <- tibble(
+  code = c("X", "Y", "Z"),
+  hours = c(12.0, 5.5, 1.5)
+)
+```
+
+```{r quote}
+# Merge line items with rates
+quote <- items %>%
+  left_join(rates, by = "code") %>%
+  mutate(subtotal = hours * rate) %>%
+  select(code, item, hours, everything())
+
+# Calculate grand totals
+quote_total <- quote %>%
+  summarise(
+    code = NA,
+    item = "Grand Total",
+    hours = sum(hours, na.rm = TRUE),
+    subtotal = sum(subtotal, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(rate = subtotal / hours)
+
+# Combine items with total
+quote <- quote %>%
+  bind_rows(quote_total) %>%
+  mutate(
+    hours = round(hours, 2),
+    subtotal = round(subtotal, 2), # Rounded to whole Rands
+    rate = round(rate, 2)
+  )
+
+# Apply formatting
+quote$rate <- currency_formatter(quote$rate)
+quote$subtotal <- currency_formatter(quote$subtotal)
+quote$hours <- sprintf("%.2f", quote$hours)
+```
+
+```{r quote-table}
+flextable(quote) %>%
+  set_header_labels(
+    code = "Code",
+    item = "Item",
+    hours = "Hours",
+    rate = "Rate",
+    subtotal = "Subtotal"
+  ) %>%
+  bold(i = nrow_part(x = .)) %>%
+  hline(i = nrow_part(x = .) - 1) %>%
+  set_caption("ESTIMATE: Billable Hours") %>%
+  width(width = dim_pretty(.)$widths) %>%
+  align(
+    j = c("hours", "rate", "subtotal"),
+    align = "right",
+    part = "all"
+  ) %>%
+  footnote(
+    i = nrow_part(x = .),
+    j = "rate",
+    value = as_paragraph("Weighted average hourly rate across all items."),
+    ref_symbols = "*"
+  )
+```
+
+
+### Scope & Timeline
+
+This project includes the following deliverables, to be completed according to a mutually agreed timeline:
+
+1. Documentation & Design
+    - Complete project design specifications
+    - Technical documentation and guidelines
+2. Analysis & Assessment
+    - Impact and feasibility analysis
+    - Resource requirements and allocation
+3. Implementation & Review
+    - Quality assurance and testing
+    - Compliance and standards certification
+
+```{r projected-duration, include = FALSE}
+# code chunk to assist user in determining timeline
+start <- today()
+finish <- ymd("2025-06-30")
+
+if (finish <= start) stop("`start` must be < `finish`")
+
+duration <- difftime(
+  finish,
+  start,
+  units = "weeks",
+  tz = Sys.timezone()
+) %>%
+  ceiling() %>%
+  format(units = "weeks")
+```
+
+The following timeline represents preliminary estimates and will be finalised upon your acceptance:
+
+- Start date: TBD
+- Completion date: TBD 
+- Duration: `r duration`
+
+### Terms and Conditions
+
+The agreement between the service provider and client is constituted by the acceptance of this quote and are subject to the following terms: 
+
+1. Quote Validity: This estimate remains valid for 30 days from issuance.
+
+2. Acceptance Process: To accept this quote, please confirm via email, including:
+   • Agreement to these terms
+   • Confirmation of project timeline
+   • Any additional requirements not addressed here
+
+3. Scope Management: Changes to project scope may affect timeline and costs. All modifications require documentation and your approval. Additional requests will be billed at the rates shown above.
+
+4. Deliverables: All deliverables will be completed according to the agreed schedule, subject to your review and approval. Final delivery will be in digital format.
+
+5. Payment: Full payment is due upon completion of all deliverables and invoice issuance. This quote is not a request for payment.
+
+```{r signature, results = "asis"}
+signature <- c(
+  "\\bigskip",
+  "We look forward to working with you!",
+  "",
+  "Kind regards,\\newline",
+  paste0(
+    "\\includegraphics[height=3em]{resources/signature.jpg}\\newline",
+    ""
+  ),
+  my_params$author$name
+)
+
+cat(signature, sep = "\n")
+```
