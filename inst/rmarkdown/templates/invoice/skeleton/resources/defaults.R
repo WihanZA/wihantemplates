@@ -1,3 +1,17 @@
+# perform metadata silimarity check across invoice and quote
+wihantemplates::compare_params(
+  # inherited from setup code chunk
+  file1 = active_file,
+  file2 = if (grepl(pattern = "invoice.Rmd", x = active_file)) {
+    file.path(dirname(active_file), "quote.Rmd")
+  } else {
+    file.path(dirname(active_file), "invoice.Rmd")
+  },
+  common = c("client", "project", "author"),
+  throw_error = FALSE
+)
+
+# flextable defaults ----
 set_flextable_defaults(
   font.family = "Arial",
   font.size = 10,
@@ -23,6 +37,16 @@ set_flextable_defaults(
   tabcolsep = NULL,
   arraystretch = 1.5,
   fonts_ignore = TRUE,
-  theme_fun = function(x)
-    theme_booktabs(x, bold_header = TRUE) %>% fit_to_width(max_width = 6.25)
+  theme_fun = function(x) {
+    theme_booktabs(x, bold_header = TRUE)
+  }
+)
+
+# consistent currency formatter ----
+# for both Rate and Subtotal in tables
+currency_formatter <- scales::label_currency(
+  prefix = "R",
+  big.mark = " ",
+  decimal = ".",
+  accuracy = 0.01 # Ensures consistent decimal display
 )

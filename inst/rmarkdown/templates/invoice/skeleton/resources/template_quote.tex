@@ -1,0 +1,304 @@
+%% --------------------------------------------------------------
+%% Invoice Template
+%% The Quote
+%% WihanZA
+%% wihanmarais@sun.ac.za
+%% --------------------------------------------------------------
+
+%% Document class
+\documentclass[
+11pt,
+a4paper,
+twoside,
+]{article}
+
+%% Language | Dates
+\usepackage[main=british]{babel}
+\usepackage[english]{isodate}
+\cleanlookdateon
+
+%% Margins | Spacing
+\usepackage[left=1in, right=1in, top=1.2in, bottom=1.2in]{geometry}
+\usepackage[parfill]{parskip}
+\usepackage{setspace}
+\setstretch{1}
+\setlength{\emergencystretch}{3em}
+\raggedbottom
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\def\lineheight{16}
+\usepackage{pdflscape}
+
+% \the\baselineskip: 13.6pt
+% \the\smallskipamount: 3.0pt plus 1.0pt minus 1.0pt
+% \the\medskipamount: 6.0pt plus 2.0pt minus 2.0pt
+% \the\bigskipamount: 12.0pt plus 4.0pt minus 4.0pt
+% \the\1em: 10.95pt
+% \the\1ex: 5.20125pt
+
+%% Ignore badboxes of less than 3pt
+\hfuzz=3pt
+
+%% Math | Font
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage[vvarbb, upint, subscriptcorrection, uprightscript]{notomath}
+\usepackage{noto-mono}
+\usepackage[rmdefault]{sourceserifpro}
+\usepackage[sfdefault]{sourcesanspro}
+\usepackage[T1]{fontenc}
+\renewcommand\familydefault{\rmdefault}
+\usepackage[normalem]{ulem}
+\usepackage{bm}
+\let\bm\symbfit
+\usepackage{fontawesome}
+
+%% Microtypography
+\usepackage[
+protrusion=true,
+factor=1000,
+expansion=true,
+auto=true,
+verbose=true
+]{microtype}
+
+\DisableLigatures{encoding=T1,shape=sc}
+
+%% Headings
+\usepackage{titlesec}
+\usepackage{titlecaps}
+\Addlcwords{a an the and but or for nor so yet at by for from in into like near of on over past to}
+
+%% Remove section numbering
+\setcounter{secnumdepth}{-\maxdimen} 
+
+%% Symbols
+\usepackage{siunitx}
+\sisetup{}
+\sisetup{
+detect-all = true,
+detect-family = true,
+output-decimal-marker = {.},
+group-separator = {\,},
+number-unit-product = {\,},
+inter-unit-product = \mathord{\cdot},
+exponent-product = \mathord{\times},
+separate-uncertainty = true}
+
+%% Packages
+\usepackage{calc}
+\usepackage{etoolbox}
+
+%% Floats
+\usepackage{float}
+% figures only float within the sections they are defined in
+\usepackage[section]{placeins}
+
+%% Tables
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.25}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage{makecell}
+\usepackage{tabularx}
+
+%% Figures | Graphics
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+%% Captions
+\usepackage[font={footnotesize, singlespacing}]{caption}
+\captionsetup[figure]{labelfont={bf},labelformat={default},labelsep=quad,name={Fig.},skip=3pt,position=bottom}
+
+%% Table Captions: Prevent numbering
+
+\captionsetup[table]{
+  labelfont={bf},
+  labelformat={empty},
+  labelsep=quad,
+  name={},
+  skip=3pt,
+  position=top}
+% \renewcommand{\thetable}{\Alph{table}}
+
+%% Code chunk printing
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+%% Lists
+\usepackage{enumitem}
+
+%% Headers | Footers | Page numbers
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+% title page style is set to empty below
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+% Clear all header/footer fields
+\fancyhf{} 
+\fancyfoot[C]{\small Page \thepage\ of \pageref{LastPage}}
+
+%% Footnotes
+% setspace package must load before footmisc
+\usepackage[hang, multiple]{footmisc}
+
+% defaults
+% \hangfootparskip =  0.5\baselineskip
+% \hangfootparindent = 0em
+% \footnotemargin = 1.8em
+
+%% make title page footnotes same as rest
+\makeatletter
+\patchcmd\maketitle{\@makefntext}{\@@@ddt}{}{}
+\patchcmd\maketitle{\rlap}{\mbox}{}{}
+\makeatother
+
+\renewcommand*{\hangfootparskip}{.5\baselineskip}
+\renewcommand*{\hangfootparindent}{0em}
+\renewcommand*{\footnotemargin}{1em}
+
+%% Color
+\usepackage[table,dvipsnames]{xcolor}
+\definecolor{stbWine}{rgb}{0.65, 0.04, 0.24}
+
+%% URLs
+\usepackage[hyphens]{url}
+\urlstyle{same}
+
+%% Hyperref
+\usepackage[unicode]{hyperref}
+\hypersetup{
+pdftitle={$params.project.value.reference$ Quote$if(params.version)$ $params.version$$endif$},
+pdfauthor={$params.author.value.name$},
+colorlinks=true,
+citecolor={black},
+urlcolor={black},
+linkcolor={black},
+filecolor={black},
+pdfborder={0 0 0}}
+
+%% Bibliography
+\usepackage[round, nonamebreak]{natbib}
+\bibliographystyle{plainnat}
+\renewcommand{\bibsection}{\section*{\refname}\pdfbookmark{References}{sec:references}}
+\renewcommand\bibfont{\small}
+
+%% Acronyms
+\usepackage{acronym}
+$if(acronyms)$
+$for(acronyms)$
+\acrodef{$acronyms.id$}[$acronyms.short$]{$acronyms.long$}
+$endfor$
+$endif$
+
+%% Cross-referencing
+\usepackage[capitalize,noabbrev]{cleveref}
+
+%% Subfigures
+\usepackage[labelformat=simple,labelfont=sf]{subcaption}
+
+%% Fix cross-referencing for subfigures
+\renewcommand\thesubfigure{(\alph{subfigure})}
+\makeatletter
+\renewcommand\p@subfigure{\thefigure\space} % prefix used in \ref and \cref for subfigures
+\makeatother
+
+%% Fix problem with amsmath cleveref acronym
+%% https://github.com/WihanZA/wihantemplates/issues/2
+%% https://tex.stackexchange.com/a/735502
+\makeatletter
+    \AtBeginDocument
+    {
+      \def\ltx@label#1{\cref@label{#1}}
+      \def\label@in@display@noarg#1{\cref@old@label@in@display{#1}}
+    }
+\makeatother
+
+%% Adapted from %% https://tex.stackexchange.com/questions/71364/acronym-acresetall-cleveref-multiply-defined-labels
+%% Add \AC before @verridelabel
+\makeatletter
+\newcommand*{\org@overidelabel}{}
+\let\org@overridelabel\AC@verridelabel
+\renewcommand*{\AC@verridelabel}[1]{%
+  \@bsphack
+  \protected@write\@auxout{}{\string\AC@undonewlabel{#1@cref}}%
+  \org@overridelabel{#1}%
+  \@esphack
+}%
+\makeatother
+
+%% Header includes
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+\begin{document}
+\vspace{0pt}
+\begin{minipage}[t]{0.5\textwidth}
+  \vspace{0pt}
+  \begin{flushleft}
+    \uppercase{From}                      \\
+    \textbf{$params.author.value.name$}   \\
+    $params.author.value.street$          \\
+    $params.author.value.city$            \\
+    $params.author.value.zip$             \\
+    \faPhone\ $params.author.value.phone$ \\
+    \faEnvelopeO\ $params.author.value.email$
+  \end{flushleft}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.5\textwidth}
+  \vspace{0pt}
+  \begin{flushright}
+    {\LARGE\bfseries\uppercase{Quote}}
+
+    {\bfseries Reference}               \\
+    $params.project.value.reference$ \\
+    $if(params.version)$
+    {\bfseries Version}                 \\
+    $params.version$              \\
+    $endif$
+    {\bfseries Issued}                    \\
+    $params.date$
+  \end{flushright}
+\end{minipage}\\[\baselineskip]
+\begin{minipage}{1\textwidth}
+  \begin{flushleft}
+    \uppercase{To}\\
+    \textbf{$params.client.value.name$}\\
+    $params.client.value.street$\\
+    $params.client.value.city$\\
+    $params.client.value.zip$\\
+    \faEnvelopeO\ $params.client.value.email$
+  \end{flushleft}
+\end{minipage}\\
+
+\begin{center}
+  {\large\bfseries\titlecap{$params.project.value.name$}}\\
+  {\itshape\titlecap{$params.project.value.description$}}
+\end{center}
+
+$if(body)$
+$body$
+$endif$
+
+$if(bibliography)$
+\clearpage
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+$endif$
+
+%% Include after
+$if(include-after)$
+\clearpage
+$for(include-after)$
+$include-after$
+$endfor$
+$endif$
+
+\end{document}

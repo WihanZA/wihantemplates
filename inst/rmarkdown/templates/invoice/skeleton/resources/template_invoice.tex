@@ -1,5 +1,6 @@
 %% --------------------------------------------------------------
 %% Invoice Template
+%% The Invoice
 %% WihanZA
 %% wihanmarais@sun.ac.za
 %% --------------------------------------------------------------
@@ -125,14 +126,14 @@ $endif$
 \usepackage{enumitem}
 
 %% Headers | Footers | Page numbers
+\usepackage{lastpage}
 \usepackage{fancyhdr}
 % title page style is set to empty below
-\pagestyle{plain}
-\pagenumbering{roman}
+\pagestyle{fancy}
 \renewcommand{\headrulewidth}{0pt}
-\fancyhead{}
-\fancyfoot{}
-\fancyfoot[C]{\small\thepage}
+% Clear all header/footer fields
+\fancyhf{} 
+\fancyfoot[C]{\small Page \thepage\ of \pageref{LastPage}}
 
 %% Footnotes
 % setspace package must load before footmisc
@@ -164,7 +165,7 @@ $endif$
 %% Hyperref
 \usepackage[unicode]{hyperref}
 \hypersetup{
-pdftitle={$params.project.value.reference$ Invoice},
+pdftitle={$params.project.value.reference$ Invoice$if(params.version)$ $params.version$$endif$},
 pdfauthor={$params.author.value.name$},
 colorlinks=true,
 citecolor={black},
@@ -249,7 +250,11 @@ $endfor$
     {\LARGE\bfseries\uppercase{Invoice}}\\
     {\bfseries Reference}               \\
     $params.project.value.reference$                   \\
-    {\bfseries Date}                    \\
+    $if(params.version)$
+    {\bfseries Version}                 \\
+    $params.version$              \\
+    $endif$
+    {\bfseries Issued}                    \\
     $params.date$
   \end{flushright}
 \end{minipage}\\[\baselineskip]
@@ -265,8 +270,8 @@ $endfor$
 \end{minipage}\\
 
 \begin{center}
-  {\Large\bfseries\titlecap{$params.project.value.name$}}\\
-  {\large\itshape\titlecap{$params.project.value.description$}}
+  {\large\bfseries\titlecap{$params.project.value.name$}}\\
+  {\itshape\titlecap{$params.project.value.description$}}
 \end{center}
 
 $if(body)$
