@@ -1,4 +1,3 @@
-scripts/package-admin.R
-scripts/tex-packages.R
-scripts/thumbnails.R
+scripts/*
 wihantemplates.Rproj
+inst/rmarkdown/templates/manuscript/skeleton/resources/indent.log
