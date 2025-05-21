@@ -8,7 +8,7 @@ wihantemplates::compare_params(
     file.path(dirname(active_file), "invoice.Rmd")
   },
   common = c("client", "project", "author"),
-  throw_error = TRUE
+  throw_error = FALSE
 )
 
 # flextable defaults ----
