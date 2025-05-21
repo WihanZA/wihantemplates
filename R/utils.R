@@ -27,7 +27,7 @@
 #' @importFrom purrr map list_flatten
 #' @importFrom tibble as_tibble
 #' @importFrom tidyr pivot_longer
-#' @importFrom dplyr everything full_join filter mutate
+#' @importFrom dplyr everything full_join filter mutate pull
 #' @importFrom stringr str_squish
 #' @export
 #'
@@ -196,3 +196,18 @@ escape_latex <- function(x, newlines = FALSE, spaces = FALSE) {
   }
   x
 }
+
+#' Pipe operator
+#'
+#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
+#'
+#' @name %>%
+#' @rdname pipe
+#' @keywords internal
+#' @export
+#' @importFrom magrittr %>%
+#' @usage lhs \%>\% rhs
+#' @param lhs A value or the magrittr placeholder.
+#' @param rhs A function call using the magrittr semantics.
+#' @return The result of calling `rhs(lhs)`.
+NULL
