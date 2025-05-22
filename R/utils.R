@@ -158,7 +158,7 @@ compare_params <- function(
   if (throw_error) {
     msg <- paste(
       msg,
-      "Set `common` or `throw_error = FALSE` to negate this error.",
+      "defaults.R: Set `common` or `throw_error = FALSE` to negate this error.",
       sep = "\n"
     )
     stop(msg, call. = FALSE)
