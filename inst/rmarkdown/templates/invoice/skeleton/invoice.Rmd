@@ -49,6 +49,7 @@ library(tibble)
 library(tidyr)
 library(janitor)
 library(flextable)
+library(purrr)
 
 knitr::opts_chunk$set(
   eval = TRUE,
@@ -67,11 +68,12 @@ active_file <- if (interactive()) {
   normalizePath(knitr::current_input(dir = TRUE))
 }
 
-# load parameters ----
-my_params <- yaml_front_matter(active_file)$params %>%
+# load front matter and clean params ----
+fm <- yaml_front_matter(active_file)$params %>%
   lapply(function(x) {
     if (is.list(x)) x$value else x
-  })
+  }) %>%
+  list_flatten(name_spec = "{substr(outer, 1, 1)}_{inner}")
 
 # determine file's resources ----
 resources <- fs::path_abs(
@@ -179,24 +181,27 @@ flextable(bill) %>%
 instructions <- c(
   "Please transfer the amount due according to the following payment instructions:\\medskip",
   "",
-  paste0("**Beneficiary**: ", my_params$billing$beneficiary, "\\newline"),
-  paste0("**Bank**: ", my_params$billing$bank, "\\newline"),
-  paste0("**Branch**: ", my_params$billing$branch, "\\newline"),
-  paste0("**Account**: ", my_params$billing$account, "\\newline"),
-  paste0("**SWIFT**: ", my_params$billing$swift, "\\newline"),
-  paste0("**Reference**: ", my_params$project$reference),
+  paste0("**Beneficiary**: ", fm$b_beneficiary, "\\newline"),
+  paste0("**Bank**: ", fm$b_bank, "\\newline"),
+  paste0("**Branch**: ", fm$b_branch, "\\newline"),
+  paste0("**Account**: ", fm$b_account, "\\newline"),
+  paste0("**SWIFT**: ", fm$b_swift, "\\newline"),
+  paste0("**Reference**: ", fm$p_reference),
   "\\bigskip",
+  "",
   "Thank you for your business.",
   "",
   "Kind regards,\\newline",
-  paste0(
-    "\\includegraphics[height=3em]{resources/signature.jpg}\\newline",
-    ""
-  ),
-  my_params$author$name
+  fm$a_name
 )
 
 cat(instructions, sep = "\n")
+```
+
+```{r signature, results = "asis"}
+if (file.exists(file.path(resources, "signature.jpg"))) {
+  cat("\\includegraphics[width=5em]{resources/signature.jpg}")
+}
 ```
 
 \clearpage

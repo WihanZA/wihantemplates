@@ -42,6 +42,7 @@ library(tibble)
 library(tidyr)
 library(janitor)
 library(flextable)
+library(purrr)
 
 knitr::opts_chunk$set(
   eval = TRUE,
@@ -60,11 +61,12 @@ active_file <- if (interactive()) {
   normalizePath(knitr::current_input(dir = TRUE))
 }
 
-# load parameters ----
-my_params <- yaml_front_matter(active_file)$params %>%
+# load front matter and clean params ----
+fm <- yaml_front_matter(active_file)$params %>%
   lapply(function(x) {
     if (is.list(x)) x$value else x
-  })
+  }) %>%
+  list_flatten(name_spec = "{substr(outer, 1, 1)}_{inner}")
 
 # determine file's resources ----
 resources <- fs::path_abs(
@@ -209,18 +211,21 @@ The agreement between the service provider and client is constituted by the acce
 
 5. Payment: Full payment is due upon completion of all deliverables and invoice issuance. This quote is not a request for payment.
 
-```{r signature, results = "asis"}
-signature <- c(
+```{r signoff, results = "asis"}
+signoff <- c(
   "\\bigskip",
+  "",
   "We look forward to working with you!",
   "",
   "Kind regards,\\newline",
-  paste0(
-    "\\includegraphics[height=3em]{resources/signature.jpg}\\newline",
-    ""
-  ),
-  my_params$author$name
+  fm$a_name
 )
 
-cat(signature, sep = "\n")
+cat(signoff, sep = "\n")
+```
+
+```{r signature, results = "asis"}
+if (file.exists(file.path(resources, "signature.jpg"))) {
+  cat("\\includegraphics[width=5em]{resources/signature.jpg}")
+}
 ```

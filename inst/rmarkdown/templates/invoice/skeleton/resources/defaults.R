@@ -2,10 +2,21 @@
 wihantemplates::compare_params(
   # inherited from setup code chunk
   file1 = active_file,
-  file2 = if (grepl(pattern = "invoice.Rmd", x = active_file)) {
-    file.path(dirname(active_file), "quote.Rmd")
+  file2 = if (
+    grepl(
+      pattern = "invoice",
+      x = basename(active_file)
+    )
+  ) {
+    file.path(
+      dirname(active_file),
+      gsub("invoice", "quote", basename(active_file))
+    )
   } else {
-    file.path(dirname(active_file), "invoice.Rmd")
+    file.path(
+      dirname(active_file),
+      gsub("quote", "invoice", basename(active_file))
+    )
   },
   common = c("client", "project", "author"),
   throw_error = FALSE
